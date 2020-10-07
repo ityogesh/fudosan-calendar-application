@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login_fudosan/forget_password.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
   @override
@@ -39,7 +40,26 @@ class _OtpScreenState extends State<OtpScreen> {
             SizedBox(
               height: 15,
             ),
-            OTPTextField(
+            PinCodeTextField(
+              appContext: context,
+              length: 4,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              onChanged: (val) {},
+              onCompleted: (val) {},
+              textStyle: TextStyle(fontSize: 20, color: Colors.white),
+              enableActiveFill: true,
+              pinTheme: PinTheme(
+                  borderRadius: BorderRadius.circular(10.0),
+                  selectedFillColor: Colors.grey[300],
+                  selectedColor: Colors.grey[300],
+                  inactiveFillColor: Colors.grey[300],
+                  inactiveColor: Colors.grey[300],
+                  activeColor: Colors.orange,
+                  fieldWidth: 50.0,
+                  activeFillColor: Colors.orange,
+                  shape: PinCodeFieldShape.box),
+            ),
+            /*  OTPTextField(
               length: 4,
               fieldWidth: 60.0,
               width: MediaQuery.of(context).size.width,
@@ -50,7 +70,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 print("Completed: " + pin);
 //              userOTP = pin;
               },
-            ),
+            ), */
             SizedBox(
               height: 12,
             ),
