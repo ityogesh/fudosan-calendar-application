@@ -1,7 +1,9 @@
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:login_fudosan/main.dart';
-import 'package:login_fudosan/otp_registration.dart';
+
+import 'package:login_fudosan/screens/loginscreen.dart';
+
+import 'otp_registration.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -32,7 +34,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Navigator.pop(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()));
+                        builder: (BuildContext context) => LoginScreen()));
               },
               child: Text(
                 'ログインヘ',
