@@ -20,6 +20,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   int _state = 0;
   List<Map<DateTime, List<dynamic>>> sample =
       List<Map<DateTime, List<dynamic>>>();
+  String val = "S";
 
   @override
   void initState() {
@@ -39,30 +40,38 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: Text(
-          "Calendar",
-          style: TextStyle(fontSize: 17.0),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.lightBlueAccent,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/Homepage_logo.png',
+              height: 35.0,
+              width: 35.0,
+            ),
+            SizedBox(width: 15.0),
+            Text(
+              "不動産カレンダー",
+              style: TextStyle(fontSize: 17.0),
+            ),
+          ],
         ),
         centerTitle: true,
-      ), */
+        automaticallyImplyLeading: false,
+      ),
       body: _state == 0
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Container(
-                color: Colors.blue,
+                color: Colors.lightBlueAccent,
                 //height: MediaQuery.of(context).size.height * 2,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-/*                       SizedBox(height: 30.0),
-                      Image.asset(
-                        'assets/images/Fudosan.png',
-                        height: 35.0,
-                        width: 35.0,
-                      ), */
                       buildYearPicker(),
                       buildMonthPicker(),
                       buildCalendar(),
@@ -82,10 +91,15 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             buttonLables: ["売買", "賃貸"],
                             fontSize: 15.0,
                             buttonValues: [
-                              "売買",
-                              "賃貸",
+                              "S",
+                              "R",
                             ],
-                            radioButtonValue: (value) {},
+                            radioButtonValue: (value) {
+                              print(value);
+                              setState(() {
+                                val = value;
+                              });
+                            },
                             selectedColor: Colors.orange,
                           ),
                         ),
@@ -150,13 +164,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
       var response = await http.get(url);
       final jsonData = jsonDecode(response.body);
       for (var data in jsonData['items']) {
-        print(data['start']['date']);
+        //  print(data['start']['date']);
         _holidayModel.add(HolidayModel(DateTime.parse(data['start']['date'])));
         setState(() {
           _state = 1;
         });
       }
-      print("hello");
     } catch (e) {
       print("Exception : $e");
     }
@@ -254,17 +267,68 @@ class _HomeScreeenState extends State<HomeScreeen> {
       child: Column(
         children: [
           Card(
-            elevation: 0.0,
-            margin: EdgeInsets.all(0.0),
-            color: Colors.blue[50],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(30),
+              elevation: 0.0,
+              margin: EdgeInsets.all(0.0),
+              color: Colors.blue[50],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(30),
+                ),
+                // side: BorderSide(width: 5, color: Colors.green),
               ),
-              // side: BorderSide(width: 5, color: Colors.green),
-            ),
-            child: buildDays(),
-          ),
+              child: Column(
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.only(top: 14.0),
+                      child: val == 'S'
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 15.0,
+                                      width: 15.0,
+                                      child: Container(
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.0),
+                                    Text("買主様ご負担日数"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 15.0,
+                                      width: 15.0,
+                                      child: Container(
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.0),
+                                    Text("売主様ご負担日数"),
+                                  ],
+                                )
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 15.0,
+                                  width: 15.0,
+                                  child: Container(
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                SizedBox(width: 10.0),
+                                Text("家賃日割日数"),
+                              ],
+                            )),
+                  buildDays(),
+                ],
+              )),
           TableCalendar(
             rowHeight: 70.0,
             headerVisible: false,
@@ -321,9 +385,21 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 sunday: Colors.red,
                 saturday: Colors.purple,
               ),
+              outsideWeekendDayBuilder: (context, date, events) => dayBuilder(
+                date: date,
+                otherdays: Colors.grey,
+                sunday: Colors.red[200],
+                saturday: Colors.purple[200],
+              ),
+              outsideHolidayDayBuilder: (context, date, events) => dayBuilder(
+                date: date,
+                otherdays: Colors.red[200],
+                sunday: Colors.red,
+                saturday: Colors.purple,
+              ),
               outsideDayBuilder: (context, date, events) => dayBuilder(
                 date: date,
-                otherdays: Colors.black,
+                otherdays: Colors.grey,
                 sunday: Colors.red[200],
                 saturday: Colors.purple[200],
               ),
@@ -360,23 +436,23 @@ class _HomeScreeenState extends State<HomeScreeen> {
           ),
           Text(
             '月',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.black),
           ),
           Text(
             '火',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.black),
           ),
           Text(
             '水',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.black),
           ),
           Text(
             '木',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.black),
           ),
           Text(
             '金',
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.black),
           ),
           Text(
             '土',
@@ -449,23 +525,25 @@ class _HomeScreeenState extends State<HomeScreeen> {
             margin: const EdgeInsets.only(top: 1.5, bottom: 1.5),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(10.0)),
+                color: Colors.blue, borderRadius: BorderRadius.circular(10.0)),
             child: Text(
               "$remaing 日分",
               style: TextStyle(color: Colors.white, fontSize: 10.0),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 1.5, bottom: 1.5),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(10.0)),
-            child: Text(
-              "$completed 日分",
-              style: TextStyle(color: Colors.white, fontSize: 10.0),
-            ),
-          ),
+          val == 'S'
+              ? Container(
+                  margin: const EdgeInsets.only(top: 1.5, bottom: 1.5),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Text(
+                    "$completed 日分",
+                    style: TextStyle(color: Colors.white, fontSize: 10.0),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
