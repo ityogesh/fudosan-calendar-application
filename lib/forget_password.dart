@@ -34,9 +34,11 @@ class _ResetPasswordState extends State<ResetPassword> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'パスワードを再設定するための認証コードを送信\nしますので、ご登録いただいているメールアドレスを\nご入力の上「信送」ボタンをクリックしてください。',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            FittedBox(
+              child: Text(
+                'パスワードを再設定するための認証コードを送信\nしますので、ご登録いただいているメールアドレスを\nご入力の上「信送」ボタンをクリックしてください。',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             SizedBox(
               height: 12,

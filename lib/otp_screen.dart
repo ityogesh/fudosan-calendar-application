@@ -1,7 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/forget_password.dart';
-import 'package:otp_text_field/otp_field.dart';
-import 'package:otp_text_field/style.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -35,8 +34,12 @@ class _OtpScreenState extends State<OtpScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-                'hep****@gmail.comに届いた確認コード及び \n新しいパスワードを入力し、「新しいパスワードを\n再設定する」ボタンをクリックしてください'),
+            FittedBox(
+              child: Text(
+                'hep****@gmail.comに届いた確認コード及び \n新しいパスワードを入力し、「新しいパスワードを\n再設定する」ボタンをクリックしてください',
+                textAlign: TextAlign.center,
+              ),
+            ),
             SizedBox(
               height: 15,
             ),
@@ -59,7 +62,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   activeFillColor: Colors.orange,
                   shape: PinCodeFieldShape.box),
             ),
-            /*  OTPTextField(
+
+            /* OTPTextField(
               length: 4,
               fieldWidth: 60.0,
               width: MediaQuery.of(context).size.width,
@@ -70,7 +74,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 print("Completed: " + pin);
 //              userOTP = pin;
               },
-            ), */
+            ),*/
             SizedBox(
               height: 12,
             ),
@@ -102,7 +106,12 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 color: Colors.blue,
                 onPressed: () {
+                  showPalmUploadAlert(context);
                   print('Hi');
+//                  Navigator.push(
+//                      context,
+//                      MaterialPageRoute(
+//                          builder: (BuildContext context) => GuideScreen()));
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -114,4 +123,142 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
     );
   }
+
+  showPalmUploadAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)), //this right here
+
+          child: Container(
+            padding: EdgeInsets.all(15),
+            height: 200,
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+//              color: Colors.lightBlueAccent,
+                    color: Colors.transparent,
+
+                    blurRadius: 500.0,
+
+//             offset: Offset(6.6, 7.8),
+                  ),
+                ]),
+            child: Column(
+              children: [
+                Image.asset("assets/images/right.PNG"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('パスワードを変更いたしました。'),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: RaisedButton(
+                    child: Text(
+                      'OK',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    color: Colors.blue,
+                    onPressed: () => Navigator.pop(context),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
+  }
 }
+
+/*_showDialog(context) {
+  Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+    elevation: 0.0,
+    backgroundColor: Colors.transparent,
+    child: dialogContent(context),
+  );
+}
+
+Widget dialogContent(BuildContext context) {
+  return Center(
+      child: Container(
+    padding: EdgeInsets.all(15),
+    height: 200,
+    width: MediaQuery.of(context).size.width * 0.9,
+    decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+//              color: Colors.lightBlueAccent,
+            color: Colors.transparent,
+
+//              blurRadius: 500.0,
+
+//             offset: Offset(6.6, 7.8),
+          ),
+        ]),
+    child: Column(
+      children: [
+        Image.asset("assets/images/right.PNG"),
+        SizedBox(
+          height: 10,
+        ),
+        Text('パスワードを変更いたしました。'),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: double.infinity,
+          height: 50,
+          child: RaisedButton(
+            child: Text(
+              'OK',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            color: Colors.blue,
+            onPressed: () => Navigator.pop(context),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+          ),
+        ),
+      ],
+    ),
+  ));
+}
+*/
+/*onAlertDialog(context) {
+  Alert(
+      context: context,
+//      title: "",
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.asset("assets/images/right.PNG"),
+          Text('パスワードを変更いたしました。')
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        )
+      ]).show();
+}*/

@@ -181,4 +181,46 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
     );
   }
+
+  showPalmUploadAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)), //this right here
+
+          child: Container(
+            padding: EdgeInsets.all(15),
+            height: 200,
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+//              color: Colors.lightBlueAccent,
+                    color: Colors.transparent,
+
+                    blurRadius: 500.0,
+
+//             offset: Offset(6.6, 7.8),
+                  ),
+                ]),
+            child: Column(
+              children: [
+                Image.asset("assets/images/pop.PNG"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('パスワードを変更いたしました。'),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          )),
+    );
+  }
 }
