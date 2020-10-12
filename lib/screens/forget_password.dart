@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'main.dart';
+import 'package:login_fudosan/screens/loginscreen.dart';
 import 'otp_screen.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -25,7 +24,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             Navigator.pop(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()));
+                    builder: (BuildContext context) => LoginScreen()));
           },
         ),
       ),
