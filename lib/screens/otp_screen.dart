@@ -134,7 +134,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
           child: Container(
             padding: EdgeInsets.all(15),
-            height: 200,
+            height: 180,
             width: MediaQuery.of(context).size.width * 0.9,
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -162,7 +162,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 50,
+                  height: 35,
                   child: RaisedButton(
                     child: Text(
                       'OK',

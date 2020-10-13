@@ -1,6 +1,9 @@
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
+
 import 'package:login_fudosan/screens/loginscreen.dart';
+
+import 'otp_registration.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -34,193 +37,150 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         builder: (BuildContext context) => LoginScreen()));
               },
               child: Text(
-                'ログイン',
+                'ログインヘ',
                 style: TextStyle(color: Colors.blue, fontSize: 18.0),
               ),
             ),
           )
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '新規ユーザー登録',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: new InputDecoration(
-                labelText: '氏名*',
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '新規ユーザー登録',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: new InputDecoration(
-                labelText: 'メールアドレス*',
+              SizedBox(
+                height: 5,
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: new InputDecoration(
-                labelText: 'パスワード*',
+              TextFormField(
+                decoration: new InputDecoration(
+                  labelText: '氏名*',
+                ),
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: new InputDecoration(
-                labelText: 'パスワードの再確認*',
+              SizedBox(
+                height: 5,
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: new InputDecoration(
-                labelText: '会社名*',
+              TextFormField(
+                keyboardType: TextInputType.emailAddress,
+                decoration: new InputDecoration(
+                  labelText: 'メールアドレス*',
+                ),
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Form(
-              key: formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
+              SizedBox(
+                height: 5,
+              ),
+              TextFormField(
+                decoration: new InputDecoration(
+                  labelText: 'パスワード*',
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              TextFormField(
+                decoration: new InputDecoration(
+                  labelText: 'パスワードの再確認*',
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              TextFormField(
+                decoration: new InputDecoration(
+                  labelText: '会社名*',
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      color: Colors.transparent,
 //                    padding: EdgeInsets.all(16),
-                    child: DropDownFormField(
-                      hintText: '部署名',
-                      titleText: '',
-                      onSaved: (value) {
-                        setState(() {
-                          _myActivity = value;
-                        });
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          _myActivity = value;
-                        });
-                      },
-                      dataSource: [
-                        {
-                          "display": "Running",
-                          "value": "Running",
+                      child: DropDownFormField(
+                        titleText: null,
+                        hintText: 'その他',
+                        onSaved: (value) {
+                          setState(() {
+                            _myActivity = value;
+                          });
                         },
-                        {
-                          "display": "Climbing",
-                          "value": "Climbing",
+                        onChanged: (value) {
+                          setState(() {
+                            _myActivity = value;
+                          });
                         },
-                        {
-                          "display": "Walking",
-                          "value": "Walking",
-                        },
-                        {
-                          "display": "Swimming",
-                          "value": "Swimming",
-                        },
-                        {
-                          "display": "Soccer Practice",
-                          "value": "Soccer Practice",
-                        },
-                        {
-                          "display": "Baseball Practice",
-                          "value": "Baseball Practice",
-                        },
-                        {
-                          "display": "Football Practice",
-                          "value": "Football Practice",
-                        },
-                      ],
-                      textField: 'display',
-                      valueField: 'value',
+                        dataSource: [
+                          {
+                            "display": "1",
+                            "value": "1",
+                          },
+                          {
+                            "display": "2",
+                            "value": "2",
+                          },
+                          {
+                            "display": "3",
+                            "value": "3",
+                          },
+                          {
+                            "display": "4",
+                            "value": "4",
+                          },
+                        ],
+                        textField: 'display',
+                        valueField: 'value',
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              TextFormField(
+                decoration: new InputDecoration(
+                  labelText: '部署名*',
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                width: double.infinity,
+                height: 50,
+                child: RaisedButton(
+                  child: Text(
+                    '登録完了',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              width: double.infinity,
-              height: 50,
-              child: RaisedButton(
-                child: Text(
-                  '登録完了',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  color: Colors.blue,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                OtpRegistrationScreen()));
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
                 ),
-                color: Colors.blue,
-                onPressed: () {
-                  print('Hi');
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  showPalmUploadAlert(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) => Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)), //this right here
-
-          child: Container(
-            padding: EdgeInsets.all(15),
-            height: 200,
-            width: MediaQuery.of(context).size.width * 0.9,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(16.0),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-//              color: Colors.lightBlueAccent,
-                    color: Colors.transparent,
-
-                    blurRadius: 500.0,
-
-//             offset: Offset(6.6, 7.8),
-                  ),
-                ]),
-            child: Column(
-              children: [
-                Image.asset("assets/images/pop.PNG"),
-                SizedBox(
-                  height: 10,
-                ),
-                Text('パスワードを変更いたしました。'),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          )),
     );
   }
 }

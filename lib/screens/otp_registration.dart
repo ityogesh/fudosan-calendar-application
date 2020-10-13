@@ -86,7 +86,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                 ),
                 color: Colors.blue,
                 onPressed: () {
-                  print('Hi');
+                  showPalmUploadAlert(context);
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -97,6 +97,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
               height: 20,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('確認コードは届いていない場合?'),
                 SizedBox(width: 5),
@@ -111,6 +112,48 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  showPalmUploadAlert(BuildContext context) {
+    showDialog(
+      context: context,
+//      barrierDismissible: false,
+      builder: (BuildContext context) => Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)), //this right here
+
+          child: Container(
+            padding: EdgeInsets.all(15),
+            height: 140,
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+//              color: Colors.lightBlueAccent,
+                    color: Colors.transparent,
+
+                    blurRadius: 5000.0,
+
+//             offset: Offset(6.6, 7.8),
+                  ),
+                ]),
+            child: Column(
+              children: [
+                Image.asset("assets/images/pop.PNG"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('計算したい日付を選択してください。'),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

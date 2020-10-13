@@ -87,7 +87,29 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               height: 18,
             ),
-            MaterialButton(
+            Container(
+              width: double.infinity,
+              height: 50,
+              child: RaisedButton(
+                child: Text(
+                  'ログイン',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                color: Colors.blue,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => HomeScreeen()));
+                  print('click me');
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+              ),
+            )
+
+            /*   MaterialButton(
               color: Colors.blue,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -110,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.white,
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
       ),
