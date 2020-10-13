@@ -340,7 +340,7 @@ class NumberPicker extends StatelessWidget {
                                       child: Center(
                                         child: Text("月",
                                             style: TextStyle(
-                                                fontSize: 18.0,
+                                                fontSize: 14.0,
                                                 fontWeight: FontWeight.bold)),
                                       ),
                                     )
@@ -351,12 +351,17 @@ class NumberPicker extends StatelessWidget {
                           : (value == (selectedIntValue - 1) ||
                                   value == (selectedIntValue + 1))
                               ? Center(
-                                  child: new Text(
-                                    getDisplayedValue(value),
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.white70,
-                                        fontWeight: FontWeight.bold),
+                                  child: InkWell(
+                                    onTap: () {
+                                    //  selectedIntValue = value;
+                                    },
+                                    child: new Text(
+                                      getDisplayedValue(value),
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.white70,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 )
                               : (value == (selectedIntValue - 2) ||

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:login_fudosan/models/holidayModel.dart';
+import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -67,89 +68,102 @@ class _HomeScreeenState extends State<HomeScreeen> {
               child: Container(
                 color: Colors.lightBlueAccent,
                 //height: MediaQuery.of(context).size.height * 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      buildYearPicker(),
-                      buildMonthPicker(),
-                      buildCalendar(),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 48.0),
-                        child: ButtonTheme(
-                          minWidth: MediaQuery.of(context).size.width * 0.33,
-                          child: CustomRadioButton(
-                            elevation: 0,
-                            height: 55.0,
-                            buttonColor: Theme.of(context).canvasColor,
-                            enableShape: true,
-                            autoWidth: true,
-                            customShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                                side: BorderSide(color: Colors.grey)),
-                            buttonLables: ["売買", "賃貸"],
-                            fontSize: 15.0,
-                            buttonValues: [
-                              "S",
-                              "R",
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildYearPicker(),
+                    buildMonthPicker(),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: buildCalendar(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 48.0),
+                      child: ButtonTheme(
+                        minWidth: MediaQuery.of(context).size.width * 0.33,
+                        child: CustomRadioButton(
+                          elevation: 0,
+                          height: 55.0,
+                          buttonColor: Theme.of(context).canvasColor,
+                          enableShape: true,
+                          autoWidth: true,
+                          customShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(color: Colors.grey)),
+                          buttonLables: ["売買", "賃貸"],
+                          fontSize: 15.0,
+                          buttonValues: [
+                            "S",
+                            "R",
+                          ],
+                          radioButtonValue: (value) {
+                            print(value);
+                            setState(() {
+                              val = value;
+                            });
+                          },
+                          selectedColor: Colors.orange,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    val != "S"
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Radio(
+                                    activeColor: Colors.white,
+                                    value: 0,
+                                    groupValue: _radioValue1,
+                                    onChanged: (val) {},
+                                  ),
+                                  Text(
+                                    " 入居",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Radio(
+                                    focusColor: Colors.white,
+                                    value: 1,
+                                    groupValue: _radioValue1,
+                                    onChanged: (val) {},
+                                  ),
+                                  Text(
+                                    "退居",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
                             ],
-                            radioButtonValue: (value) {
-                              print(value);
-                              setState(() {
-                                val = value;
-                              });
-                            },
-                            selectedColor: Colors.orange,
+                          )
+                        : Container(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      BuyingSellingScreen()));
+                        },
+                        child: CircleAvatar(
+                          radius: 25.0,
+                          backgroundColor: Colors.orange,
+                          child: Icon(
+                            Icons.navigate_next,
+                            color: Colors.white,
+                            size: 30.0,
                           ),
                         ),
                       ),
-                      SizedBox(height: 5.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Radio(
-                                activeColor: Colors.white,
-                                value: 0,
-                                groupValue: _radioValue1,
-                                onChanged: (val) {},
-                              ),
-                              Text(
-                                " 入居",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Radio(
-                                focusColor: Colors.white,
-                                value: 1,
-                                groupValue: _radioValue1,
-                                onChanged: (val) {},
-                              ),
-                              Text(
-                                "退居",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5.0),
-                      CircleAvatar(
-                        radius: 25.0,
-                        backgroundColor: Colors.orange,
-                        child: Icon(
-                          Icons.navigate_next,
-                          color: Colors.white,
-                          size: 30.0,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -207,7 +221,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: SizedBox(
-        height: 20.0,
+        height: 15.0,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -233,22 +247,25 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   buildMonthPicker() {
     return SizedBox(
-      height: 100.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new NumberPicker.horizontal(
-            ismonth: true,
-            numberToDisplay: 7,
-            zeroPad: false,
-            initialValue: _currentmonth,
-            minValue: 1,
-            maxValue: 12,
-            onChanged: (newValue) => setState(() {
-              changeMonth(newValue);
-            }),
-          )
-        ],
+      height: 90.0,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new NumberPicker.horizontal(
+              ismonth: true,
+              numberToDisplay: 7,
+              zeroPad: false,
+              initialValue: _currentmonth,
+              minValue: 1,
+              maxValue: 12,
+              onChanged: (newValue) => setState(() {
+                changeMonth(newValue);
+              }),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -294,7 +311,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                       ),
                                     ),
                                     SizedBox(width: 10.0),
-                                    Text("買主様ご負担日数"),
+                                    Text(
+                                      "買主様ご負担日数",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ],
                                 ),
                                 Row(
@@ -307,7 +328,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                       ),
                                     ),
                                     SizedBox(width: 10.0),
-                                    Text("売主様ご負担日数"),
+                                    Text(
+                                      "売主様ご負担日数",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ],
                                 )
                               ],
@@ -338,7 +363,34 @@ class _HomeScreeenState extends State<HomeScreeen> {
             onVisibleDaysChanged: (date1, date2, cformat) {
               print("1:$date1");
               print("2:$date2");
+              if (date1.year == date2.year) {
+                if (date1.month == date2.month - 1) {
+                  if (date1.day == 1) {
+                    changeMonth(date1.month);
+                  } else {
+                    changeMonth(date2.month);
+                  }
+                } else if (date1.month == date2.month - 2) {
+                  changeMonth(date1.month + 1);
+                } else if (date1.month == date2.month) {
+                  changeMonth(date1.month);
+                }
+              } else {
+                if (date1.month == 11) {
+                  changeYear(date1.year);
+                  changeMonth(date1.month + 1);
+                } else {
+                  if (date1.month == 12 && date1.day == 1) {
+                    changeYear(date1.year);
+                    changeMonth(date1.month);
+                  } else if (date1.month == 12 && date1.day != 1) {
+                    changeYear(date2.year);
+                    changeMonth(1);
+                  }
+                }
+              }
             },
+            onUnavailableDaySelected: () {},
             availableGestures: AvailableGestures.none,
             calendarStyle: CalendarStyle(
                 outsideDaysVisible: true,
@@ -517,9 +569,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   decoration: BoxDecoration(
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(10.0)),
-                  child: Text(
-                    "$completed 日分",
-                    style: TextStyle(color: Colors.white, fontSize: 10.0),
+                  child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: Text(
+                      "$completed 日分",
+                      style: TextStyle(color: Colors.white, fontSize: 10.0),
+                    ),
                   ),
                 )
               : Container(),

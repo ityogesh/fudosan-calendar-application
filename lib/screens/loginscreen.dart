@@ -97,11 +97,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 color: Colors.blue,
                 onPressed: () {
-                  /*   Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => HomeScreeen())); */
-                  _loginInitiate();
+                          builder: (BuildContext context) => HomeScreeen()));
+                  //_loginInitiate();
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
