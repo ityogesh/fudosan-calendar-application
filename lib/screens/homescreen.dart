@@ -412,10 +412,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
               ),
               todayDayBuilder: (context, date, events) => dayBuilder(
                 date: date,
-                otherdays: Colors.white,
-                sunday: Colors.white,
-                saturday: Colors.white,
-                backgroundcolor: Colors.orange,
+                otherdays: Colors.orange,
+                sunday: Colors.orange,
+                saturday: Colors.orange,
+                backgroundcolor: Colors.white,
               ),
             ),
           ),
@@ -484,56 +484,35 @@ class _HomeScreeenState extends State<HomeScreeen> {
         children: [
           //7th day Sunday -  6th Saturday
           date.weekday == 6
-              ? CircleAvatar(
-                  radius: 10.0,
-                  backgroundColor:
-                      backgroundcolor == null ? Colors.white : backgroundcolor,
-                  child: Text(
-                    date.day.toString(),
-                    style: TextStyle(
-                        color: saturday,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold),
-                  ))
+              ? dateBuilder(
+                  date,
+                  backgroundcolor == null ? Colors.white : backgroundcolor,
+                  saturday)
               : date.weekday == 7
-                  ? CircleAvatar(
-                      radius: 10.0,
-                      backgroundColor: backgroundcolor == null
-                          ? Colors.white
-                          : backgroundcolor,
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(
-                            color: sunday,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold),
-                      ))
-                  : CircleAvatar(
-                      radius: 10.0,
-                      backgroundColor: backgroundcolor == null
-                          ? Colors.white
-                          : backgroundcolor,
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(
-                            color: otherdays,
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                  ? dateBuilder(
+                      date,
+                      backgroundcolor == null ? Colors.white : backgroundcolor,
+                      sunday)
+                  : dateBuilder(
+                      date,
+                      backgroundcolor == null ? Colors.white : backgroundcolor,
+                      otherdays),
           Container(
-            margin: const EdgeInsets.only(top: 1.5, bottom: 1.5),
+            margin: const EdgeInsets.only(top: 1, bottom: 1),
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: Colors.blue, borderRadius: BorderRadius.circular(10.0)),
-            child: Text(
-              "$remaing 日分",
-              style: TextStyle(color: Colors.white, fontSize: 10.0),
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: Text(
+                "$remaing 日分",
+                style: TextStyle(color: Colors.white, fontSize: 10.0),
+              ),
             ),
           ),
           val == 'S'
               ? Container(
-                  margin: const EdgeInsets.only(top: 1.5, bottom: 1.5),
+                  margin: const EdgeInsets.only(top: 1, bottom: 1),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Colors.orange,
@@ -545,6 +524,18 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 )
               : Container(),
         ],
+      ),
+    );
+  }
+
+  dateBuilder(DateTime date, Color backgroundcolor, Color textcolor) {
+    return CircleAvatar(
+      radius: 13.0,
+      backgroundColor: backgroundcolor == null ? Colors.white : backgroundcolor,
+      child: Text(
+        date.day.toString(),
+        style: TextStyle(
+            color: textcolor, fontSize: 15.0, fontWeight: FontWeight.bold),
       ),
     );
   }

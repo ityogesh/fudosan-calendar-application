@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/screens/homescreen.dart';
+import 'package:login_fudosan/utils/constants.dart';
 import 'registration.dart';
 import 'forget_password.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -90,10 +93,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(15.0),
                   side: BorderSide(color: Colors.white)),
               onPressed: () {
-                Navigator.push(
+                _loginInitiate();
+                /*  Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => HomeScreeen()));
+                        builder: (BuildContext context) => HomeScreeen())); */
               },
               minWidth: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(
@@ -111,5 +115,24 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  _loginInitiate() async {
+    var headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+    var data = '{"email":"gowtham114@yopmail.com","password":"password"}';
+
+    var res =
+        await http.post(Constants.login_URL, headers: headers, body: data);
+    if (res.statusCode != 200)
+      throw Exception('http.post error: statusCode= ${res.statusCode}');
+    print(res.body);
+    var responsedata = json.decode(res.body);
+    print(responsedata['success']);
+    print(responsedata['UserDetails']['id']);
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
   }
 }
