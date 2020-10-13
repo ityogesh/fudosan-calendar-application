@@ -97,42 +97,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 color: Colors.blue,
                 onPressed: () {
-                  Navigator.push(
+                  /*   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => HomeScreeen()));
-                  print('click me');
+                          builder: (BuildContext context) => HomeScreeen())); */
+                  _loginInitiate();
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
             )
-
-            /*   MaterialButton(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: BorderSide(color: Colors.white)),
-              onPressed: () {
-                _loginInitiate();
-                /*  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => HomeScreeen())); */
-              },
-              minWidth: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(
-                vertical: 12.0,
-              ),
-              child: Text(
-                'ログイン',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),*/
           ],
         ),
       ),
