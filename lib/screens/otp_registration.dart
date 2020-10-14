@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+import 'homescreen.dart';
 
 class OtpRegistrationScreen extends StatefulWidget {
   @override
@@ -19,10 +22,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
             color: Colors.black,
           ),
           onPressed: () {
-            /*Navigator.pop(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => ResetPassword()));*/
+            Navigator.pop(context);
           },
         ),
       ),
@@ -34,7 +34,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
           children: [
             FittedBox(
               child: Text(
-                '本人確認のため、ご登録のhep****@gmail.comに\n届いた確認コードを入力し、「確認」ボタンを\nクリックしてください',
+                "本人確認のため、ご登録のhep****@gmail.comに\n 届いた認証コードを入力し、「確認」ボタンを\n クリックしてください。",
                 textAlign: TextAlign.center,
               ),
             ),
@@ -84,9 +84,12 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                   '確認',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
-                color: Colors.blue,
+                color: ColorConstant.otpButton,
                 onPressed: () {
-                  showPalmUploadAlert(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => HomeScreeen()));
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -99,12 +102,12 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('確認コードは届いていない場合?'),
+                Text('認証コードは届いていない場合?'),
                 SizedBox(width: 5),
                 InkWell(
                   child: Text(
                     '再送信',
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(color: ColorConstant.otpButton),
                   ),
                 ),
               ],
@@ -115,6 +118,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
     );
   }
 
+//change the function Name
   showPalmUploadAlert(BuildContext context) {
     showDialog(
       context: context,

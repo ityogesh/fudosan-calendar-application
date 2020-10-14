@@ -2,6 +2,7 @@ import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 
 import 'package:login_fudosan/screens/loginscreen.dart';
+import 'package:login_fudosan/utils/colorconstant.dart';
 
 import 'otp_registration.dart';
 
@@ -38,7 +39,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               },
               child: Text(
                 'ログインヘ',
-                style: TextStyle(color: Colors.blue, fontSize: 18.0),
+                style: TextStyle(
+                    color: ColorConstant.rButton,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           )
@@ -47,6 +51,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.only(left: 20, right: 20),
+          alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +110,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      color: Colors.transparent,
+                      color: Colors.white,
 //                    padding: EdgeInsets.all(16),
                       child: DropDownFormField(
                         titleText: null,
@@ -122,20 +127,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                         dataSource: [
                           {
-                            "display": "1",
-                            "value": "1",
+                            "display": "賃貸",
+                            "value": "賃貸",
                           },
                           {
-                            "display": "2",
-                            "value": "2",
+                            "display": "販売（売買）",
+                            "value": "販売（売買）",
                           },
                           {
-                            "display": "3",
-                            "value": "3",
+                            "display": "企画開発",
+                            "value": "企画開発",
                           },
                           {
-                            "display": "4",
-                            "value": "4",
+                            "display": "資産運用",
+                            "value": "資産運用",
+                          },
+                          {
+                            "display": "賃貸管理",
+                            "value": "賃貸管理",
+                          },
+                          {
+                            "display": "物流",
+                            "value": "物流",
+                          },
+                          {
+                            "display": "総務・経理",
+                            "value": "総務・経理",
+                          },
+                          {
+                            "display": "その他",
+                            "value": "その他",
                           },
                         ],
                         textField: 'display',
@@ -150,11 +171,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextFormField(
                 decoration: new InputDecoration(
-                  labelText: '部署名*',
+                  labelText: '部署名（任意）',
                 ),
               ),
               SizedBox(
-                height: 15,
+                height: 30,
               ),
               Container(
                 width: double.infinity,
@@ -164,7 +185,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     '登録完了',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
-                  color: Colors.blue,
+                  color: ColorConstant.rButton,
                   onPressed: () {
                     Navigator.push(
                         context,

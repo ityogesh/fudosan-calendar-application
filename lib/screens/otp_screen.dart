@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/screens/forget_password.dart';
+import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+import 'homescreen.dart';
 
 class OtpScreen extends StatefulWidget {
   @override
@@ -36,12 +39,12 @@ class _OtpScreenState extends State<OtpScreen> {
           children: [
             FittedBox(
               child: Text(
-                'hep****@gmail.comに届いた確認コード及び \n新しいパスワードを入力し、「新しいパスワードを\n再設定する」ボタンをクリックしてください',
+                "hep....@gmail.comに届いた認証コード及び\n 新しいパスワードを入力し、「パスワードを\n 再設定する」ボタンをクリックしてください。",
                 textAlign: TextAlign.center,
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 25,
             ),
             PinCodeTextField(
               appContext: context,
@@ -90,11 +93,11 @@ class _OtpScreenState extends State<OtpScreen> {
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               decoration: new InputDecoration(
-                labelText: '新しいパスワード（確認）',
+                labelText: '新しいパスワード(確認)',
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 40,
             ),
             Container(
               width: double.infinity,
@@ -104,7 +107,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   'パスワードを再設定する',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
-                color: Colors.blue,
+                color: ColorConstant.otpButton,
                 onPressed: () {
                   showPalmUploadAlert(context);
                   print('Hi');
@@ -134,7 +137,6 @@ class _OtpScreenState extends State<OtpScreen> {
 
           child: Container(
             padding: EdgeInsets.all(15),
-            height: 180,
             width: MediaQuery.of(context).size.width * 0.9,
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -151,25 +153,29 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ]),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset("assets/images/right.PNG"),
+                Image.asset("assets/images/Success_popup.png"),
                 SizedBox(
                   height: 10,
                 ),
-                Text('パスワードを変更いたしました。'),
+                Text('パスワードを更新いたしました。'),
                 SizedBox(
                   height: 10,
                 ),
                 Container(
                   width: double.infinity,
-                  height: 35,
+                  height: 45,
                   child: RaisedButton(
                     child: Text(
                       'OK',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                    color: Colors.blue,
-                    onPressed: () => Navigator.pop(context),
+                    color: ColorConstant.otpButton,
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => HomeScreeen())),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),

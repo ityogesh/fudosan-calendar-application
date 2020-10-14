@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
+import 'package:login_fudosan/utils/colorconstant.dart';
 import 'otp_screen.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -35,7 +36,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           children: [
             FittedBox(
               child: Text(
-                'パスワードを再設定するための認証コードを送信\nしますので、ご登録いただいているメールアドレスを\nご入力の上「信送」ボタンをクリックしてください。',
+                "パスワードを再設定するための認証コードを送信\n しますので、ご登録いただいているメールアドレスを\n ご入力の上「送信」ボタンをクリックしてください。",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -49,7 +50,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               ),
             ),
             SizedBox(
-              height: 18,
+              height: 40,
             ),
             Container(
               width: double.infinity,
@@ -59,7 +60,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   '信送',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
-                color: Colors.blue,
+                color: ColorConstant.otpButton,
                 onPressed: () {
                   print('Hi');
                   Navigator.push(

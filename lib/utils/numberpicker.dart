@@ -353,13 +353,13 @@ class NumberPicker extends StatelessWidget {
                               ? Center(
                                   child: InkWell(
                                     onTap: () {
-                                    //  selectedIntValue = value;
+                                      //  selectedIntValue = value;
                                     },
                                     child: new Text(
                                       getDisplayedValue(value),
                                       style: TextStyle(
                                           fontSize: 16.0,
-                                          color: Colors.white70,
+                                          color: Colors.white60,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -371,7 +371,7 @@ class NumberPicker extends StatelessWidget {
                                         getDisplayedValue(value),
                                         style: TextStyle(
                                             fontSize: 16.0,
-                                            color: Colors.white54,
+                                            color: Colors.white38,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     )
@@ -380,7 +380,7 @@ class NumberPicker extends StatelessWidget {
                                         getDisplayedValue(value),
                                         style: TextStyle(
                                             fontSize: 16.0,
-                                            color: Colors.white38,
+                                            color: Colors.white24,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     );
@@ -462,7 +462,7 @@ class NumberPicker extends StatelessWidget {
                                     getDisplayedValue(value),
                                     style: TextStyle(
                                         fontSize: 16.0,
-                                        color: Colors.white70,
+                                        color: Colors.white60,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 )
@@ -473,7 +473,7 @@ class NumberPicker extends StatelessWidget {
                                         getDisplayedValue(value),
                                         style: TextStyle(
                                             fontSize: 16.0,
-                                            color: Colors.white54,
+                                            color: Colors.white38,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     )
@@ -482,7 +482,7 @@ class NumberPicker extends StatelessWidget {
                                         getDisplayedValue(value),
                                         style: TextStyle(
                                             fontSize: 16.0,
-                                            color: Colors.white38,
+                                            color: Colors.white24,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     );
