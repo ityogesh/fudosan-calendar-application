@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:login_fudosan/models/apiRequestModels/register/registerRequestModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/register/registerResponseModel.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
+import 'package:login_fudosan/utils/constants.dart';
 
 import 'otp_registration.dart';
 
@@ -12,8 +17,24 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   String _myActivity;
+  RegisterResponseModel registerResponseModel = new RegisterResponseModel();
 
   final formKey = new GlobalKey<FormState>();
+  final userNameController = new TextEditingController();
+  final emailController = new TextEditingController();
+  final passwordController = new TextEditingController();
+  final confirmPasswordController = new TextEditingController();
+  final organizationController = new TextEditingController();
+  final departmentNameController = new TextEditingController();
+
+  String userName,
+      email,
+      password,
+      confirmPassword,
+      companyName,
+      department,
+      departmentName;
+
   void initState() {
     super.initState();
     _myActivity = '';
@@ -59,6 +80,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 5,
               ),
               TextFormField(
+                controller: userNameController,
                 decoration: new InputDecoration(
                   labelText: '氏名*',
                 ),
@@ -67,6 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 5,
               ),
               TextFormField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: new InputDecoration(
                   labelText: 'メールアドレス*',
@@ -76,6 +99,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 5,
               ),
               TextFormField(
+                controller: passwordController,
                 decoration: new InputDecoration(
                   labelText: 'パスワード*',
                 ),
@@ -84,6 +108,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 5,
               ),
               TextFormField(
+                controller: confirmPasswordController,
                 decoration: new InputDecoration(
                   labelText: 'パスワードの再確認*',
                 ),
@@ -92,6 +117,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 5,
               ),
               TextFormField(
+                controller: organizationController,
                 decoration: new InputDecoration(
                   labelText: '会社名*',
                 ),
@@ -149,6 +175,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 5,
               ),
               TextFormField(
+                controller: departmentNameController,
                 decoration: new InputDecoration(
                   labelText: '部署名*',
                 ),
@@ -166,11 +193,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   color: Colors.blue,
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                OtpRegistrationScreen()));
+                    _doUserRegistration();
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
@@ -182,5 +205,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
+  }
+
+  _doUserRegistration() async {
+    RegisterRequestModel registerRequestModel;
+    userName = userNameController.text;
+    email = emailController.text;
+    password = passwordController.text;
+    confirmPassword = confirmPasswordController.text;
+    companyName = organizationController.text;
+    department = _myActivity;
+    departmentName = departmentNameController.text;
+
+    /*var headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };*/
+    registerRequestModel = new RegisterRequestModel(
+        fullname: userName,
+        email: email,
+        password: password,
+        cPassword: confirmPassword,
+        companyName: companyName,
+        department: departmentName);
+
+    var response = await http.post(Constants.register_URL,
+        body: registerRequestModel.toJson());
+
+    if (response.statusCode == 200) {
+      var responseData = json.decode(response.body);
+      final Map registerResponse = responseData;
+      registerResponseModel = RegisterResponseModel.fromJson(registerResponse);
+      print('Register response');
+      print(registerResponseModel.toJson());
+      print('User id : ${registerResponseModel.userid}');
+      print('Token : ${registerResponseModel.success.token}');
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => OtpRegistrationScreen()));
+    } else {
+      print('response error');
+      throw Exception();
+    }
   }
 }
