@@ -69,159 +69,166 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '新規ユーザー登録',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              TextFormField(
-                controller: userNameController,
-                decoration: new InputDecoration(
-                  labelText: '氏名*',
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '新規ユーザー登録',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              TextFormField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: new InputDecoration(
-                  labelText: 'メールアドレス*',
+                SizedBox(
+                  height: 5,
                 ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              TextFormField(
-                controller: passwordController,
-                decoration: new InputDecoration(
-                  labelText: 'パスワード*',
+                TextFormField(
+                  controller: userNameController,
+                  decoration: new InputDecoration(
+                    labelText: '氏名*',
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              TextFormField(
-                controller: confirmPasswordController,
-                decoration: new InputDecoration(
-                  labelText: 'パスワードの再確認*',
+                SizedBox(
+                  height: 5,
                 ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              TextFormField(
-                controller: organizationController,
-                decoration: new InputDecoration(
-                  labelText: '会社名*',
+                TextFormField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: new InputDecoration(
+                    labelText: 'メールアドレス*',
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      color: Colors.white,
+                SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  controller: passwordController,
+                  decoration: new InputDecoration(
+                    labelText: 'パスワード*',
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  controller: confirmPasswordController,
+                  decoration: new InputDecoration(
+                    labelText: 'パスワードの再確認*',
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  controller: organizationController,
+                  decoration: new InputDecoration(
+                    labelText: '会社名*',
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        color: Colors.white,
 //                    padding: EdgeInsets.all(16),
-                      child: DropDownFormField(
-                        titleText: null,
-                        hintText: 'その他',
-                        onSaved: (value) {
-                          setState(() {
-                            _myActivity = value;
-                          });
-                        },
-                        onChanged: (value) {
-                          setState(() {
-                            _myActivity = value;
-                          });
-                        },
-                        dataSource: [
-                          {
-                            "display": "賃貸",
-                            "value": "賃貸",
+                        child: DropDownFormField(
+                          titleText: null,
+                          hintText: 'その他',
+                          onSaved: (value) {
+                            setState(() {
+                              _myActivity = value;
+                            });
                           },
-                          {
-                            "display": "販売（売買）",
-                            "value": "販売（売買）",
+                          onChanged: (value) {
+                            setState(() {
+                              _myActivity = value;
+                            });
                           },
-                          {
-                            "display": "企画開発",
-                            "value": "企画開発",
-                          },
-                          {
-                            "display": "資産運用",
-                            "value": "資産運用",
-                          },
-                          {
-                            "display": "賃貸管理",
-                            "value": "賃貸管理",
-                          },
-                          {
-                            "display": "物流",
-                            "value": "物流",
-                          },
-                          {
-                            "display": "総務・経理",
-                            "value": "総務・経理",
-                          },
-                          {
-                            "display": "その他",
-                            "value": "その他",
-                          },
-                        ],
-                        textField: 'display',
-                        valueField: 'value',
+                          dataSource: [
+                            {
+                              "display": "賃貸",
+                              "value": "賃貸",
+                            },
+                            {
+                              "display": "販売（売買）",
+                              "value": "販売（売買）",
+                            },
+                            {
+                              "display": "企画開発",
+                              "value": "企画開発",
+                            },
+                            {
+                              "display": "資産運用",
+                              "value": "資産運用",
+                            },
+                            {
+                              "display": "賃貸管理",
+                              "value": "賃貸管理",
+                            },
+                            {
+                              "display": "物流",
+                              "value": "物流",
+                            },
+                            {
+                              "display": "総務・経理",
+                              "value": "総務・経理",
+                            },
+                            {
+                              "display": "その他",
+                              "value": "その他",
+                            },
+                          ],
+                          textField: 'display',
+                          valueField: 'value',
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  controller: departmentNameController,
+                  decoration: new InputDecoration(
+                    labelText: '部署名（任意）',
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: RaisedButton(
+                    child: Text(
+                      '登録完了',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              TextFormField(
-                controller: departmentNameController,
-                decoration: new InputDecoration(
-                  labelText: '部署名（任意）',
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                width: double.infinity,
-                height: 50,
-                child: RaisedButton(
-                  child: Text(
-                    '登録完了',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    color: ColorConstant.rButton,
+                    onPressed: () {
+                      _doUserRegistration();
+                      /*        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  OtpRegistrationScreen()));*/
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
                   ),
-                  color: ColorConstant.rButton,
-                  onPressed: () {
-                    _doUserRegistration();
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

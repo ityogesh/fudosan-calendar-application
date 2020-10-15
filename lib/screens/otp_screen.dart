@@ -32,96 +32,100 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Container(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FittedBox(
-              child: Text(
-                "hep....@gmail.comに届いた認証コード及び\n 新しいパスワードを入力し、「パスワードを\n 再設定する」ボタンをクリックしてください。",
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            PinCodeTextField(
-              appContext: context,
-              length: 4,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              onChanged: (val) {},
-              onCompleted: (val) {},
-              textStyle: TextStyle(fontSize: 20, color: Colors.white),
-              enableActiveFill: true,
-              pinTheme: PinTheme(
-                  borderRadius: BorderRadius.circular(10.0),
-                  selectedFillColor: Colors.grey[300],
-                  selectedColor: Colors.grey[300],
-                  inactiveFillColor: Colors.grey[300],
-                  inactiveColor: Colors.grey[300],
-                  activeColor: Colors.orange,
-                  fieldWidth: 50.0,
-                  activeFillColor: Colors.orange,
-                  shape: PinCodeFieldShape.box),
-            ),
-
-            /* OTPTextField(
-              length: 4,
-              fieldWidth: 60.0,
-              width: MediaQuery.of(context).size.width,
-              style: TextStyle(fontSize: 20, color: Colors.black),
-              textFieldAlignment: MainAxisAlignment.spaceEvenly,
-              fieldStyle: FieldStyle.box,
-              onCompleted: (pin) {
-                print("Completed: " + pin);
-//              userOTP = pin;
-              },
-            ),*/
-            SizedBox(
-              height: 12,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: new InputDecoration(
-                labelText: '新しいパスワード',
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: new InputDecoration(
-                labelText: '新しいパスワード(確認)',
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              width: double.infinity,
-              height: 50,
-              child: RaisedButton(
-                child: Text(
-                  'パスワードを再設定する',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: Text(
+                    "hep....@gmail.comに届いた認証コード及び\n 新しいパスワードを入力し、「パスワードを\n 再設定する」ボタンをクリックしてください。",
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                color: ColorConstant.otpButton,
-                onPressed: () {
-                  showPalmUploadAlert(context);
-                  print('Hi');
+                SizedBox(
+                  height: 25,
+                ),
+                PinCodeTextField(
+                  appContext: context,
+                  length: 4,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  onChanged: (val) {},
+                  onCompleted: (val) {},
+                  textStyle: TextStyle(fontSize: 20, color: Colors.white),
+                  enableActiveFill: true,
+                  pinTheme: PinTheme(
+                      borderRadius: BorderRadius.circular(10.0),
+                      selectedFillColor: Colors.grey[300],
+                      selectedColor: Colors.grey[300],
+                      inactiveFillColor: Colors.grey[300],
+                      inactiveColor: Colors.grey[300],
+                      activeColor: Colors.orange,
+                      fieldWidth: 50.0,
+                      activeFillColor: Colors.orange,
+                      shape: PinCodeFieldShape.box),
+                ),
+
+                /* OTPTextField(
+                  length: 4,
+                  fieldWidth: 60.0,
+                  width: MediaQuery.of(context).size.width,
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  textFieldAlignment: MainAxisAlignment.spaceEvenly,
+                  fieldStyle: FieldStyle.box,
+                  onCompleted: (pin) {
+                    print("Completed: " + pin);
+//              userOTP = pin;
+                  },
+                ),*/
+                SizedBox(
+                  height: 12,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: new InputDecoration(
+                    labelText: '新しいパスワード',
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: new InputDecoration(
+                    labelText: '新しいパスワード(確認)',
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: RaisedButton(
+                    child: Text(
+                      'パスワードを再設定する',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    color: ColorConstant.otpButton,
+                    onPressed: () {
+                      showPalmUploadAlert(context);
+                      print('Hi');
 //                  Navigator.push(
 //                      context,
 //                      MaterialPageRoute(
 //                          builder: (BuildContext context) => GuideScreen()));
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

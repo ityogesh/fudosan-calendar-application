@@ -43,79 +43,85 @@ class _LoginScreenState extends State<LoginScreen> {
           )
         ],
       ),
-      body: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-      Text(
-        'ようこそ',
-        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25.0),
-      ),
-      Text('アプリを使用するにはログインしてください。'),
-      SizedBox(
-        height: 7,
-      ),
-      TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: new InputDecoration(
-          labelText: 'メールアドレス',
-        ),
-      ),
-      SizedBox(
-        height: 7,
-      ),
-      TextFormField(
-        obscureText: false,
-        decoration: new InputDecoration(
-          labelText: 'パスワード',
-        ),
-      ),
-      SizedBox(
-        height: 20,
-      ),
-      InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => ResetPassword()));
-        },
-        child: Text(
-          'パスワードを忘れた方はこちら',
-          style: TextStyle(
-            decoration: TextDecoration.underline,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'ようこそ',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25.0),
+                ),
+                Text('アプリを使用するにはログインしてください。'),
+                SizedBox(
+                  height: 7,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: new InputDecoration(
+                    labelText: 'メールアドレス',
+                  ),
+                ),
+                SizedBox(
+                  height: 7,
+                ),
+                TextFormField(
+                  obscureText: false,
+                  decoration: new InputDecoration(
+                    labelText: 'パスワード',
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ResetPassword()));
+                  },
+                  child: Text(
+                    'パスワードを忘れた方はこちら',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 22,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  child: RaisedButton(
+                    child: Text(
+                      'ログイン',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    color: ColorConstant.lButton,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  HomeScreeen()));
+                      //_loginInitiate();
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
-      SizedBox(
-        height: 22,
-      ),
-      Container(
-        width: double.infinity,
-        height: 50,
-        child: RaisedButton(
-          child: Text(
-            'ログイン',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          color: ColorConstant.lButton,
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => HomeScreeen()));
-            //_loginInitiate();
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-        ),
-      )
-            ],
-          ),
-        ),
     );
   }
 
