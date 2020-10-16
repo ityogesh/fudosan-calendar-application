@@ -16,4 +16,28 @@ class ValidateHelper {
       return null;
     }
   }
+
+//  String validateConfirmPassword(String value) {
+//    if (value.length < 6) {
+//      return "Enter valid Password";
+//    } else {
+//      return null;
+//    }
+//  }
+
+  String validateName(String value) {
+    if (value.length < 1) {
+      return "Enter valid name";
+    } else {
+      return null;
+    }
+  }
+
+  String validateCompanyName(String value) {
+    if (value.length < 1) {
+      return "Enter valid company name";
+    } else {
+      return null;
+    }
+  }
 }
