@@ -1,9 +1,9 @@
-class OtpResendRequestModel {
-  int id;
+class ResendOtpRequestModel {
+  String id;
 
-  OtpResendRequestModel({this.id});
+  ResendOtpRequestModel({this.id});
 
-  OtpResendRequestModel.fromJson(Map<String, dynamic> json) {
+  ResendOtpRequestModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
   }
 

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class RegisterRequestModel {
   String fullname;
   String email;

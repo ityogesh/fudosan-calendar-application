@@ -1,9 +1,9 @@
-class OtpResendResponseModel {
+class ResendOtpResponseModel {
   String success;
 
-  OtpResendResponseModel({this.success});
+  ResendOtpResponseModel({this.success});
 
-  OtpResendResponseModel.fromJson(Map<String, dynamic> json) {
+  ResendOtpResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
   }
 
