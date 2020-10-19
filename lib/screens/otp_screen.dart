@@ -111,7 +111,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                     color: ColorConstant.otpButton,
                     onPressed: () {
-                      showPalmUploadAlert(context);
+                      showSuccessAlert(context);
                       print('Hi');
 //                  Navigator.push(
 //                      context,
@@ -131,7 +131,7 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  showPalmUploadAlert(BuildContext context) {
+  showSuccessAlert(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,

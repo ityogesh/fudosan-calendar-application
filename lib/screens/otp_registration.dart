@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/registerOtpRequestModel.dart';
+import 'package:login_fudosan/models/apiRequestModels/register/resendOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerOtpResponseModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/register/resendOtpResponseModel.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -24,7 +26,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
   final otpController = new TextEditingController();
 
   String email;
-  int email_otp;
+  String email_otp;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +64,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                   PinCodeTextField(
                     controller: otpController,
                     appContext: context,
-                    length: 6,
+                    length: 4,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     onChanged: (val) {},
                     onCompleted: (val) {},
@@ -127,9 +129,12 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                       Text('認証コードは届いていない場合?'),
                       SizedBox(width: 5),
                       InkWell(
-                        child: Text(
-                          '再送信',
-                          style: TextStyle(color: ColorConstant.otpButton),
+                        child: InkWell(
+                          onTap: _reSendOtp,
+                          child: Text(
+                            '再送信',
+                            style: TextStyle(color: ColorConstant.otpButton),
+                          ),
                         ),
                       ),
                     ],
@@ -143,55 +148,12 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
     );
   }
 
-//change the function Name
-  showPalmUploadAlert(BuildContext context) {
-    showDialog(
-      context: context,
-//      barrierDismissible: false,
-      builder: (BuildContext context) => Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)), //this right here
-
-          child: Container(
-            padding: EdgeInsets.all(15),
-            height: 140,
-            width: MediaQuery.of(context).size.width * 0.9,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(16.0),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-//              color: Colors.lightBlueAccent,
-                    color: Colors.transparent,
-
-                    blurRadius: 5000.0,
-
-//             offset: Offset(6.6, 7.8),
-                  ),
-                ]),
-            child: Column(
-              children: [
-                Image.asset("assets/images/pop.PNG"),
-                SizedBox(
-                  height: 10,
-                ),
-                Text('計算したい日付を選択してください。'),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          )),
-    );
-  }
-
   _doUserOtpRegistration() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
     email = instance.getString("email");
     print('click me');
     RegisterOtpRequestModel registerOtpRequestModel;
-    email_otp = int.parse(otpController.text);
+    email_otp = otpController.text;
     print('click me');
     /*var headers = {
       'accept': 'application/json',
@@ -217,6 +179,36 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 //      instance.setString("token", registerResponseModel.success.token);
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
+    } else {
+      print('response error');
+      throw Exception();
+    }
+  }
+
+  ResendOtpResponseModel resendOtpRegisterResponseModel =
+      ResendOtpResponseModel();
+  String id;
+  _reSendOtp() async {
+    print('hi');
+    ResendOtpRequestModel resendOtpRequestModel;
+    SharedPreferences instance = await SharedPreferences.getInstance();
+    id = instance.getString('id');
+    /*var headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };*/
+    resendOtpRequestModel = new ResendOtpRequestModel(
+      id: id,
+    );
+    var response = await http.post(Constants.register_Resend_Otp_URL,
+        body: resendOtpRequestModel.toJson());
+
+    if (response.statusCode == 200) {
+      var responseData = json.decode(response.body);
+      final Map registerResponse = responseData;
+      resendOtpRegisterResponseModel =
+          ResendOtpResponseModel.fromJson(registerResponse);
+      print(resendOtpRegisterResponseModel.success);
     } else {
       print('response error');
       throw Exception();

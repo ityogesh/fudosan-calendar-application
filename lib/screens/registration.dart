@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/register/registerRequestModel.dart';
@@ -8,6 +7,8 @@ import 'package:login_fudosan/models/apiResponseModels/register/registerResponse
 import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
+import 'package:login_fudosan/utils/dropdown.dart';
+
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,10 +38,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final FocusNode passwordFocus = FocusNode();
   final FocusNode confirmpasswordFocus = FocusNode();
   final FocusNode companynameFocus = FocusNode();
+  final FocusNode dropdownFocus = FocusNode();
   final FocusNode departmentFocus = FocusNode();
 
   bool autoValidate = false;
   bool passwordVisibility = true;
+  bool confirmPasswordVisibility = true;
+  bool visible = false;
 
   String userName,
       email,
@@ -166,16 +170,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   TextFormField(
                       focusNode: confirmpasswordFocus,
                       controller: confirmPasswordController,
-                      obscureText: passwordVisibility,
+                      obscureText: confirmPasswordVisibility,
                       decoration: new InputDecoration(
                         labelText: 'パスワードの再確認*',
                         suffixIcon: IconButton(
-                            icon: passwordVisibility
+                            icon: confirmPasswordVisibility
                                 ? Icon(Icons.visibility_off)
                                 : Icon(Icons.visibility),
                             onPressed: () {
                               setState(() {
-                                passwordVisibility = !passwordVisibility;
+                                confirmPasswordVisibility =
+                                    !confirmPasswordVisibility;
                               });
                             }),
                       ),
@@ -224,9 +229,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               });
                             },
                             onChanged: (value) {
-                              setState(() {
-                                _myActivity = value;
-                              });
+                              if (value == "その他") {
+                                setState(() {
+                                  visible = !visible;
+                                });
+                              } else {
+                                setState(() {
+                                  _myActivity = value;
+                                  visible = false;
+                                });
+                              }
                             },
                             dataSource: [
                               {
@@ -272,11 +284,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  TextFormField(
-                    controller: departmentNameController,
-                    decoration: new InputDecoration(
-                      labelText: '部署名（任意）',
-                    ),
+                  Visibility(
+                    visible: visible,
+                    child: TextFormField(
+                        controller: departmentNameController,
+                        decoration: new InputDecoration(
+                          labelText: '部署名（任意）',
+                        ),
+                        onFieldSubmitted: (String value) {
+                          validateCredentials();
+                        }),
                   ),
                   SizedBox(
                     height: 30,
@@ -358,6 +375,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("email", emailController.text);
       instance.setString("token", registerResponseModel.success.token);
+      instance.setString("id", registerResponseModel.userid.toString());
       Navigator.push(
           context,
           MaterialPageRoute(

@@ -1,6 +1,6 @@
 class RegisterOtpRequestModel {
   String email;
-  int emailOtp;
+  String emailOtp;
 
   RegisterOtpRequestModel({this.email, this.emailOtp});
 
