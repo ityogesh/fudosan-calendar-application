@@ -17,13 +17,13 @@ class ValidateHelper {
     }
   }
 
-//  String validateConfirmPassword(String value) {
-//    if (value.length < 6) {
-//      return "Enter valid Password";
-//    } else {
-//      return null;
-//    }
-//  }
+  String validateConfirmPassword(String value, String cpassword) {
+    if (value != cpassword) {
+      return "Passwords doesn't match";
+    } else {
+      return null;
+    }
+  }
 
   String validateName(String value) {
     if (value.length < 1) {

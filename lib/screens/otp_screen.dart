@@ -1,17 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:login_fudosan/models/apiRequestModels/forget%20password/foregetPasswordOtpRequestModel.dart';
+import 'package:login_fudosan/models/apiRequestModels/forget%20password/forgetPasswordOtpVerifyRequestModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/forget%20password/forgetPasswordOtpResponseModel.dart';
 import 'package:login_fudosan/screens/forget_password.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:login_fudosan/utils/constants.dart';
+import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'homescreen.dart';
+import 'dart:convert';
 
 class OtpScreen extends StatefulWidget {
+  final String email;
+  OtpScreen(this.email);
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  TextEditingController pin = TextEditingController();
+  TextEditingController createPassword = TextEditingController();
+  TextEditingController confirmpassword = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  bool autoValidate = false;
+  bool createPasswordVisibility = true;
+  bool confirmPasswordVisibility = true;
+  FocusNode pinCodeFoucs = FocusNode();
+  FocusNode createPasswordFocus = FocusNode();
+  FocusNode confrimPasswordFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,98 +52,137 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FittedBox(
-                  child: Text(
-                    "hep....@gmail.comに届いた認証コード及び\n 新しいパスワードを入力し、「パスワードを\n 再設定する」ボタンをクリックしてください。",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                PinCodeTextField(
-                  appContext: context,
-                  length: 4,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  onChanged: (val) {},
-                  onCompleted: (val) {},
-                  textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                  enableActiveFill: true,
-                  pinTheme: PinTheme(
-                      borderRadius: BorderRadius.circular(10.0),
-                      selectedFillColor: Colors.grey[300],
-                      selectedColor: Colors.grey[300],
-                      inactiveFillColor: Colors.grey[300],
-                      inactiveColor: Colors.grey[300],
-                      activeColor: Colors.orange,
-                      fieldWidth: 50.0,
-                      activeFillColor: Colors.orange,
-                      shape: PinCodeFieldShape.box),
-                ),
-
-                /* OTPTextField(
-                  length: 4,
-                  fieldWidth: 60.0,
-                  width: MediaQuery.of(context).size.width,
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                  textFieldAlignment: MainAxisAlignment.spaceEvenly,
-                  fieldStyle: FieldStyle.box,
-                  onCompleted: (pin) {
-                    print("Completed: " + pin);
-//              userOTP = pin;
-                  },
-                ),*/
-                SizedBox(
-                  height: 12,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: new InputDecoration(
-                    labelText: '新しいパスワード',
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: new InputDecoration(
-                    labelText: '新しいパスワード(確認)',
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  child: RaisedButton(
+      body: Form(
+        key: formKey,
+        autovalidate: autoValidate,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
                     child: Text(
-                      'パスワードを再設定する',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    color: ColorConstant.otpButton,
-                    onPressed: () {
-                      showPalmUploadAlert(context);
-                      print('Hi');
-//                  Navigator.push(
-//                      context,
-//                      MaterialPageRoute(
-//                          builder: (BuildContext context) => GuideScreen()));
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                      "${widget.email}に届いた認証コード及び\n 新しいパスワードを入力し、「パスワードを\n 再設定する」ボタンをクリックしてください。",
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 25,
+                  ),
+                  PinCodeTextField(
+                    controller: pin,
+                    textInputAction: TextInputAction.next,
+                    focusNode: pinCodeFoucs,
+                    keyboardType: TextInputType.number,
+                    appContext: context,
+                    length: 4,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    onSubmitted: (val) {
+                      _fieldFocusChange(
+                          context, pinCodeFoucs, createPasswordFocus);
+                    },
+                    onChanged: (val) {},
+                    onCompleted: (val) {
+                      _fieldFocusChange(
+                          context, pinCodeFoucs, createPasswordFocus);
+                    },
+                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
+                    enableActiveFill: true,
+                    pinTheme: PinTheme(
+                        borderRadius: BorderRadius.circular(10.0),
+                        selectedFillColor: Colors.grey[300],
+                        selectedColor: Colors.grey[300],
+                        inactiveFillColor: Colors.grey[300],
+                        inactiveColor: Colors.grey[300],
+                        activeColor: Colors.orange,
+                        fieldWidth: 50.0,
+                        activeFillColor: Colors.orange,
+                        shape: PinCodeFieldShape.box),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  TextFormField(
+                    obscureText: createPasswordVisibility,
+                    textInputAction: TextInputAction.next,
+                    focusNode: createPasswordFocus,
+                    controller: createPassword,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: new InputDecoration(
+                      labelText: '新しいパスワード',
+                      suffixIcon: IconButton(
+                          icon: createPasswordVisibility
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              createPasswordVisibility =
+                                  !createPasswordVisibility;
+                            });
+                          }),
+                    ),
+                    validator: (String value) {
+                      return ValidateHelper().validatePassword(value);
+                    },
+                    onFieldSubmitted: (String value) {
+                      _fieldFocusChange(
+                          context, createPasswordFocus, confrimPasswordFocus);
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    obscureText: confirmPasswordVisibility,
+                    textInputAction: TextInputAction.done,
+                    focusNode: confrimPasswordFocus,
+                    controller: confirmpassword,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: new InputDecoration(
+                      labelText: '新しいパスワード(確認)',
+                      suffixIcon: IconButton(
+                          icon: confirmPasswordVisibility
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              confirmPasswordVisibility =
+                                  !confirmPasswordVisibility;
+                            });
+                          }),
+                    ),
+                    validator: (String value) {
+                      return ValidateHelper()
+                          .validateConfirmPassword(value, createPassword.text);
+                    },
+                    onFieldSubmitted: (String value) {
+                      checkValidation();
+                    },
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 50,
+                    child: RaisedButton(
+                      child: Text(
+                        'パスワードを再設定する',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      color: ColorConstant.otpButton,
+                      onPressed: () {
+                        checkValidation();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -131,7 +190,47 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  showPalmUploadAlert(BuildContext context) {
+  checkValidation() {
+    if (formKey.currentState.validate()) {
+      print('a');
+      passwordChange();
+    } else {
+      setState(() {
+        autoValidate = true;
+      });
+    }
+  }
+
+  passwordChange() async {
+    ForgetPasswordOtpVerifyRequestModel forgetPasswordOtpVerifyRequestModel =
+        ForgetPasswordOtpVerifyRequestModel(
+            email: widget.email,
+            emailOtp: pin.text,
+            password: createPassword.text);
+
+    final body = <String, dynamic>{};
+    body.addAll(forgetPasswordOtpVerifyRequestModel.toJson());
+
+    var response =
+        await http.post(Constants.forgot_password_Change_URL, body: body);
+    print('abcd');
+    if (response.statusCode == 200) {
+      ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
+          ForgetPasswordOtpResponseModel.fromJson(json.decode(response.body));
+      showSuccessAlert(context);
+    } else {
+      throw Exception('http.post error: statusCode= ${response.statusCode}');
+    }
+    print(response.body);
+  }
+
+  _fieldFocusChange(
+      BuildContext context, FocusNode _currentFocus, FocusNode _nextFocus) {
+    _currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(_nextFocus);
+  }
+
+  showSuccessAlert(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -176,10 +275,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                     color: ColorConstant.otpButton,
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => HomeScreeen())),
+                    onPressed: () {
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),

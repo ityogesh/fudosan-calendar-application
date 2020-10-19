@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:login_fudosan/models/apiRequestModels/forget%20password/foregetPasswordOtpRequestModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/forget%20password/ForgetPasswordOtpResponseModel.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:login_fudosan/utils/constants.dart';
+import 'package:login_fudosan/utils/validateHelper.dart';
 import 'otp_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ResetPassword extends StatefulWidget {
   @override
@@ -9,6 +16,10 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
+  TextEditingController emailaddress = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  bool autoValidate = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,57 +40,95 @@ class _ResetPasswordState extends State<ResetPassword> {
           },
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FittedBox(
-                  child: Text(
-                    "パスワードを再設定するための認証コードを送信\n しますので、ご登録いただいているメールアドレスを\n ご入力の上「送信」ボタンをクリックしてください。",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: new InputDecoration(
-                    labelText: 'メールアドレス',
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  child: RaisedButton(
+      body: Form(
+        key: formKey,
+        autovalidate: autoValidate,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
                     child: Text(
-                      '信送',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    color: ColorConstant.otpButton,
-                    onPressed: () {
-                      print('Hi');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => OtpScreen()));
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                      "パスワードを再設定するための認証コードを送信\n しますので、ご登録いただいているメールアドレスを\n ご入力の上「送信」ボタンをクリックしてください。",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                )
-              ],
+                  SizedBox(
+                    height: 12,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: emailaddress,
+                    textInputAction: TextInputAction.done,
+                    decoration: new InputDecoration(
+                      labelText: 'メールアドレス',
+                    ),
+                    validator: (String value) {
+                      return ValidateHelper().validateEmail(value);
+                    },
+                    onFieldSubmitted: (String value) {
+                      checkValidation();
+                    },
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 50,
+                    child: RaisedButton(
+                      child: Text(
+                        '信送',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      color: ColorConstant.otpButton,
+                      onPressed: () {
+                        checkValidation();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  checkValidation() {
+    if (formKey.currentState.validate()) {
+      sendOTP();
+    } else {
+      setState(() {
+        autoValidate = true;
+      });
+    }
+  }
+
+  sendOTP() async {
+    print("Sending OTP");
+    ForgetPasswordOtpRequestModel forgetPasswordOtpRequestModel =
+        ForgetPasswordOtpRequestModel(email: emailaddress.text);
+    var response = await http.post(Constants.forgot_password_Otp_URL,
+        body: forgetPasswordOtpRequestModel.toJson());
+    if (response.statusCode == 200) {
+      Map sendOtpResponse = json.decode(response.body);
+      ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
+          ForgetPasswordOtpResponseModel.fromJson(sendOtpResponse);
+      print('${forgetPasswordOtpResponseModel.success}');
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => OtpScreen(emailaddress.text)));
+    } else {
+      throw Exception('http.post error: statusCode= ${response.statusCode}');
+    }
   }
 }
