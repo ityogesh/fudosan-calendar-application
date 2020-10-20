@@ -379,7 +379,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => OtpRegistrationScreen()));
+              builder: (BuildContext context) => OtpRegistrationScreen(email)));
     } else {
       print('response error');
       throw Exception();
