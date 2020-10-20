@@ -15,6 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'homescreen.dart';
 
 class OtpRegistrationScreen extends StatefulWidget {
+  final String email;
+  OtpRegistrationScreen(this.email);
   @override
   _OtpRegistrationScreenState createState() => _OtpRegistrationScreenState();
 }
@@ -26,7 +28,6 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 
   final otpController = new TextEditingController();
 
-  String email;
   String email_otp;
   ProgressDialog progressDialog;
 
@@ -84,7 +85,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                 children: [
                   FittedBox(
                     child: Text(
-                      "本人確認のため、ご登録のhep****@gmail.comに\n 届いた認証コードを入力し、「確認」ボタンを\n クリックしてください。",
+                      "本人確認のため、ご登録の${widget.email}\n 届いた認証コードを入力し、「確認」ボタンを\n クリックしてください。",
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -183,7 +184,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 
   _doUserOtpRegistration() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
-    email = instance.getString("email");
+//    email = instance.getString("email");
     print('click me');
     RegisterOtpRequestModel registerOtpRequestModel;
     email_otp = otpController.text;
@@ -193,7 +194,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       'Content-Type': 'application/json',
     };*/
     registerOtpRequestModel =
-        new RegisterOtpRequestModel(email: email, emailOtp: email_otp);
+        new RegisterOtpRequestModel(email: widget.email, emailOtp: email_otp);
     print('click me');
     var response = await http.post(Constants.register_Otp_URL,
         body: registerOtpRequestModel.toJson());

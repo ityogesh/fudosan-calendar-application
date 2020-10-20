@@ -396,7 +396,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => OtpRegistrationScreen()));
+              builder: (BuildContext context) =>
+                  OtpRegistrationScreen(emailController.text)));
     } else {
       progressDialog.hide();
       print('response error: ${response.body}');
@@ -449,7 +450,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => OtpRegistrationScreen()));
+              builder: (BuildContext context) => OtpRegistrationScreen(email)));
     } else {
       progressDialog.hide();
       print('response error');
