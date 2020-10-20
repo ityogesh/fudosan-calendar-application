@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/models/apiRequestModels/login/loginRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/login/loginResponseModel.dart';
@@ -11,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'registration.dart';
 import 'forget_password.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -25,6 +26,34 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode passwordFocus = FocusNode();
   bool autoValidate = false;
   bool passwordVisibility = true;
+  ProgressDialog progressDialog;
+
+  @override
+  void initState() {
+    super.initState();
+    progressInit();
+    progressStyle();
+  }
+
+  progressInit() {
+    progressDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+  }
+
+  progressStyle() {
+    progressDialog.style(
+      message: 'Please Wait...',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   validateCredentials() {
     if (formKey.currentState.validate()) {
+      progressDialog.show();
       _loginInitiate();
     } else {
       setState(() {
@@ -192,10 +222,26 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Token : ${loginResponseModel.success.token}');
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("token", loginResponseModel.success.token);
+      progressDialog.hide();
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
-    } else
-      throw Exception('http.post error: statusCode= ${response.statusCode}');
+    } else {
+      progressDialog.hide();
+      var error = json.decode(response.body);
+      if (error['error'] == "User profile not present") {
+        Fluttertoast.showToast(
+          msg: "User profile not present",
+        );
+      } else if (error['error'] == "User login password is incorrect") {
+        Fluttertoast.showToast(
+          msg: "User login password is incorrect",
+        );
+      } else if (error['error'] == "User not activated") {
+        Fluttertoast.showToast(
+          msg: "User not activated",
+        );
+      }
+    }
   }
 
   _fieldFocusChange(

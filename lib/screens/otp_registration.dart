@@ -9,6 +9,7 @@ import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'homescreen.dart';
@@ -27,6 +28,35 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 
   String email;
   String email_otp;
+  ProgressDialog progressDialog;
+
+  @override
+  void initState() {
+    super.initState();
+    progressInit();
+    progressStyle();
+  }
+
+  progressInit() {
+    progressDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+  }
+
+  progressStyle() {
+    progressDialog.style(
+      message: 'Please Wait...',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +94,8 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                   PinCodeTextField(
                     controller: otpController,
                     appContext: context,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
                     length: 4,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     onChanged: (val) {},
@@ -107,6 +139,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                       ),
                       color: ColorConstant.otpButton,
                       onPressed: () {
+                        progressDialog.show();
                         _doUserOtpRegistration();
 
                         /*Navigator.push(
@@ -177,10 +210,13 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       SharedPreferences instance = await SharedPreferences.getInstance();
 //      instance.setString("email", emailController.text);
 //      instance.setString("token", registerResponseModel.success.token);
+      progressDialog.hide();
+
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     } else {
-      print('response error');
+      progressDialog.hide();
+      print('response error : ${response.body}');
       throw Exception();
     }
   }

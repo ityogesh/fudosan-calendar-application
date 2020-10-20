@@ -8,6 +8,7 @@ import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'homescreen.dart';
@@ -15,7 +16,8 @@ import 'dart:convert';
 
 class OtpScreen extends StatefulWidget {
   final String email;
-  OtpScreen(this.email);
+  final int uid;
+  OtpScreen(this.email, this.uid);
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
@@ -31,6 +33,34 @@ class _OtpScreenState extends State<OtpScreen> {
   FocusNode pinCodeFoucs = FocusNode();
   FocusNode createPasswordFocus = FocusNode();
   FocusNode confrimPasswordFocus = FocusNode();
+  ProgressDialog progressDialog;
+
+  @override
+  void initState() {
+    super.initState();
+    progressInit();
+    progressStyle();
+  }
+
+  progressInit() {
+    progressDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+  }
+
+  progressStyle() {
+    progressDialog.style(
+      message: 'Please Wait...',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +222,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   checkValidation() {
     if (formKey.currentState.validate()) {
-      print('a');
+      progressDialog.show();
       passwordChange();
     } else {
       setState(() {
@@ -213,13 +243,16 @@ class _OtpScreenState extends State<OtpScreen> {
 
     var response =
         await http.post(Constants.forgot_password_Change_URL, body: body);
-    print('abcd');
     if (response.statusCode == 200) {
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(json.decode(response.body));
+      print(response.body);
+      progressDialog.hide();
       showSuccessAlert(context);
     } else {
-      throw Exception('http.post error: statusCode= ${response.statusCode}');
+      progressDialog.hide();
+      print(json.decode(response.body));
+      /*  throw Exception('http.post error: statusCode= ${response.statusCode}'); */
     }
     print(response.body);
   }

@@ -5,6 +5,7 @@ import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'otp_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,34 @@ class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController emailaddress = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool autoValidate = false;
+  ProgressDialog progressDialog;
+
+  @override
+  void initState() {
+    super.initState();
+    progressInit();
+    progressStyle();
+  }
+
+  progressInit() {
+    progressDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+  }
+
+  progressStyle() {
+    progressDialog.style(
+      message: 'Please Wait...',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +133,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   checkValidation() {
     if (formKey.currentState.validate()) {
+      progressDialog.show();
       sendOTP();
     } else {
       setState(() {
@@ -122,12 +152,15 @@ class _ResetPasswordState extends State<ResetPassword> {
       Map sendOtpResponse = json.decode(response.body);
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(sendOtpResponse);
-      print('${forgetPasswordOtpResponseModel.success}');
+      print('${response.body}');
+      progressDialog.hide();
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => OtpScreen(emailaddress.text)));
+              builder: (BuildContext context) => OtpScreen(
+                  emailaddress.text, forgetPasswordOtpResponseModel.userid)));
     } else {
+      progressDialog.hide();
       throw Exception('http.post error: statusCode= ${response.statusCode}');
     }
   }

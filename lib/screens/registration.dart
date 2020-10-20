@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/register/registerRequestModel.dart';
+import 'package:login_fudosan/models/apiRequestModels/register/registerUpdateRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerResponseModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/register/registerUpdateResponseModel.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/dropdown.dart';
 
 import 'package:login_fudosan/utils/validateHelper.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'otp_registration.dart';
@@ -45,6 +48,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool passwordVisibility = true;
   bool confirmPasswordVisibility = true;
   bool visible = false;
+  int state = 0;
+  bool readonly = false;
+
+  ProgressDialog progressDialog;
 
   String userName,
       email,
@@ -57,6 +64,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void initState() {
     super.initState();
     _myActivity = '';
+    progressInit();
+    progressStyle();
+  }
+
+  progressInit() {
+    progressDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+  }
+
+  progressStyle() {
+    progressDialog.style(
+      message: 'Please Wait...',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
   }
 
   @override
@@ -107,6 +136,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 5,
                   ),
                   TextFormField(
+                    readOnly: readonly,
                     focusNode: nameFocus,
                     controller: userNameController,
                     decoration: new InputDecoration(
@@ -141,6 +171,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 5,
                   ),
                   TextFormField(
+                    readOnly: readonly,
                     focusNode: passwordFocus,
                     controller: passwordController,
                     obscureText: passwordVisibility,
@@ -168,6 +199,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 5,
                   ),
                   TextFormField(
+                      readOnly: readonly,
                       focusNode: confirmpasswordFocus,
                       controller: confirmPasswordController,
                       obscureText: confirmPasswordVisibility,
@@ -196,6 +228,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 5,
                   ),
                   TextFormField(
+                    readOnly: readonly,
                     focusNode: companynameFocus,
                     controller: organizationController,
                     decoration: new InputDecoration(
@@ -287,6 +320,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Visibility(
                     visible: visible,
                     child: TextFormField(
+                        readOnly: readonly,
                         controller: departmentNameController,
                         decoration: new InputDecoration(
                           labelText: '部署名（任意）',
@@ -331,11 +365,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   validateCredentials() {
     if (formKey.currentState.validate()) {
-      _doUserRegistration();
+      progressDialog.show();
+      if (state == 0) {
+        _doUserRegistration();
+      } else {
+        _doUserRegisatrationUpdate();
+      }
     } else {
       setState(() {
         autoValidate = true;
       });
+    }
+  }
+
+  _doUserRegisatrationUpdate() async {
+    SharedPreferences instance = await SharedPreferences.getInstance();
+    RegisterUpdateRequestModel registerUpdateRequestModel =
+        RegisterUpdateRequestModel(
+      email: emailController.text,
+      id: instance.getString("id"),
+    );
+    var response = await http.post(Constants.register_Update_URL,
+        body: registerUpdateRequestModel.toJson());
+    if (response.statusCode == 200) {
+      RegisterUpdateResponseModel registerUpdateResponseModel =
+          RegisterUpdateResponseModel.fromJson(json.decode(response.body));
+      instance.setString("email", registerUpdateResponseModel.email);
+      print(response.body);
+      progressDialog.hide();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => OtpRegistrationScreen()));
+    } else {
+      progressDialog.hide();
+      print('response error: ${response.body}');
+      throw Exception();
     }
   }
 
@@ -376,11 +441,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       instance.setString("email", emailController.text);
       instance.setString("token", registerResponseModel.success.token);
       instance.setString("id", registerResponseModel.userid.toString());
+      setState(() {
+        state = 1;
+        readonly = true;
+      });
+      progressDialog.hide();
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => OtpRegistrationScreen()));
     } else {
+      progressDialog.hide();
       print('response error');
       throw Exception();
     }
