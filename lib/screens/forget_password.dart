@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/foregetPasswordOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/forget%20password/ForgetPasswordOtpResponseModel.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
@@ -161,7 +162,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                   emailaddress.text, forgetPasswordOtpResponseModel.userid)));
     } else {
       progressDialog.hide();
-      throw Exception('http.post error: statusCode= ${response.statusCode}');
+      print("Error ${response.body}");
+      var error = json.decode(response.body);
+      if (error['error'] == "User not found") {
+        Fluttertoast.showToast(
+          msg: "User not found",
+        );
+      }
+      //throw Exception('http.post error: statusCode= ${response.statusCode}');
     }
   }
 }
