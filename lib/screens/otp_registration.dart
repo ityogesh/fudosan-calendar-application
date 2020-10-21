@@ -226,7 +226,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       print(registerOtpErrorResponseModel.error);
       if (registerOtpErrorResponseModel.error == "OTP verification failed") {
         Fluttertoast.showToast(
-          msg: "OTP verification failed",
+          msg: "認証コードは一致しませんのでもう一度試してください。",
         );
       }
     }

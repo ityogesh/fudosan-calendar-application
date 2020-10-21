@@ -467,7 +467,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (registerErrorResponseModel.error.email[0] ==
           "The email has already been taken.") {
         Fluttertoast.showToast(
-          msg: "The email has already been taken",
+          msg: "メールはすでに取られています,
         );
       }
     }

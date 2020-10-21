@@ -239,15 +239,15 @@ class _LoginScreenState extends State<LoginScreen> {
       var error = json.decode(response.body);
       if (error['error'] == "User profile not present") {
         Fluttertoast.showToast(
-          msg: "User profile not present",
+          msg: "ユーザープロファイルが存在しません",
         );
       } else if (error['error'] == "User login password is incorrect") {
         Fluttertoast.showToast(
-          msg: "User login password is incorrect",
+          msg: "ユーザーログインパスワードが正しくありません",
         );
       } else if (error['error'] == "User not activated") {
         Fluttertoast.showToast(
-          msg: "User not activated",
+          msg: "ユーザーがアクティブ化されていません",
         );
       }
     }
