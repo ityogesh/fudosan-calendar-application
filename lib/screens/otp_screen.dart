@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/foregetPasswordOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/forgetPasswordOtpVerifyRequestModel.dart';
+import 'package:login_fudosan/models/apiRequestModels/register/resendOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/forget%20password/forgetPasswordOtpResponseModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/register/resendOtpResponseModel.dart';
 import 'package:login_fudosan/screens/forget_password.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
@@ -211,6 +213,25 @@ class _OtpScreenState extends State<OtpScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('認証コードは届いていない場合?'),
+                      SizedBox(width: 5),
+                      InkWell(
+                        child: InkWell(
+                          onTap: _reSendOtp,
+                          child: Text(
+                            '再送信',
+                            style: TextStyle(color: ColorConstant.otpButton),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -320,6 +341,36 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
           )),
     );
+  }
+
+  ResendOtpResponseModel resendOtpRegisterResponseModel =
+      ResendOtpResponseModel();
+
+  _reSendOtp() async {
+    print('hi');
+    ResendOtpRequestModel resendOtpRequestModel;
+    SharedPreferences instance = await SharedPreferences.getInstance();
+
+    /*var headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };*/
+    resendOtpRequestModel = new ResendOtpRequestModel(
+      id: widget.uid.toString(),
+    );
+    var response = await http.post(Constants.register_Resend_Otp_URL,
+        body: resendOtpRequestModel.toJson());
+
+    if (response.statusCode == 200) {
+      var responseData = json.decode(response.body);
+      final Map registerResponse = responseData;
+      resendOtpRegisterResponseModel =
+          ResendOtpResponseModel.fromJson(registerResponse);
+      print(resendOtpRegisterResponseModel.success);
+    } else {
+      print('response error');
+      throw Exception();
+    }
   }
 }
 

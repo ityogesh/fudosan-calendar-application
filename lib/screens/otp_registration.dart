@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/registerOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/resendOtpRequestModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/register/registerOtpErrorResponseModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerOtpResponseModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/resendOtpResponseModel.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
@@ -217,8 +219,16 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     } else {
       progressDialog.hide();
-      print('response error : ${response.body}');
-      throw Exception();
+      var errorData = json.decode(response.body);
+      final Map errorResponse = errorData;
+      RegisterOtpErrorResponseModel registerOtpErrorResponseModel =
+          RegisterOtpErrorResponseModel.fromJson(errorResponse);
+      print(registerOtpErrorResponseModel.error);
+      if (registerOtpErrorResponseModel.error == "OTP verification failed") {
+        Fluttertoast.showToast(
+          msg: "OTP verification failed",
+        );
+      }
     }
   }
 
