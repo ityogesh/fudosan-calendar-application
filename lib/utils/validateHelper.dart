@@ -22,7 +22,7 @@ class ValidateHelper {
   }
 
   String validateCreatePassword(String value) {
-    if (value.length < 0) {
+    if (value.length == 0) {
       return "パスワードを入力してください。";
     } else if (value.length < 6) {
       return "正しいパスワードを入力してください。";
@@ -32,24 +32,26 @@ class ValidateHelper {
   }
 
   String validateConfirmPassword(String value, String cpassword) {
-    if (value != cpassword) {
-      return "Passwords doesn't match";
+    if (value.length == 0) {
+      return "パスワードを入力してください。";
+    } else if (value != cpassword) {
+      return "パスワードの再確認を入力してください。";
     } else {
       return null;
     }
   }
 
   String validateName(String value) {
-    if (value.length < 1) {
-      return "Enter valid name";
+    if (value.length == 0) {
+      return "氏名は必須項目なので入力してください。";
     } else {
       return null;
     }
   }
 
   String validateCompanyName(String value) {
-    if (value.length < 1) {
-      return "Enter valid company name";
+    if (value.length == 0) {
+      return "会社名は必須項目なので入力してください。";
     } else {
       return null;
     }

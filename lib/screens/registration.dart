@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/register/registerRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/registerUpdateRequestModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/register/registerErrorResponseModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerResponseModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerUpdateResponseModel.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
@@ -34,6 +36,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final passwordController = new TextEditingController();
   final confirmPasswordController = new TextEditingController();
   final organizationController = new TextEditingController();
+//  final companyController = new TextEditingController();
   final departmentNameController = new TextEditingController();
 
   final FocusNode nameFocus = FocusNode();
@@ -188,7 +191,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           }),
                     ),
                     validator: (String value) {
-                      return ValidateHelper().validatePassword(value);
+                      return ValidateHelper().validateCreatePassword(value);
                     },
                     onFieldSubmitted: (String value) {
                       _fieldFocusChange(
@@ -199,31 +202,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 5,
                   ),
                   TextFormField(
-                      readOnly: readonly,
-                      focusNode: confirmpasswordFocus,
-                      controller: confirmPasswordController,
-                      obscureText: confirmPasswordVisibility,
-                      decoration: new InputDecoration(
-                        labelText: 'パスワードの再確認*',
-                        suffixIcon: IconButton(
-                            icon: confirmPasswordVisibility
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                            onPressed: () {
-                              setState(() {
-                                confirmPasswordVisibility =
-                                    !confirmPasswordVisibility;
-                              });
-                            }),
-                      ),
-                      validator: (value) {
-                        // ignore: missing_return
-                        if (value != passwordController.text) {
-                          return "not match";
-                        } else {
-                          return null;
-                        }
-                      }),
+                    readOnly: readonly,
+                    focusNode: confirmpasswordFocus,
+                    controller: confirmPasswordController,
+                    obscureText: confirmPasswordVisibility,
+                    decoration: new InputDecoration(
+                      labelText: 'パスワードの再確認*',
+                      suffixIcon: IconButton(
+                          icon: confirmPasswordVisibility
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              confirmPasswordVisibility =
+                                  !confirmPasswordVisibility;
+                            });
+                          }),
+                    ),
+                    validator: (
+                      String value,
+                    ) {
+                      return ValidateHelper().validateConfirmPassword(
+                          value, passwordController.text);
+                    },
+                    onFieldSubmitted: (String value) {
+                      _fieldFocusChange(
+                          context, confirmpasswordFocus, companynameFocus);
+                    },
+                  ),
                   SizedBox(
                     height: 5,
                   ),
@@ -453,8 +459,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               builder: (BuildContext context) => OtpRegistrationScreen(email)));
     } else {
       progressDialog.hide();
-      print('response error');
-      throw Exception();
+      var error = json.decode(response.body);
+      final Map responseError = error;
+      RegisterErrorResponseModel registerErrorResponseModel =
+          RegisterErrorResponseModel.fromJson(responseError);
+      print(registerErrorResponseModel.error.email[0]);
+      if (registerErrorResponseModel.error.email[0] ==
+          "The email has already been taken.") {
+        Fluttertoast.showToast(
+          msg: "The email has already been taken",
+        );
+      }
     }
   }
 
