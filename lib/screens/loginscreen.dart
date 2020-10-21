@@ -30,9 +30,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
+    checkUserStatus();
     super.initState();
     progressInit();
     progressStyle();
+  }
+
+  checkUserStatus() async {
+    SharedPreferences instance = await SharedPreferences.getInstance();
+    if (instance.getString('token') != null) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
+    }
   }
 
   progressInit() {

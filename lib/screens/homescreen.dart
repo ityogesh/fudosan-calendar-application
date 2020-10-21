@@ -45,107 +45,90 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: ColorConstant.appBar,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/Homepage_logo.png',
-              height: 35.0,
-              width: 35.0,
-            ),
-            SizedBox(width: 15.0),
-            Text(
-              "不動産カレンダー",
-              style: TextStyle(fontSize: 17.0),
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: ColorConstant.appBar,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/Homepage_logo.png',
+                height: 35.0,
+                width: 35.0,
+              ),
+              SizedBox(width: 15.0),
+              Text(
+                "不動産カレンダー",
+                style: TextStyle(fontSize: 17.0),
+              ),
+            ],
+          ),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
         ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: _state == 0
-          ? Center(child: CircularProgressIndicator())
-          : Stack(
-              children: [
-                Container(color: ColorConstant.hBackground),
-                SingleChildScrollView(
-                  child: Container(
-                    color: ColorConstant.hBackground,
-                    /*   height: MediaQuery.of(context).size.height * 2,
-                   */
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        buildYearPicker(),
-                        buildMonthPicker(),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: buildCalendar(),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 48.0),
-                          child: ButtonTheme(
-                            minWidth: MediaQuery.of(context).size.width * 0.33,
-                            child: CustomRadioButton(
-                              elevation: 0,
-                              height: 55.0,
-                              buttonColor: Theme.of(context).canvasColor,
-                              enableShape: true,
-                              autoWidth: true,
-                              customShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  side: BorderSide(color: Colors.grey)),
-                              buttonLables: ["売買", "賃貸"],
-                              fontSize: 15.0,
-                              buttonValues: [
-                                "S",
-                                "R",
-                              ],
-                              radioButtonValue: (value) {
-                                print(value);
-                                setState(() {
-                                  val = value;
-                                });
-                              },
-                              selectedColor: ColorConstant.hHighlight,
+        body: _state == 0
+            ? Center(child: CircularProgressIndicator())
+            : Stack(
+                children: [
+                  Container(color: ColorConstant.hBackground),
+                  SingleChildScrollView(
+                    child: Container(
+                      color: ColorConstant.hBackground,
+                      /*   height: MediaQuery.of(context).size.height * 2,
+                     */
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          buildYearPicker(),
+                          buildMonthPicker(),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: buildCalendar(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 48.0),
+                            child: ButtonTheme(
+                              minWidth:
+                                  MediaQuery.of(context).size.width * 0.33,
+                              child: CustomRadioButton(
+                                elevation: 0,
+                                height: 55.0,
+                                buttonColor: Theme.of(context).canvasColor,
+                                enableShape: true,
+                                autoWidth: true,
+                                customShape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    side: BorderSide(color: Colors.grey)),
+                                buttonLables: ["売買", "賃貸"],
+                                fontSize: 15.0,
+                                buttonValues: [
+                                  "S",
+                                  "R",
+                                ],
+                                radioButtonValue: (value) {
+                                  print(value);
+                                  setState(() {
+                                    val = value;
+                                  });
+                                },
+                                selectedColor: ColorConstant.hHighlight,
+                              ),
                             ),
                           ),
-                        ),
-                        val != "S"
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        activeColor: Colors.white,
-                                        value: 0,
-                                        groupValue: _radioValue1,
-                                        onChanged: (val) {
-                                          setState(
-                                            () {
-                                              _radioValue1 = val;
-                                            },
-                                          );
-                                        },
-                                      ),
-                                      Text(
-                                        " 入居",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Radio(
+                          val != "S"
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Radio(
                                           activeColor: Colors.white,
-                                          value: 1,
+                                          value: 0,
                                           groupValue: _radioValue1,
                                           onChanged: (val) {
                                             setState(
@@ -153,49 +136,71 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                                 _radioValue1 = val;
                                               },
                                             );
-                                          }),
-                                      Text(
-                                        "退居",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            : Container(),
-                        InkWell(
-                          onTap: () {
-                            selectedDate == null
-                                ? showDateSelectAlert(context)
-                                : val == "S"
-                                    ? Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                BuyingSellingScreen(
-                                                    selectedDate)))
-                                    : Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                RentalScreen(_radioValue1,selectedDate)));
-                          },
-                          child: CircleAvatar(
-                            radius: 23.0,
-                            backgroundColor: Colors.orange,
-                            child: Icon(
-                              Icons.navigate_next,
-                              color: Colors.white,
-                              size: 32.0,
+                                          },
+                                        ),
+                                        Text(
+                                          " 入居",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Radio(
+                                            activeColor: Colors.white,
+                                            value: 1,
+                                            groupValue: _radioValue1,
+                                            onChanged: (val) {
+                                              setState(
+                                                () {
+                                                  _radioValue1 = val;
+                                                },
+                                              );
+                                            }),
+                                        Text(
+                                          "退居",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                          InkWell(
+                            onTap: () {
+                              selectedDate == null
+                                  ? showDateSelectAlert(context)
+                                  : val == "S"
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  BuyingSellingScreen(
+                                                      selectedDate)))
+                                      : Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  RentalScreen(_radioValue1,
+                                                      selectedDate)));
+                            },
+                            child: CircleAvatar(
+                              radius: 23.0,
+                              backgroundColor: Colors.orange,
+                              child: Icon(
+                                Icons.navigate_next,
+                                color: Colors.white,
+                                size: 32.0,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 
