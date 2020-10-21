@@ -166,7 +166,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       var error = json.decode(response.body);
       if (error['error'] == "User not found") {
         Fluttertoast.showToast(
-          msg: "User not found",
+          msg: "ユーザーが見つかりません",
         );
       }
       //throw Exception('http.post error: statusCode= ${response.statusCode}');

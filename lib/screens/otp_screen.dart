@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/foregetPasswordOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/forgetPasswordOtpVerifyRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/resendOtpRequestModel.dart';
@@ -272,7 +273,9 @@ class _OtpScreenState extends State<OtpScreen> {
       showSuccessAlert(context);
     } else {
       progressDialog.hide();
-      print(json.decode(response.body));
+      Fluttertoast.showToast(
+        msg: "認証コードは一致しませんのでもう一度試してください。",
+      );
       /*  throw Exception('http.post error: statusCode= ${response.statusCode}'); */
     }
     print(response.body);
