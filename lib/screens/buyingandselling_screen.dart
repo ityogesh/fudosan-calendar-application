@@ -2,17 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 
 class BuyingSellingScreen extends StatefulWidget {
+  final DateTime selectedDate;
+  BuyingSellingScreen(this.selectedDate);
   @override
   _BuyingSellingScreenState createState() => _BuyingSellingScreenState();
 }
 
 class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
+  TextEditingController textEditingController = TextEditingController();
   TextStyle cardSmallText = TextStyle(color: Colors.white, fontSize: 18.0);
   TextStyle cardBigText = TextStyle(
       color: Colors.white, fontSize: 21.0, fontWeight: FontWeight.bold);
   TextStyle bottomContainerText = TextStyle(fontSize: 18.0);
   TextStyle bottomContainerTextBold =
       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
+  int completedDays;
+  int remaingDays;
+  DateTime date;
+  final ValueNotifier<int> samount = ValueNotifier<int>(0);
+  final ValueNotifier<int> bamount = ValueNotifier<int>(0);
+
+  @override
+  void initState() {
+    super.initState();
+    date = widget.selectedDate;
+    completedDays = date.difference(DateTime(date.year, 1, 1)).inDays;
+    remaingDays =
+        date.year % 4 == 0 ? 366 - completedDays : 365 - completedDays;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,11 +67,11 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           style: cardSmallText,
                         ),
                         Text(
-                          "1月1日　～　5月13日",
+                          "1月1日　～　${widget.selectedDate.month}月${widget.selectedDate.day}日",
                           style: cardSmallText,
                         ),
                         Text(
-                          "合計　133　日分",
+                          "合計　${completedDays.toString()}　日分",
                           style: cardBigText,
                         ),
                       ],
@@ -83,11 +101,11 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           style: cardSmallText,
                         ),
                         Text(
-                          "5月14日　～　12月31日",
+                          "${widget.selectedDate.month}月${widget.selectedDate.day + 1}日　～　12月31日",
                           style: cardSmallText,
                         ),
                         Text(
-                          "合計　232　日分",
+                          "合計　${remaingDays.toString()}　日分",
                           style: cardBigText,
                         ),
                       ],
@@ -110,9 +128,26 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                     Radius.circular(15),
                   ),
                 ),
-                child: TextField(
+                child: TextFormField(
+                  controller: textEditingController,
+                  keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
-                  decoration: InputDecoration(border: InputBorder.none),
+                  decoration: InputDecoration(
+                      border: InputBorder.none),
+                  onChanged: (String value) {
+                    if (value == null) {
+                      samount.value = 0;
+                      bamount.value = 0;
+                    } else {
+                      int price = int.parse(value);
+                      int totaldays = date.year % 4 == 0 ? 366 : 365;
+                      double eachdayprice = price / totaldays;
+                      samount.value = int.parse(
+                          (eachdayprice * completedDays).toStringAsFixed(0));
+                      bamount.value = int.parse(
+                          (eachdayprice * remaingDays).toStringAsFixed(0));
+                    }
+                  },
                 ),
               ),
             ),
@@ -131,10 +166,15 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           "売主様負担分",
                           style: bottomContainerText,
                         ),
-                        Text(
-                          "1330 円",
-                          style: bottomContainerTextBold,
-                        )
+                        ValueListenableBuilder(
+                            valueListenable: samount,
+                            builder: (BuildContext context, int value,
+                                Widget child) {
+                              return Text(
+                                "$value 円",
+                                style: bottomContainerTextBold,
+                              );
+                            }),
                       ],
                     ),
                     SizedBox(height: 20.0),
@@ -145,10 +185,15 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           "買主様負担分",
                           style: bottomContainerText,
                         ),
-                        Text(
-                          "2320 円",
-                          style: bottomContainerTextBold,
-                        )
+                        ValueListenableBuilder(
+                            valueListenable: bamount,
+                            builder: (BuildContext context, int value,
+                                Widget child) {
+                              return Text(
+                                "$value 円",
+                                style: bottomContainerTextBold,
+                              );
+                            }),
                       ],
                     )
                   ],

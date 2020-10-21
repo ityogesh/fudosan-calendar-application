@@ -22,9 +22,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
   int _currentmonth;
   List<HolidayModel> _holidayModel = List<HolidayModel>();
   int _state = 1;
+  int _initialProcess = 0;
   List<Map<DateTime, List<dynamic>>> sample =
       List<Map<DateTime, List<dynamic>>>();
-  String val = "S";
+  String val = "R";
+  DateTime selectedDate;
 
   @override
   void initState() {
@@ -163,17 +165,20 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             : Container(),
                         InkWell(
                           onTap: () {
-                            val == "S"
-                                ? Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            BuyingSellingScreen()))
-                                : Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            RentalScreen(_radioValue1)));
+                            selectedDate == null
+                                ? showDateSelectAlert(context)
+                                : val == "S"
+                                    ? Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                BuyingSellingScreen(
+                                                    selectedDate)))
+                                    : Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                RentalScreen(_radioValue1,selectedDate)));
                           },
                           child: CircleAvatar(
                             radius: 23.0,
@@ -393,36 +398,40 @@ class _HomeScreeenState extends State<HomeScreeen> {
               initialCalendarFormat: CalendarFormat.month,
               calendarController: _calendarController,
               onVisibleDaysChanged: (date1, date2, cformat) {
-                print("1:$date1");
-                print("2:$date2");
-                if (date1.year == date2.year) {
-                  if (date1.month == date2.month - 1) {
-                    if (date1.day == 1) {
+                if (_initialProcess == 1) {
+                  print("1:$date1");
+                  print("2:$date2");
+                  if (date1.year == date2.year) {
+                    if (date1.month == date2.month - 1) {
+                      if (date1.day == 1) {
+                        changeMonth(date1.month);
+                      } else {
+                        changeMonth(date2.month);
+                      }
+                    } else if (date1.month == date2.month - 2) {
+                      changeMonth(date1.month + 1);
+                    } else if (date1.month == date2.month) {
                       changeMonth(date1.month);
-                    } else {
-                      changeMonth(date2.month);
                     }
-                  } else if (date1.month == date2.month - 2) {
-                    changeMonth(date1.month + 1);
-                  } else if (date1.month == date2.month) {
-                    changeMonth(date1.month);
+                  } else {
+                    if (date1.month == 11) {
+                      changeYear(date1.year);
+                      changeMonth(date1.month + 1);
+                    } else {
+                      if (date1.month == 12 && date1.day == 1) {
+                        changeYear(date1.year);
+                        changeMonth(date1.month);
+                      } else if (date1.month == 12 && date1.day != 1) {
+                        changeYear(date2.year);
+                        changeMonth(1);
+                      }
+                    }
                   }
                 } else {
-                  if (date1.month == 11) {
-                    changeYear(date1.year);
-                    changeMonth(date1.month + 1);
-                  } else {
-                    if (date1.month == 12 && date1.day == 1) {
-                      changeYear(date1.year);
-                      changeMonth(date1.month);
-                    } else if (date1.month == 12 && date1.day != 1) {
-                      changeYear(date2.year);
-                      changeMonth(1);
-                    }
-                  }
+                  _initialProcess = 1;
                 }
               },
-              onUnavailableDaySelected: () {},
+              initialSelectedDay: DateTime(0, 0, 0),
               availableGestures: AvailableGestures.none,
               calendarStyle: CalendarStyle(
                   outsideDaysVisible: true,
@@ -443,9 +452,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 formatButtonShowsNext: false,
               ),
               startingDayOfWeek: StartingDayOfWeek.sunday,
+              onUnavailableDaySelected: () {},
               onDaySelected: (date, events) {
                 print(date.microsecondsSinceEpoch);
                 print(date.toIso8601String());
+                selectedDate = date;
                 // _calendarController.setFocusedDay(DateTime.now());
               },
               onCalendarCreated: (date, date2, cformat) {
@@ -548,6 +559,22 @@ class _HomeScreeenState extends State<HomeScreeen> {
     );
   }
 
+  int daysRemaining(int month, int year) {
+    if (month == 1 ||
+        month == 3 ||
+        month == 5 ||
+        month == 7 ||
+        month == 8 ||
+        month == 10 ||
+        month == 12) {
+      return 32;
+    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+      return 31;
+    } else if (month == 2) {
+      return year % 4 == 0 ? 30 : 28;
+    }
+  }
+
   dayBuilder({
     @required DateTime date,
     Color otherdays,
@@ -555,9 +582,13 @@ class _HomeScreeenState extends State<HomeScreeen> {
     Color sunday,
     Color backgroundcolor,
   }) {
-    DateTime firstday = DateTime(date.year, 1, 1);
+    DateTime firstday = val == "S"
+        ? DateTime(date.year, 1, 1)
+        : DateTime(date.year, date.month, 1);
     final completed = date.difference(firstday).inDays;
-    final remaing = 366 - completed;
+    final remaing = val == "S"
+        ? date.year % 4 == 0 ? 366 - completed : 365 - completed
+        : daysRemaining(date.month, date.year) - date.day;
     return Container(
       margin: const EdgeInsets.all(1.5),
       alignment: Alignment.center,
@@ -626,6 +657,59 @@ class _HomeScreeenState extends State<HomeScreeen> {
         style: TextStyle(
             color: textcolor, fontSize: 15.0, fontWeight: FontWeight.bold),
       ),
+    );
+  }
+
+  showDateSelectAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0)), //this right here
+          child: Container(
+            padding: EdgeInsets.all(15),
+            height: 160,
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    //color: Colors.lightBlueAccent,
+                    //      color: Colors.transparent,
+                    blurRadius: 5000.0,
+                    offset: Offset(6.6, 7.8),
+                  ),
+                ]),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        size: 20.0,
+                        color: Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+                Image.asset("assets/images/Date_pick.png"),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('計算したい日付を選択してください。'),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          )),
     );
   }
 }
