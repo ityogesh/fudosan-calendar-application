@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:intl/intl.dart';
 
 class RentalScreen extends StatefulWidget {
-  int choice;
-  RentalScreen(this.choice);
+  final int choice;
+  final DateTime selecteddate;
+  RentalScreen(this.choice, this.selecteddate);
   @override
   _RentalScreenState createState() => _RentalScreenState();
 }
@@ -19,6 +21,7 @@ class _RentalScreenState extends State<RentalScreen> {
 
   DateTime selectedDate = DateTime.now();
   TextEditingController _date = new TextEditingController();
+  DateTime currentSelected;
   var selectedYear;
   var selectedMonth;
   var selectedDay;
@@ -28,22 +31,39 @@ class _RentalScreenState extends State<RentalScreen> {
   String _selectedYear = 'Tap to select date';
   String _selectedMonth = '';
   String _selectedDay = '';
+  final ValueNotifier<int> ramount = ValueNotifier<int>(0);
+  final ValueNotifier<int> mamount = ValueNotifier<int>(0);
+  final ValueNotifier<int> days = ValueNotifier<int>(0);
+  final ValueNotifier<int> tamount = ValueNotifier<int>(0);
+  var format = NumberFormat.currency(locale: 'HI');
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: new DateTime(2020),
+        initialDate: currentSelected,
+        helpText: "",
         firstDate: DateTime(1901, 1),
         lastDate: DateTime.now());
+
     if (picked != null) {
       setState(() {
         _selectedYear = new DateFormat("yyyy").format(picked);
         _selectedMonth = new DateFormat("MM").format(picked);
         _selectedDay = new DateFormat("dd").format(picked);
+        currentSelected = picked;
         yearController.value = TextEditingValue(text: _selectedYear.toString());
         monthController.value =
             TextEditingValue(text: _selectedMonth.toString());
         dayController.value = TextEditingValue(text: _selectedDay.toString());
+        days.value = widget.choice == 0
+            ? DateTime(
+                currentSelected.year,
+                currentSelected.month,
+                daysRemaining(
+                  currentSelected.month,
+                  currentSelected.year,
+                )).difference(picked).inDays
+            : currentSelected.day;
 //        var finalDate = "${_selectedYear}"
       });
     }
@@ -70,6 +90,56 @@ class _RentalScreenState extends State<RentalScreen> {
       dayController.value = TextEditingValue(text: currentDay.toLowerCase());
     });
   }*/
+
+  @override
+  void initState() {
+    super.initState();
+    yearController.text = widget.selecteddate.year.toString();
+    monthController.text = widget.selecteddate.month.toString();
+    dayController.text = widget.selecteddate.day.toString();
+    currentSelected = widget.selecteddate;
+    days.value = widget.choice == 0
+        ? DateTime(
+            widget.selecteddate.year,
+            widget.selecteddate.month,
+            daysRemaining(
+              widget.selecteddate.month,
+              widget.selecteddate.year,
+            )).difference(widget.selecteddate).inDays
+        : selectedDate.day;
+  }
+
+  int daysRemaining(int month, int year) {
+    if (month == 1 ||
+        month == 3 ||
+        month == 5 ||
+        month == 7 ||
+        month == 8 ||
+        month == 10 ||
+        month == 12) {
+      return 32;
+    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+      return 31;
+    } else if (month == 2) {
+      return year % 4 == 0 ? 30 : 29;
+    }
+  }
+
+  int totalDays(int month, int year) {
+    if (month == 1 ||
+        month == 3 ||
+        month == 5 ||
+        month == 7 ||
+        month == 8 ||
+        month == 10 ||
+        month == 12) {
+      return 31;
+    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+      return 30;
+    } else if (month == 2) {
+      return year % 4 == 0 ? 29 : 28;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,11 +211,11 @@ class _RentalScreenState extends State<RentalScreen> {
                                         onTap: () => _selectDate(context),
                                         child: AbsorbPointer(
                                           child: TextFormField(
+                                            textAlign: TextAlign.center,
                                             controller: yearController,
                                             keyboardType:
                                                 TextInputType.datetime,
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: bottomContainerTextBold,
                                             cursorColor: Colors.redAccent,
                                             readOnly: true,
                                             decoration: new InputDecoration(
@@ -196,27 +266,24 @@ class _RentalScreenState extends State<RentalScreen> {
                                         onTap: () => _selectDate(context),
                                         child: AbsorbPointer(
                                           child: TextFormField(
+                                            textAlign: TextAlign.center,
                                             controller: monthController,
                                             keyboardType:
                                                 TextInputType.datetime,
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: bottomContainerTextBold,
                                             cursorColor: Colors.redAccent,
                                             readOnly: true,
                                             decoration: new InputDecoration(
-                                                filled: true,
-                                                fillColor: Colors.white,
-//                                                hintText:
-//                                                AppLocalizations.of(context)
-//                                                    .translate('R_Dob'),
-
-                                                border: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.red,
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                )),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.red,
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -230,27 +297,24 @@ class _RentalScreenState extends State<RentalScreen> {
                                         onTap: () => _selectDate(context),
                                         child: AbsorbPointer(
                                           child: TextFormField(
+                                            textAlign: TextAlign.center,
                                             controller: dayController,
                                             keyboardType:
                                                 TextInputType.datetime,
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                            style: bottomContainerTextBold,
                                             cursorColor: Colors.redAccent,
                                             readOnly: true,
                                             decoration: new InputDecoration(
-                                                filled: true,
-                                                fillColor: Colors.white,
-//                                                hintText:
-//                                                AppLocalizations.of(context)
-//                                                    .translate('R_Dob'),
-
-                                                border: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.red,
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                )),
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.red,
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -278,10 +342,21 @@ class _RentalScreenState extends State<RentalScreen> {
                                 Radius.circular(15),
                               ),
                             ),
-                            child: TextField(
+                            child: TextFormField(
                               textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
                               decoration:
                                   InputDecoration(border: InputBorder.none),
+                              onChanged: (String value) {
+                                int price = int.parse(value);
+                                double eachdayprice = price /
+                                    totalDays(currentSelected.month,
+                                        currentSelected.year);
+                                ramount.value = int.parse(
+                                    (eachdayprice * days.value)
+                                        .toStringAsFixed(0));
+                                tamount.value = ramount.value + mamount.value;
+                              },
                             ),
                           ),
                         ),
@@ -302,17 +377,35 @@ class _RentalScreenState extends State<RentalScreen> {
                                 Radius.circular(15),
                               ),
                             ),
-                            child: TextField(
+                            child: TextFormField(
                               textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
                               decoration:
                                   InputDecoration(border: InputBorder.none),
+                              onChanged: (String value) {
+                                int price = int.parse(value);
+                                double eachdayprice = price /
+                                    totalDays(currentSelected.month,
+                                        currentSelected.year);
+                                mamount.value = int.parse(
+                                    (eachdayprice * days.value)
+                                        .toStringAsFixed(0));
+
+                                tamount.value = ramount.value + mamount.value;
+                              },
                             ),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: 10.0),
-                    Text("日割計算:　10日分", style: bottomContainerText)
+                    ValueListenableBuilder(
+                        valueListenable: days,
+                        builder:
+                            (BuildContext context, int value, Widget child) {
+                          return Text("日割計算:　$value日分",
+                              style: bottomContainerText);
+                        }),
                   ],
                 ),
               ),
@@ -327,7 +420,15 @@ class _RentalScreenState extends State<RentalScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("賃料", style: bottomContainerText),
-                            Text("10,000円", style: bottomContainerTextBold),
+                            ValueListenableBuilder(
+                                valueListenable: ramount,
+                                builder: (BuildContext context, int value,
+                                    Widget child) {
+                                  return Text(
+                                    "$value 円",
+                                    style: bottomContainerTextBold,
+                                  );
+                                }),
                           ],
                         ),
                         SizedBox(height: 20.0),
@@ -335,7 +436,15 @@ class _RentalScreenState extends State<RentalScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("共益費", style: bottomContainerText),
-                            Text("1,000 円", style: bottomContainerTextBold),
+                            ValueListenableBuilder(
+                                valueListenable: mamount,
+                                builder: (BuildContext context, int value,
+                                    Widget child) {
+                                  return Text(
+                                    "$value 円",
+                                    style: bottomContainerTextBold,
+                                  );
+                                }),
                           ],
                         ),
                         SizedBox(height: 20.0),
@@ -343,7 +452,15 @@ class _RentalScreenState extends State<RentalScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("合計", style: bottomContainerText),
-                            Text("11,000円", style: bottomContainerTextBold),
+                            ValueListenableBuilder(
+                                valueListenable: tamount,
+                                builder: (BuildContext context, int value,
+                                    Widget child) {
+                                  return Text(
+                                    "$value 円",
+                                    style: bottomContainerTextBold,
+                                  );
+                                }),
                           ],
                         ),
                       ],
