@@ -54,7 +54,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   int state = 0;
   bool readonly = false;
 
-  ProgressDialog progressDialog;
+  ProgressDialog _progressDialog;
 
   String userName,
       email,
@@ -72,7 +72,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   progressInit() {
-    progressDialog = ProgressDialog(
+    _progressDialog = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
@@ -80,7 +80,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   progressStyle() {
-    progressDialog.style(
+    _progressDialog.style(
       message: 'Please Wait...',
       borderRadius: 10.0,
       backgroundColor: Colors.white,
@@ -142,6 +142,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     readOnly: readonly,
                     focusNode: nameFocus,
                     controller: userNameController,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
                     decoration: new InputDecoration(
                       labelText: '氏名*',
                     ),
@@ -159,6 +161,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     focusNode: emailaddressFocus,
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                     decoration: new InputDecoration(
                       labelText: 'メールアドレス*',
                     ),
@@ -178,6 +181,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     focusNode: passwordFocus,
                     controller: passwordController,
                     obscureText: passwordVisibility,
+                    textInputAction: TextInputAction.next,
                     decoration: new InputDecoration(
                       labelText: 'パスワード*',
                       suffixIcon: IconButton(
@@ -206,6 +210,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     focusNode: confirmpasswordFocus,
                     controller: confirmPasswordController,
                     obscureText: confirmPasswordVisibility,
+                    textInputAction: TextInputAction.next,
                     decoration: new InputDecoration(
                       labelText: 'パスワードの再確認*',
                       suffixIcon: IconButton(
@@ -237,6 +242,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     readOnly: readonly,
                     focusNode: companynameFocus,
                     controller: organizationController,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
                     decoration: new InputDecoration(
                       labelText: '会社名*',
                     ),
@@ -249,7 +256,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     },
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 13,
                   ),
                   Form(
                     key: deptKey,
@@ -257,19 +264,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
+                          margin: EdgeInsets.all(0.0),
                           color: Colors.white,
+
 //                    padding: EdgeInsets.all(16),
                           child: DropDownFormField(
+                            enabled: !readonly,
                             titleText: null,
-                            hintText: 'その他',
+                            hintText: readonly ? _myActivity : '部署名',
                             onSaved: (value) {
                               setState(() {
                                 _myActivity = value;
                               });
                             },
+                            value: _myActivity,
                             onChanged: (value) {
                               if (value == "その他") {
                                 setState(() {
+                                  _myActivity = value;
                                   visible = !visible;
                                 });
                               } else {
@@ -369,12 +381,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  validateCredentials() {
+  validateCredentials() async {
     if (formKey.currentState.validate()) {
-      progressDialog.show();
       if (state == 0) {
+        await _progressDialog.show();
         _doUserRegistration();
       } else {
+        ProgressDialog pd = ProgressDialog(context);
+        await _progressDialog.show();
         _doUserRegisatrationUpdate();
       }
     } else {
@@ -398,16 +412,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           RegisterUpdateResponseModel.fromJson(json.decode(response.body));
       instance.setString("email", registerUpdateResponseModel.email);
       print(response.body);
-      progressDialog.hide();
+      _progressDialog.hide();
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) =>
                   OtpRegistrationScreen(emailController.text)));
     } else {
-      progressDialog.hide();
-      print('response error: ${response.body}');
-      throw Exception();
+      _progressDialog.hide();
+      RegisterErrorResponseModel registerErrorResponseModel =
+          RegisterErrorResponseModel.fromJson(json.decode(response.body));
+      print(registerErrorResponseModel.error.email[0]);
+      if (registerErrorResponseModel.error.email[0] ==
+          "The email has already been taken.") {
+        Fluttertoast.showToast(
+          msg: "メールはすでに取られています",
+        );
+      }
     }
   }
 
@@ -419,7 +440,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     confirmPassword = confirmPasswordController.text;
     companyName = organizationController.text;
     department = _myActivity;
-    departmentName = departmentNameController.text;
+    departmentName =
+        _myActivity == "その他" ? departmentNameController.text : _myActivity;
 
     /*var headers = {
       'accept': 'application/json',
@@ -452,13 +474,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         state = 1;
         readonly = true;
       });
-      progressDialog.hide();
+      _progressDialog.hide();
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => OtpRegistrationScreen(email)));
     } else {
-      progressDialog.hide();
+      _progressDialog.hide();
       var error = json.decode(response.body);
       final Map responseError = error;
       RegisterErrorResponseModel registerErrorResponseModel =

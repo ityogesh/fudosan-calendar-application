@@ -33,9 +33,9 @@ class ValidateHelper {
 
   String validateConfirmPassword(String value, String cpassword) {
     if (value.length == 0) {
-      return "パスワードを入力してください。";
-    } else if (value != cpassword) {
       return "パスワードの再確認を入力してください。";
+    } else if (value != cpassword) {
+      return "パスワードが一致がしませんので正しいパスワードを入力してください。";
     } else {
       return null;
     }

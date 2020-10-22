@@ -31,10 +31,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   void initState() {
     super.initState();
+    getHolidays();
     _calendarController = CalendarController();
     _cyear = DateTime.now().year;
     _currentmonth = DateTime.now().month;
-    getHolidays();
   }
 
   @override
