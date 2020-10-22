@@ -110,7 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                           fontWeight: FontWeight.w800, fontSize: 25.0),
                     ),
-                    Text('アプリを使用するにはログインしてください。'),
+                    Text(
+                      'アプリを使用するにはログインしてください。',
+                      style: TextStyle(color: ColorConstant.lSubtextColor),
+                    ),
                     SizedBox(
                       height: 7,
                     ),
@@ -121,6 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.next,
                       decoration: new InputDecoration(
                         labelText: 'メールアドレス',
+                        labelStyle:
+                            TextStyle(color: ColorConstant.lHintTextColor),
                       ),
                       validator: (String value) {
                         return ValidateHelper().validateEmail(value);
@@ -141,6 +146,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.done,
                       decoration: new InputDecoration(
                         labelText: 'パスワード',
+                        labelStyle:
+                            TextStyle(color: ColorConstant.lHintTextColor),
                         suffixIcon: IconButton(
                             icon: passwordVisibility
                                 ? Icon(Icons.visibility_off)
@@ -173,6 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'パスワードを忘れた方はこちら',
                         style: TextStyle(
                           decoration: TextDecoration.underline,
+                          color: ColorConstant.lSubtextColor,
                         ),
                       ),
                     ),

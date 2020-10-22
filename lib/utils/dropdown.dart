@@ -14,6 +14,7 @@ class DropDownFormField extends FormField<dynamic> {
   final Function onChanged;
   final bool filled;
   final EdgeInsets contentPadding;
+  final bool enabled;
 
   DropDownFormField(
       {FormFieldSetter<dynamic> onSaved,
@@ -29,7 +30,8 @@ class DropDownFormField extends FormField<dynamic> {
       this.valueField,
       this.onChanged,
       this.filled = true,
-      this.contentPadding = const EdgeInsets.fromLTRB(12, 12, 8, 0)})
+      this.enabled = true,
+      this.contentPadding = const EdgeInsets.fromLTRB(0, 0, 0, 0)})
       : super(
           onSaved: onSaved,
           validator: validator,
@@ -52,28 +54,45 @@ class DropDownFormField extends FormField<dynamic> {
                         contentPadding: contentPadding,
                       ),
                       child: DropdownButtonHideUnderline(
-                        child: DropdownButton<dynamic>(
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Color.fromRGBO(200, 200, 200, 1),
-                          ),
-                          hint: Text(
-                            hintText,
-                            style: TextStyle(color: Colors.grey.shade500),
-                          ),
-                          value: value == '' ? null : value,
-                          onChanged: (dynamic newValue) {
-                            state.didChange(newValue);
-                            onChanged(newValue);
-                          },
-                          items: dataSource.map((item) {
-                            return DropdownMenuItem<dynamic>(
-                              value: item[valueField],
-                              child: Text(item[textField]),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                          child: enabled
+                              ? DropdownButton<dynamic>(
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Color.fromRGBO(200, 200, 200, 1),
+                                  ),
+                                  hint: Text(
+                                    hintText,
+                                    style:
+                                        TextStyle(color: Colors.grey.shade500),
+                                  ),
+                                  value: value == '' ? null : value,
+                                  onChanged: (dynamic newValue) {
+                                    state.didChange(newValue);
+                                    onChanged(newValue);
+                                  },
+                                  items: dataSource.map((item) {
+                                    return DropdownMenuItem<dynamic>(
+                                      value: item[valueField],
+                                      child: Text(item[textField]),
+                                    );
+                                  }).toList(),
+                                )
+                              : DropdownButton<dynamic>(
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Color.fromRGBO(200, 200, 200, 1),
+                                  ),
+                                  hint: Text(
+                                    hintText,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  value: value == '' ? null : value,
+                                  onChanged: (dynamic newValue) {
+                                    state.didChange(newValue);
+                                    onChanged(newValue);
+                                  },
+                                  items: [],
+                                )),
                     ),
                     SizedBox(height: state.hasError ? 5.0 : 0.0),
                     Text(

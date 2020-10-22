@@ -9,6 +9,8 @@ class ColorConstant {
   static Color hHolidayy = Color(0xFFFF0000);//HexColor("#FF0000");
   static Color hSaturday = Color(0xFFA100FF);//HexColor("#A100FF");
   static Color hDayBackground = Color(0xFF188CFF11);//HexColor("#188CFF11");
+  static Color lSubtextColor = Color(0xFF747474);
+  static Color lHintTextColor = Color(0xFF898888);
   static Color lButton = Color(0xFF3ECAFD);//HexColor("#3ECAFD");
   static Color rButton = Color(0xFF3ECAFD);//HexColor("#3ECAFD");
   static Color otpButton = Color(0xFF3ECAFD);//HexColor("#3ECAFD");

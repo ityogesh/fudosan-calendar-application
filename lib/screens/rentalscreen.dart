@@ -43,7 +43,7 @@ class _RentalScreenState extends State<RentalScreen> {
         initialDate: currentSelected,
         helpText: "",
         firstDate: DateTime(1901, 1),
-        lastDate: DateTime.now());
+        lastDate:DateTime(2050, 1));
 
     if (picked != null) {
       setState(() {
@@ -106,7 +106,7 @@ class _RentalScreenState extends State<RentalScreen> {
               widget.selecteddate.month,
               widget.selecteddate.year,
             )).difference(widget.selecteddate).inDays
-        : selectedDate.day;
+        : widget.selecteddate.day;
   }
 
   int daysRemaining(int month, int year) {
