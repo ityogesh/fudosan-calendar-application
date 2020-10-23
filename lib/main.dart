@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
 
 void main() {
@@ -6,7 +7,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +16,13 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginScreen(),
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('ja'),
+       ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+      ],
       debugShowCheckedModeBanner: false,
     );
   }

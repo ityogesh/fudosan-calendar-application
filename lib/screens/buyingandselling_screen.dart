@@ -66,13 +66,59 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           "売主様負担分",
                           style: cardSmallText,
                         ),
-                        Text(
-                          "1月1日　～　${widget.selectedDate.month}月${widget.selectedDate.day}日",
-                          style: cardSmallText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "1月1日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "～",
+                                style: cardSmallText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "${widget.selectedDate.month}月${widget.selectedDate.day}日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "合計　${completedDays.toString()}　日分",
-                          style: cardBigText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "合計",
+                                style: cardBigText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "${completedDays.toString()}",
+                                style: cardBigText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "日分",
+                                style: cardBigText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -100,13 +146,59 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           "買主様負担分",
                           style: cardSmallText,
                         ),
-                        Text(
-                          "${widget.selectedDate.month}月${widget.selectedDate.day + 1}日　～　12月31日",
-                          style: cardSmallText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "${widget.selectedDate.month}月${widget.selectedDate.day + 1}日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "～",
+                                style: cardSmallText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "12月31日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "合計　${remaingDays.toString()}　日分",
-                          style: cardBigText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "合計",
+                                style: cardBigText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "${remaingDays.toString()}",
+                                style: cardBigText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "日分",
+                                style: cardBigText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -122,7 +214,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
             Container(
               width: MediaQuery.of(context).size.width / 1.5,
               child: Card(
-                elevation: 8.0,
+                shadowColor: ColorConstant.priceBackground,
+                elevation: 15.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(15),
@@ -131,9 +224,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                 child: TextFormField(
                   controller: textEditingController,
                   keyboardType: TextInputType.number,
+                  maxLength: 10,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                      border: InputBorder.none),
+                      counterText: "", border: InputBorder.none),
                   onChanged: (String value) {
                     if (value == null) {
                       samount.value = 0;
@@ -153,7 +247,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
             ),
             SizedBox(height: 10.0),
             Container(
-              color: ColorConstant.pirceBackground,
+              color: ColorConstant.priceBackground,
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 10.0, right: 10.0, top: 20.0, bottom: 20.0),
