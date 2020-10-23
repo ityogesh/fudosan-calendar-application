@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:    
+    sdk: flutter
 
   pin_code_fields: ^5.2.0
   rflutter_alert: ^1.1.0

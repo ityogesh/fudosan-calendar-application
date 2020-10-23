@@ -41,7 +41,7 @@ class _RentalScreenState extends State<RentalScreen> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: currentSelected,
-        helpText: "",
+        locale: Locale('ja', 'JP'),
         firstDate: DateTime(1901, 1),
         lastDate: DateTime(2050, 1));
 
@@ -95,8 +95,12 @@ class _RentalScreenState extends State<RentalScreen> {
   void initState() {
     super.initState();
     yearController.text = widget.selecteddate.year.toString();
-    monthController.text = widget.selecteddate.month.toString();
-    dayController.text = widget.selecteddate.day.toString();
+    monthController.text = widget.selecteddate.month < 10
+        ? "0${widget.selecteddate.month}"
+        : widget.selecteddate.month.toString();
+    dayController.text = widget.selecteddate.day < 10
+        ? "0${widget.selecteddate.day}"
+        : widget.selecteddate.day.toString();
     currentSelected = widget.selecteddate;
     days.value = widget.choice == 0
         ? DateTime(
@@ -182,7 +186,7 @@ class _RentalScreenState extends State<RentalScreen> {
                             Radius.circular(20),
                           ),
                         ),
-                        color: Colors.lightBlueAccent,
+                        color: ColorConstant.rBackGround,
                         child: Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -202,119 +206,65 @@ class _RentalScreenState extends State<RentalScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      alignment: Alignment.topCenter,
-                                      child: GestureDetector(
-                                        onTap: () => _selectDate(context),
+                                    GestureDetector(
+                                      onTap: () => _selectDate(context),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
+                                        ),
+                                        width:
+                                            (MediaQuery.of(context).size.width *
+                                                0.22),
+                                        height: 50.0,
+                                        alignment: Alignment.center,
                                         child: AbsorbPointer(
-                                          child: TextFormField(
-                                            textAlign: TextAlign.center,
-                                            controller: yearController,
-                                            keyboardType:
-                                                TextInputType.datetime,
+                                          child: Text(
+                                            "${yearController.text}",
                                             style: bottomContainerTextBold,
-                                            cursorColor: Colors.redAccent,
-                                            readOnly: true,
-                                            decoration: new InputDecoration(
-                                                filled: true,
-                                                fillColor: Colors.white,
-//                                                hintText:
-//                                                AppLocalizations.of(context)
-//                                                    .translate('R_Dob'),
-
-                                                border: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.red,
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                )),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    /*    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      color: Colors.transparent,
-                                      child: Card(
-                                        margin: EdgeInsets.all(0.0),
-                                        color: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(15),
-                                          ),
+                                    GestureDetector(
+                                      onTap: () => _selectDate(context),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
                                         ),
-                                        child: TextFormField(
-                                          initialValue: "07",
-                                          textAlign: TextAlign.center,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none),
-                                        ),
-                                      ),
-                                    ),*/
-                                    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      alignment: Alignment.topCenter,
-                                      child: GestureDetector(
-                                        onTap: () => _selectDate(context),
+                                        width:
+                                            (MediaQuery.of(context).size.width *
+                                                0.22),
+                                        height: 50.0,
+                                        alignment: Alignment.center,
                                         child: AbsorbPointer(
-                                          child: TextFormField(
-                                            textAlign: TextAlign.center,
-                                            controller: monthController,
-                                            keyboardType:
-                                                TextInputType.datetime,
+                                          child: Text(
+                                            "${monthController.text}",
                                             style: bottomContainerTextBold,
-                                            cursorColor: Colors.redAccent,
-                                            readOnly: true,
-                                            decoration: new InputDecoration(
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              border: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Colors.red,
-                                                    width: 2.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      alignment: Alignment.topCenter,
-                                      child: GestureDetector(
-                                        onTap: () => _selectDate(context),
+                                    GestureDetector(
+                                      onTap: () => _selectDate(context),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
+                                        ),
+                                        width:
+                                            (MediaQuery.of(context).size.width *
+                                                0.22),
+                                        height: 50.0,
+                                        alignment: Alignment.center,
                                         child: AbsorbPointer(
-                                          child: TextFormField(
-                                            textAlign: TextAlign.center,
-                                            controller: dayController,
-                                            keyboardType:
-                                                TextInputType.datetime,
+                                          child: Text(
+                                            "${dayController.text}",
                                             style: bottomContainerTextBold,
-                                            cursorColor: Colors.redAccent,
-                                            readOnly: true,
-                                            decoration: new InputDecoration(
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              border: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Colors.red,
-                                                    width: 2.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
                                           ),
                                         ),
                                       ),
@@ -336,7 +286,8 @@ class _RentalScreenState extends State<RentalScreen> {
                           height: 50.0,
                           width: MediaQuery.of(context).size.width / 1.75,
                           child: Card(
-                            elevation: 8.0,
+                            elevation: 15.0,
+                            shadowColor: ColorConstant.priceBackground,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(15),
@@ -374,7 +325,8 @@ class _RentalScreenState extends State<RentalScreen> {
                           height: 50.0,
                           width: MediaQuery.of(context).size.width / 1.75,
                           child: Card(
-                            elevation: 8.0,
+                            shadowColor: ColorConstant.priceBackground,
+                            elevation: 15.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(15),
@@ -416,7 +368,7 @@ class _RentalScreenState extends State<RentalScreen> {
                 ),
               ),
               Container(
-                  color: ColorConstant.pirceBackground,
+                  color: ColorConstant.priceBackground,
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 14.0, right: 14.0, top: 20.0, bottom: 20.0),

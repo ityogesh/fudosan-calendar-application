@@ -161,11 +161,7 @@ class _CustomRadioButtonState extends State<CustomRadioButton> {
               style: TextStyle(
                   color: currentSelectedLabel == widget.buttonLables[index]
                       ? Colors.white
-                      : Theme
-                      .of(context)
-                      .textTheme
-                      .bodyText1
-                      .color,
+                      : Theme.of(context).textTheme.bodyText1.color,
                   fontSize: widget.fontSize,
                   fontWeight: FontWeight.w800),
             ),
@@ -191,9 +187,10 @@ class _CustomRadioButtonState extends State<CustomRadioButton> {
                 children: buildButtonsRow() //buildButtonsRow,
                 )
             : ListView(
-          scrollDirection: Axis.horizontal,
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: buildButtonsColumn(),
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: buildButtonsColumn(),
               ),
       ),
     );
