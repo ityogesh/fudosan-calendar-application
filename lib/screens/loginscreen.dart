@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   progressStyle() {
     progressDialog.style(
-      message: 'Please Wait...',
+      message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -236,15 +236,20 @@ class _LoginScreenState extends State<LoginScreen> {
       LoginResponseModel loginResponseModel =
           LoginResponseModel.fromJson(loginResponse);
       print('Login response: ${loginResponseModel.toJson()}');
+      print('success: $loginResponseModel.success');
       print('Token : ${loginResponseModel.success.token}');
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("token", loginResponseModel.success.token);
       progressDialog.hide();
+      Fluttertoast.showToast(
+        msg: "ログインに成功しました",
+      );
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     } else {
       progressDialog.hide();
       var error = json.decode(response.body);
+
       if (error['error'] == "User profile not present") {
         Fluttertoast.showToast(
           msg: "ユーザープロファイルが存在しません",

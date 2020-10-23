@@ -55,7 +55,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   progressStyle() {
     progressDialog.style(
-      message: 'Please Wait...',
+      message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -244,8 +244,12 @@ class _OtpScreenState extends State<OtpScreen> {
 
   checkValidation() {
     if (formKey.currentState.validate()) {
-      progressDialog.show();
-      passwordChange();
+      if (ValidateHelper().validatePin(pin.text)) {
+        progressDialog.show();
+        passwordChange();
+      } else {
+        Fluttertoast.showToast(msg: "認証コード入力は必須項目なので入力してください。");
+      }
     } else {
       setState(() {
         autoValidate = true;

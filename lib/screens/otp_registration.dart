@@ -9,6 +9,7 @@ import 'package:login_fudosan/models/apiResponseModels/register/registerOtpRespo
 import 'package:login_fudosan/models/apiResponseModels/register/resendOtpResponseModel.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
+import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
@@ -32,6 +33,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 
   String email_otp;
   ProgressDialog progressDialog;
+  bool autoValidate = false;
 
   @override
   void initState() {
@@ -50,7 +52,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 
   progressStyle() {
     progressDialog.style(
-      message: 'Please Wait...',
+      message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -78,6 +80,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       ),
       backgroundColor: Colors.white,
       body: Form(
+        key: formKey,
         child: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -87,7 +90,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                 children: [
                   FittedBox(
                     child: Text(
-                      "本人確認のため、ご登録の${widget.email}\n 届いた認証コードを入力し、「確認」ボタンを\n クリックしてください。",
+                      "本人確認のため、ご登録の${widget.email}\n に届いた認証コードを入力し、「確認」ボタンを\n クリックしてください。",
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -142,8 +145,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                       ),
                       color: ColorConstant.otpButton,
                       onPressed: () {
-                        progressDialog.show();
-                        _doUserOtpRegistration();
+                        checkValidation();
 
                         /*Navigator.push(
                             context,
@@ -184,6 +186,21 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
     );
   }
 
+  checkValidation() {
+    if (formKey.currentState.validate()) {
+      if (ValidateHelper().validatePin(otpController.text)) {
+        progressDialog.show();
+        _doUserOtpRegistration();
+      } else {
+        Fluttertoast.showToast(msg: "認証コード入力は必須項目なので入力してください。");
+      }
+    } else {
+      setState(() {
+        autoValidate = true;
+      });
+    }
+  }
+
   _doUserOtpRegistration() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
 //    email = instance.getString("email");
@@ -213,7 +230,6 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       SharedPreferences instance = await SharedPreferences.getInstance();
 //      instance.setString("email", emailController.text);
 //      instance.setString("token", registerResponseModel.success.token);
-      progressDialog.hide();
 
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));

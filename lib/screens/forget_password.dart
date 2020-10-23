@@ -40,7 +40,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   progressStyle() {
     progressDialog.style(
-      message: 'Please Wait...',
+      message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,

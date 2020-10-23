@@ -43,7 +43,7 @@ class _RentalScreenState extends State<RentalScreen> {
         initialDate: currentSelected,
         helpText: "",
         firstDate: DateTime(1901, 1),
-        lastDate:DateTime(2050, 1));
+        lastDate: DateTime(2050, 1));
 
     if (picked != null) {
       setState(() {
@@ -345,8 +345,11 @@ class _RentalScreenState extends State<RentalScreen> {
                             child: TextFormField(
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.number,
-                              decoration:
-                                  InputDecoration(border: InputBorder.none),
+                              maxLength: 10,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                counterText: "",
+                              ),
                               onChanged: (String value) {
                                 int price = int.parse(value);
                                 double eachdayprice = price /
@@ -380,8 +383,11 @@ class _RentalScreenState extends State<RentalScreen> {
                             child: TextFormField(
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.number,
-                              decoration:
-                                  InputDecoration(border: InputBorder.none),
+                              maxLength: 10,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                counterText: "",
+                              ),
                               onChanged: (String value) {
                                 int price = int.parse(value);
                                 double eachdayprice = price /
