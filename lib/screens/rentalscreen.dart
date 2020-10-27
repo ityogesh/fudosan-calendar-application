@@ -18,6 +18,8 @@ class _RentalScreenState extends State<RentalScreen> {
   TextStyle bottomContainerText = TextStyle(fontSize: 18.0);
   TextStyle bottomContainerTextBold =
       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
+  TextEditingController rentController = TextEditingController();
+  TextEditingController maintainceController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   TextEditingController _date = new TextEditingController();
@@ -31,11 +33,11 @@ class _RentalScreenState extends State<RentalScreen> {
   String _selectedYear = 'Tap to select date';
   String _selectedMonth = '';
   String _selectedDay = '';
-  final ValueNotifier<int> ramount = ValueNotifier<int>(0);
-  final ValueNotifier<int> mamount = ValueNotifier<int>(0);
+  final ValueNotifier<double> ramount = ValueNotifier<double>(0.0);
+  final ValueNotifier<double> mamount = ValueNotifier<double>(0.0);
   final ValueNotifier<int> days = ValueNotifier<int>(0);
-  final ValueNotifier<int> tamount = ValueNotifier<int>(0);
-  var format = NumberFormat.currency(locale: 'HI');
+  final ValueNotifier<double> tamount = ValueNotifier<double>(0.0);
+  var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -64,32 +66,18 @@ class _RentalScreenState extends State<RentalScreen> {
                   currentSelected.year,
                 )).difference(picked).inDays
             : currentSelected.day;
-//        var finalDate = "${_selectedYear}"
+        int price = int.parse(rentController.text);
+        double eachdayprice =
+            price / totalDays(currentSelected.month, currentSelected.year);
+        ramount.value = eachdayprice * days.value;
+        int mprice = int.parse(maintainceController.text);
+        double eachdaymprice =
+            mprice / totalDays(currentSelected.month, currentSelected.year);
+        mamount.value = eachdaymprice * days.value;
+        tamount.value = ramount.value + mamount.value;
       });
     }
   }
-
-  /*getCurrentDateMonth() {
-    var date = new DateTime.now().toString();
-
-    var dateParse = DateTime.parse(date);
-
-    var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
-    setState(() {
-      _selectedDOBDate = new DateFormat("yyyy-MM-dd").format(picked);
-      _date.value = TextEditingValue(text: _selectedDOBDate.toString());
-      var finalDate = formattedDate.toString();
-      String currentDay = dateParse.day.toString();
-      String currentMonth = dateParse.month.toString();
-      String currentYear = dateParse.year.toString();
-      print(
-          'Current date : $finalDate : month : $currentMonth : day : $currentDay year : $currentYear');
-      yearController.value = TextEditingValue(text: currentYear.toLowerCase());
-      monthController.value =
-          TextEditingValue(text: currentMonth.toLowerCase());
-      dayController.value = TextEditingValue(text: currentDay.toLowerCase());
-    });
-  }*/
 
   @override
   void initState() {
@@ -104,12 +92,13 @@ class _RentalScreenState extends State<RentalScreen> {
     currentSelected = widget.selecteddate;
     days.value = widget.choice == 0
         ? DateTime(
-            widget.selecteddate.year,
-            widget.selecteddate.month,
-            daysRemaining(
-              widget.selecteddate.month,
-              widget.selecteddate.year,
-            )).difference(widget.selecteddate).inDays
+                widget.selecteddate.year,
+                widget.selecteddate.month,
+                daysRemaining(
+                  widget.selecteddate.month,
+                  widget.selecteddate.year,
+                )).difference(widget.selecteddate).inDays +
+            1
         : widget.selecteddate.day;
   }
 
@@ -293,24 +282,46 @@ class _RentalScreenState extends State<RentalScreen> {
                                 Radius.circular(15),
                               ),
                             ),
-                            child: TextFormField(
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              maxLength: 10,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                counterText: "",
-                              ),
-                              onChanged: (String value) {
-                                int price = int.parse(value);
-                                double eachdayprice = price /
-                                    totalDays(currentSelected.month,
-                                        currentSelected.year);
-                                ramount.value = int.parse(
-                                    (eachdayprice * days.value)
-                                        .toStringAsFixed(0));
-                                tamount.value = ramount.value + mamount.value;
-                              },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: TextFormField(
+                                    controller: rentController,
+                                    textAlign: TextAlign.right,
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      counterText: "",
+                                    ),
+                                    onChanged: (String value) {
+                                      int price = int.parse(value);
+                                      double eachdayprice = price /
+                                          totalDays(currentSelected.month,
+                                              currentSelected.year);
+                                      ramount.value = eachdayprice * days.value;
+                                      tamount.value =
+                                          ramount.value + mamount.value;
+                                    },
+                                    /*   onEditingComplete: () {
+                                      int price = int.parse(rentController.text);
+                                      String val =
+                                          (japaneseCurrency.format(price)).toString();
+                                      print("$val");
+                                      rentController.value = TextEditingValue(
+                                        text: "$val",
+                                        selection: TextSelection.fromPosition(
+                                          TextPosition(offset: val.length),
+                                        ),
+                                      );
+                                    }, */
+                                  ),
+                                ),
+                                Expanded(
+                                    child:
+                                        Text(" 円", style: bottomContainerText)),
+                              ],
                             ),
                           ),
                         ),
@@ -332,25 +343,34 @@ class _RentalScreenState extends State<RentalScreen> {
                                 Radius.circular(15),
                               ),
                             ),
-                            child: TextFormField(
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              maxLength: 10,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                counterText: "",
-                              ),
-                              onChanged: (String value) {
-                                int price = int.parse(value);
-                                double eachdayprice = price /
-                                    totalDays(currentSelected.month,
-                                        currentSelected.year);
-                                mamount.value = int.parse(
-                                    (eachdayprice * days.value)
-                                        .toStringAsFixed(0));
-
-                                tamount.value = ramount.value + mamount.value;
-                              },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: TextFormField(
+                                    controller: maintainceController,
+                                    textAlign: TextAlign.right,
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      counterText: "",
+                                    ),
+                                    onChanged: (String value) {
+                                      int price = int.parse(value);
+                                      double eachdayprice = price /
+                                          totalDays(currentSelected.month,
+                                              currentSelected.year);
+                                      mamount.value = eachdayprice * days.value;
+                                      tamount.value =
+                                          ramount.value + mamount.value;
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                    child:
+                                        Text(" 円", style: bottomContainerText)),
+                              ],
                             ),
                           ),
                         ),
@@ -380,10 +400,10 @@ class _RentalScreenState extends State<RentalScreen> {
                             Text("賃料", style: bottomContainerText),
                             ValueListenableBuilder(
                                 valueListenable: ramount,
-                                builder: (BuildContext context, int value,
+                                builder: (BuildContext context, double value,
                                     Widget child) {
                                   return Text(
-                                    "$value 円",
+                                    "${japaneseCurrency.format(value)} 円",
                                     style: bottomContainerTextBold,
                                   );
                                 }),
@@ -396,10 +416,10 @@ class _RentalScreenState extends State<RentalScreen> {
                             Text("共益費", style: bottomContainerText),
                             ValueListenableBuilder(
                                 valueListenable: mamount,
-                                builder: (BuildContext context, int value,
+                                builder: (BuildContext context, double value,
                                     Widget child) {
                                   return Text(
-                                    "$value 円",
+                                    "${japaneseCurrency.format(value)} 円",
                                     style: bottomContainerTextBold,
                                   );
                                 }),
@@ -412,10 +432,10 @@ class _RentalScreenState extends State<RentalScreen> {
                             Text("合計", style: bottomContainerText),
                             ValueListenableBuilder(
                                 valueListenable: tamount,
-                                builder: (BuildContext context, int value,
+                                builder: (BuildContext context, double value,
                                     Widget child) {
                                   return Text(
-                                    "$value 円",
+                                    "${japaneseCurrency.format(value)} 円",
                                     style: bottomContainerTextBold,
                                   );
                                 }),

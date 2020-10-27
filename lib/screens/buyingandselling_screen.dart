@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 
 class BuyingSellingScreen extends StatefulWidget {
@@ -19,8 +20,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   int completedDays;
   int remaingDays;
   DateTime date;
-  final ValueNotifier<int> samount = ValueNotifier<int>(0);
-  final ValueNotifier<int> bamount = ValueNotifier<int>(0);
+  var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
+  final ValueNotifier<double> samount = ValueNotifier<double>(0);
+  final ValueNotifier<double> bamount = ValueNotifier<double>(0);
 
   @override
   void initState() {
@@ -221,27 +223,33 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                     Radius.circular(15),
                   ),
                 ),
-                child: TextFormField(
-                  controller: textEditingController,
-                  keyboardType: TextInputType.number,
-                  maxLength: 10,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      counterText: "", border: InputBorder.none),
-                  onChanged: (String value) {
-                    if (value == null) {
-                      samount.value = 0;
-                      bamount.value = 0;
-                    } else {
-                      int price = int.parse(value);
-                      int totaldays = date.year % 4 == 0 ? 366 : 365;
-                      double eachdayprice = price / totaldays;
-                      samount.value = int.parse(
-                          (eachdayprice * completedDays).toStringAsFixed(0));
-                      bamount.value = int.parse(
-                          (eachdayprice * remaingDays).toStringAsFixed(0));
-                    }
-                  },
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        controller: textEditingController,
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        textAlign: TextAlign.right,
+                        decoration: InputDecoration(
+                            counterText: "", border: InputBorder.none),
+                        onChanged: (String value) {
+                          if (value == null) {
+                            samount.value = 0;
+                            bamount.value = 0;
+                          } else {
+                            int price = int.parse(value);
+                            int totaldays = date.year % 4 == 0 ? 366 : 365;
+                            double eachdayprice = price / totaldays;
+                            samount.value = eachdayprice * completedDays;
+                            bamount.value = eachdayprice * remaingDays;
+                          }
+                        },
+                      ),
+                    ),
+                    Expanded(child: Text(" 円", style: bottomContainerText)),
+                  ],
                 ),
               ),
             ),
@@ -262,10 +270,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         ),
                         ValueListenableBuilder(
                             valueListenable: samount,
-                            builder: (BuildContext context, int value,
+                            builder: (BuildContext context, double value,
                                 Widget child) {
                               return Text(
-                                "$value 円",
+                                "${japaneseCurrency.format(value)} 円",
                                 style: bottomContainerTextBold,
                               );
                             }),
@@ -281,10 +289,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         ),
                         ValueListenableBuilder(
                             valueListenable: bamount,
-                            builder: (BuildContext context, int value,
+                            builder: (BuildContext context, double value,
                                 Widget child) {
                               return Text(
-                                "$value 円",
+                                "${japaneseCurrency.format(value)} 円",
                                 style: bottomContainerTextBold,
                               );
                             }),
