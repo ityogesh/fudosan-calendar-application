@@ -38,7 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkUserStatus() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
-    if (instance.getString('token') != null) {
+    if ((instance.getString('token') != null) &&
+        (instance.getInt('status') == 1)) {
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     }
@@ -240,6 +241,9 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Token : ${loginResponseModel.success.token}');
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("token", loginResponseModel.success.token);
+      instance.setString("email", loginResponseModel.userDetails.email);
+      instance.setString("id", loginResponseModel.userDetails.id.toString());
+      instance.setInt("status", loginResponseModel.userDetails.status);
       progressDialog.hide();
       Fluttertoast.showToast(
         msg: "ログインに成功しました",

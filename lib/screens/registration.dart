@@ -472,6 +472,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       instance.setString("email", emailController.text);
       instance.setString("token", registerResponseModel.success.token);
       instance.setString("id", registerResponseModel.userid.toString());
+      instance.setInt("status", registerResponseModel.success.status);
       setState(() {
         state = 1;
         readonly = true;

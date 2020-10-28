@@ -228,6 +228,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       print('success : ${registerOtpResponseModel.success}');
 //      print('Token : ${registerOtpResponseModel.success.token}');
       SharedPreferences instance = await SharedPreferences.getInstance();
+      instance.setInt("status", 1);
 //      instance.setString("email", emailController.text);
 //      instance.setString("token", registerResponseModel.success.token);
 
