@@ -182,7 +182,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     controller: passwordController,
                     obscureText: passwordVisibility,
                     textInputAction: TextInputAction.next,
+                    maxLength: 14,
                     decoration: new InputDecoration(
+                      counterText: "",
                       labelText: 'パスワード*',
                       suffixIcon: IconButton(
                           icon: passwordVisibility
@@ -195,7 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           }),
                     ),
                     validator: (String value) {
-                      return ValidateHelper().validateCreatePassword(value);
+                      return ValidateHelper().validatePassword(value);
                     },
                     onFieldSubmitted: (String value) {
                       _fieldFocusChange(
@@ -271,7 +273,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           child: DropDownFormField(
                             enabled: !readonly,
                             titleText: null,
-                            hintText: readonly ? _myActivity : '部署名',
+                            hintText: readonly ? _myActivity : '部署名（任意) ',
                             onSaved: (value) {
                               setState(() {
                                 _myActivity = value;
@@ -489,7 +491,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (registerErrorResponseModel.error.email[0] ==
           "The email has already been taken.") {
         Fluttertoast.showToast(
-          msg: "メールはすでに取られています",
+          msg: "メールはすでに登録されています。",
         );
       }
     }
