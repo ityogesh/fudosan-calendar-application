@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode passwordFocus = FocusNode();
   bool autoValidate = false;
   bool passwordVisibility = true;
-  ProgressDialog progressDialog;
+  ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   progressInit() {
-    progressDialog = ProgressDialog(
+    _progressDialog = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   progressStyle() {
-    progressDialog.style(
+    _progressDialog.style(
       message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
@@ -214,9 +214,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  validateCredentials() {
+  validateCredentials() async {
     if (formKey.currentState.validate()) {
-      progressDialog.show();
+      await _progressDialog.show();
       _loginInitiate();
     } else {
       setState(() {
@@ -240,14 +240,14 @@ class _LoginScreenState extends State<LoginScreen> {
       print('Token : ${loginResponseModel.success.token}');
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("token", loginResponseModel.success.token);
-      progressDialog.hide();
+      _progressDialog.hide();
       Fluttertoast.showToast(
         msg: "ログインに成功しました",
       );
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     } else {
-      progressDialog.hide();
+      _progressDialog.hide();
       var error = json.decode(response.body);
 
       if (error['error'] == "User profile not present") {
