@@ -217,6 +217,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.4"
+  radio_grouped_buttons:
+    dependency: "direct main"
+    description:
+      name: radio_grouped_buttons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+2"
   rflutter_alert:
     dependency: "direct main"
     description:
