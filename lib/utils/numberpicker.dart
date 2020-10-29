@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:infinite_listview/infinite_listview.dart';
+import 'package:login_fudosan/utils/colorconstant.dart';
 
 /// Created by Marcin Szałek
 ///Define a text mapper to transform the text displayed by the picker
@@ -27,6 +28,8 @@ class NumberPicker extends StatelessWidget {
     @required this.maxValue,
     @required this.onChanged,
     this.textMapper,
+    this.currentDate,
+    this.selectedYear,
     this.itemExtent = kDefaultItemExtent,
     this.listViewHeight = kDefaultListViewCrossAxisSize,
     this.numberToDisplay = 3,
@@ -64,6 +67,8 @@ class NumberPicker extends StatelessWidget {
     @required this.maxValue,
     @required this.onChanged,
     this.textMapper,
+    this.currentDate,
+    this.selectedYear,
     this.itemExtent = kDefaultItemExtent,
     this.listViewWidth = kDefaultListViewCrossAxisSize,
     this.numberToDisplay = 3,
@@ -106,6 +111,8 @@ class NumberPicker extends StatelessWidget {
     @required this.maxValue,
     @required this.onChanged,
     this.textMapper,
+    this.currentDate,
+    this.selectedYear,
     this.decimalPlaces = 1,
     this.itemExtent = kDefaultItemExtent,
     this.listViewWidth = kDefaultListViewCrossAxisSize,
@@ -148,6 +155,12 @@ class NumberPicker extends StatelessWidget {
 
   //whether month picker or year picker
   final bool ismonth;
+
+  //current date
+  final DateTime currentDate;
+
+  //selected date
+  final int selectedYear;
 
   ///max value user can pick
   final int maxValue;
@@ -348,8 +361,8 @@ class NumberPicker extends StatelessWidget {
                                 ),
                               ),
                             )
-                          : (value == (selectedIntValue - 1) ||
-                                  value == (selectedIntValue + 1))
+                          : (value == currentDate.month &&
+                                  currentDate.year == selectedYear)
                               ? Center(
                                   child: InkWell(
                                     onTap: () {
@@ -359,31 +372,47 @@ class NumberPicker extends StatelessWidget {
                                       getDisplayedValue(value),
                                       style: TextStyle(
                                           fontSize: 16.0,
-                                          color: Colors.white60,
+                                          color: Colors.orange,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 )
-                              : (value == (selectedIntValue - 2) ||
-                                      value == (selectedIntValue + 2))
+                              : (value == (selectedIntValue - 1) ||
+                                      value == (selectedIntValue + 1))
                                   ? Center(
-                                      child: new Text(
-                                        getDisplayedValue(value),
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.white38,
-                                            fontWeight: FontWeight.bold),
+                                      child: InkWell(
+                                        onTap: () {
+                                          //  selectedIntValue = value;
+                                        },
+                                        child: new Text(
+                                          getDisplayedValue(value),
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white60,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     )
-                                  : Center(
-                                      child: new Text(
-                                        getDisplayedValue(value),
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.white24,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    );
+                                  : (value == (selectedIntValue - 2) ||
+                                          value == (selectedIntValue + 2))
+                                      ? Center(
+                                          child: new Text(
+                                            getDisplayedValue(value),
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.white38,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : Center(
+                                          child: new Text(
+                                            getDisplayedValue(value),
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.white24,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        );
                 },
               ),
               _NumberPickerSelectedItemDecoration(
@@ -455,37 +484,47 @@ class NumberPicker extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                             )
-                          : (value == (selectedIntValue - 1) ||
-                                  value == (selectedIntValue + 1))
+                          : (value == currentDate.year)
                               ? Center(
                                   child: new Text(
                                     getDisplayedValue(value),
                                     style: TextStyle(
                                         fontSize: 16.0,
-                                        color: Colors.white60,
+                                        color: Colors.orange,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 )
-                              : (value == (selectedIntValue - 2) ||
-                                      value == (selectedIntValue + 2))
+                              : (value == (selectedIntValue - 1) ||
+                                      value == (selectedIntValue + 1))
                                   ? Center(
                                       child: new Text(
                                         getDisplayedValue(value),
                                         style: TextStyle(
                                             fontSize: 16.0,
-                                            color: Colors.white38,
+                                            color: Colors.white60,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     )
-                                  : Center(
-                                      child: new Text(
-                                        getDisplayedValue(value),
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.white24,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    );
+                                  : (value == (selectedIntValue - 2) ||
+                                          value == (selectedIntValue + 2))
+                                      ? Center(
+                                          child: new Text(
+                                            getDisplayedValue(value),
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.white38,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : Center(
+                                          child: new Text(
+                                            getDisplayedValue(value),
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.white24,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        );
                 },
               ),
               _NumberPickerSelectedItemDecoration(

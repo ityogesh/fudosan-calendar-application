@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/screens/rentalscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
-import 'package:login_fudosan/utils/customradiobutton.dart';
+import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
@@ -49,6 +50,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
+          brightness: Brightness.light,
           elevation: 0.0,
           backgroundColor: ColorConstant.appBar,
           title: Row(
@@ -90,80 +92,93 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             padding: EdgeInsets.all(8.0),
                             child: buildCalendar(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 48.0),
-                            child: ButtonTheme(
-                              minWidth:
-                                  MediaQuery.of(context).size.width * 0.33,
-                              child: CustomRadioButton(
-                                elevation: 0,
-                                height: 55.0,
-                                buttonColor: Theme.of(context).canvasColor,
-                                enableShape: true,
-                                autoWidth: true,
-                                customShape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    side: BorderSide(color: Colors.grey)),
-                                buttonLables: ["売買", "賃貸"],
-                                fontSize: 15.0,
-                                buttonValues: [
-                                  "S",
-                                  "R",
-                                ],
-                                radioButtonValue: (value) {
-                                  print(value);
-                                  setState(() {
-                                    val = value;
-                                  });
-                                },
-                                selectedColor: ColorConstant.hHighlight,
-                              ),
+                          ButtonTheme(
+                            minWidth: MediaQuery.of(context).size.width * 0.33,
+                            child: own.CustomRadioButton(
+                              padding: 5.0,
+                              elevation: 0,
+                              height: 55.0,
+                              buttonColor: Theme.of(context).canvasColor,
+                              enableShape: true,
+                              autoWidth: true,
+                              customShape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  side: BorderSide(color: Colors.transparent)),
+                              buttonLables: ["売買", "賃貸"],
+                              fontSize: 15.0,
+                              buttonValues: [
+                                "S",
+                                "R",
+                              ],
+                              radioButtonValue: (value) {
+                                print(value);
+                                setState(() {
+                                  val = value;
+                                });
+                              },
+                              selectedColor: ColorConstant.hHighlight,
                             ),
                           ),
                           val != "S"
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Radio(
-                                          activeColor: Colors.white,
-                                          value: 0,
-                                          groupValue: _radioValue1,
-                                          onChanged: (val) {
-                                            setState(
-                                              () {
-                                                _radioValue1 = val;
-                                              },
-                                            );
-                                          },
-                                        ),
-                                        Text(
-                                          " 入居",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Radio(
-                                            activeColor: Colors.white,
-                                            value: 1,
-                                            groupValue: _radioValue1,
-                                            onChanged: (val) {
-                                              setState(
-                                                () {
-                                                  _radioValue1 = val;
+                              ? Theme(
+                                  data: ThemeData(
+                                      unselectedWidgetColor: Colors.white),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 16.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Radio(
+                                                focusColor: Colors.orange,
+                                                activeColor: Colors.orange,
+                                                value: 0,
+                                                groupValue: _radioValue1,
+                                                onChanged: (val) {
+                                                  setState(
+                                                    () {
+                                                      _radioValue1 = val;
+                                                    },
+                                                  );
                                                 },
-                                              );
-                                            }),
-                                        Text(
-                                          "退居",
-                                          style: TextStyle(color: Colors.white),
+                                              ),
+                                              Text(
+                                                "入居",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Radio(
+                                                activeColor: Colors.orange,
+                                                value: 1,
+                                                groupValue: _radioValue1,
+                                                onChanged: (val) {
+                                                  setState(
+                                                    () {
+                                                      _radioValue1 = val;
+                                                    },
+                                                  );
+                                                }),
+                                            Text(
+                                              "退居",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 )
                               : Container(),
                           InkWell(
@@ -193,6 +208,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                 size: 32.0,
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            height: 15.0,
                           ),
                         ],
                       ),
@@ -262,6 +280,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new NumberPicker.horizontal(
+                currentDate: DateTime.now(),
+                selectedYear: _cyear,
                 ismonth: false,
                 numberToDisplay: 7,
                 zeroPad: false,
@@ -290,6 +310,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new NumberPicker.horizontal(
+                currentDate: DateTime.now(),
+                selectedYear: _cyear,
                 ismonth: true,
                 numberToDisplay: 7,
                 zeroPad: false,
@@ -397,7 +419,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   ],
                 )),
             TableCalendar(
-              rowHeight: 65.0,
+              rowHeight: 70.0,
               headerVisible: false,
               holidays: _hdayBuilder(),
               initialCalendarFormat: CalendarFormat.month,
@@ -528,38 +550,41 @@ class _HomeScreeenState extends State<HomeScreeen> {
   buildDays() {
     return SizedBox(
       height: 50.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Text(
-            '日', //'Sun',
-            style: TextStyle(color: ColorConstant.hHolidayy),
-          ),
-          Text(
-            '月',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            '火',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            '水',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            '木',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            '金',
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            '土',
-            style: TextStyle(color: ColorConstant.hSaturday),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              '日', //'Sun',
+              style: TextStyle(color: ColorConstant.hHolidayy),
+            ),
+            Text(
+              '月',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              '火',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              '水',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              '木',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              '金',
+              style: TextStyle(color: Colors.black),
+            ),
+            Text(
+              '土',
+              style: TextStyle(color: ColorConstant.hSaturday),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -619,8 +644,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       backgroundcolor == null ? Colors.white : backgroundcolor,
                       otherdays),
           Container(
+            padding: const EdgeInsets.only(top: 0, bottom: 3),
             margin: const EdgeInsets.only(top: 1, bottom: 1),
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
             decoration: BoxDecoration(
                 color: ColorConstant.hRent,
                 borderRadius: BorderRadius.circular(10.0)),
@@ -634,6 +660,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           ),
           val == 'S'
               ? Container(
+                  padding: const EdgeInsets.only(top: 0, bottom: 3),
                   margin: const EdgeInsets.only(top: 1, bottom: 1),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(

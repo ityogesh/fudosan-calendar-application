@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
-import 'package:intl/intl.dart';
 
 class RentalScreen extends StatefulWidget {
   final int choice;
@@ -18,7 +17,10 @@ class _RentalScreenState extends State<RentalScreen> {
   TextStyle bottomContainerText = TextStyle(fontSize: 18.0);
   TextStyle bottomContainerTextBold =
       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
-
+  TextEditingController rentController = TextEditingController();
+  TextEditingController maintainceController = TextEditingController();
+  FocusNode rentFocus = FocusNode();
+  FocusNode maintainanceFocus = FocusNode();
   DateTime selectedDate = DateTime.now();
   TextEditingController _date = new TextEditingController();
   DateTime currentSelected;
@@ -31,19 +33,19 @@ class _RentalScreenState extends State<RentalScreen> {
   String _selectedYear = 'Tap to select date';
   String _selectedMonth = '';
   String _selectedDay = '';
-  final ValueNotifier<int> ramount = ValueNotifier<int>(0);
-  final ValueNotifier<int> mamount = ValueNotifier<int>(0);
+  final ValueNotifier<double> ramount = ValueNotifier<double>(0.0);
+  final ValueNotifier<double> mamount = ValueNotifier<double>(0.0);
   final ValueNotifier<int> days = ValueNotifier<int>(0);
-  final ValueNotifier<int> tamount = ValueNotifier<int>(0);
-  var format = NumberFormat.currency(locale: 'HI');
+  final ValueNotifier<double> tamount = ValueNotifier<double>(0.0);
+  var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: currentSelected,
-        helpText: "",
+        locale: Locale('ja', 'JP'),
         firstDate: DateTime(1901, 1),
-        lastDate:DateTime(2050, 1));
+        lastDate: DateTime(2050, 1));
 
     if (picked != null) {
       setState(() {
@@ -64,48 +66,45 @@ class _RentalScreenState extends State<RentalScreen> {
                   currentSelected.year,
                 )).difference(picked).inDays
             : currentSelected.day;
-//        var finalDate = "${_selectedYear}"
+        var rev = rentController.text == ""
+            ? 0
+            : japaneseCurrency.parse(rentController.text);
+        int price = int.parse(rev.toStringAsFixed(0));
+        double eachdayprice =
+            price / totalDays(currentSelected.month, currentSelected.year);
+        ramount.value = eachdayprice * days.value;
+        rev = maintainceController.text == ""
+            ? 0
+            : japaneseCurrency.parse(maintainceController.text);
+        int mprice = int.parse(rev.toStringAsFixed(0));
+        double eachdaymprice =
+            mprice / totalDays(currentSelected.month, currentSelected.year);
+        mamount.value = eachdaymprice * days.value;
+        tamount.value = ramount.value + mamount.value;
       });
     }
   }
-
-  /*getCurrentDateMonth() {
-    var date = new DateTime.now().toString();
-
-    var dateParse = DateTime.parse(date);
-
-    var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
-    setState(() {
-      _selectedDOBDate = new DateFormat("yyyy-MM-dd").format(picked);
-      _date.value = TextEditingValue(text: _selectedDOBDate.toString());
-      var finalDate = formattedDate.toString();
-      String currentDay = dateParse.day.toString();
-      String currentMonth = dateParse.month.toString();
-      String currentYear = dateParse.year.toString();
-      print(
-          'Current date : $finalDate : month : $currentMonth : day : $currentDay year : $currentYear');
-      yearController.value = TextEditingValue(text: currentYear.toLowerCase());
-      monthController.value =
-          TextEditingValue(text: currentMonth.toLowerCase());
-      dayController.value = TextEditingValue(text: currentDay.toLowerCase());
-    });
-  }*/
 
   @override
   void initState() {
     super.initState();
     yearController.text = widget.selecteddate.year.toString();
-    monthController.text = widget.selecteddate.month.toString();
-    dayController.text = widget.selecteddate.day.toString();
+    monthController.text = widget.selecteddate.month < 10
+        ? "0${widget.selecteddate.month}"
+        : widget.selecteddate.month.toString();
+    dayController.text = widget.selecteddate.day < 10
+        ? "0${widget.selecteddate.day}"
+        : widget.selecteddate.day.toString();
     currentSelected = widget.selecteddate;
     days.value = widget.choice == 0
         ? DateTime(
-            widget.selecteddate.year,
-            widget.selecteddate.month,
-            daysRemaining(
-              widget.selecteddate.month,
-              widget.selecteddate.year,
-            )).difference(widget.selecteddate).inDays
+                widget.selecteddate.year,
+                widget.selecteddate.month,
+                daysRemaining(
+                  widget.selecteddate.month,
+                  widget.selecteddate.year,
+                )).difference(widget.selecteddate).inDays +
+            1
         : widget.selecteddate.day;
   }
 
@@ -182,7 +181,7 @@ class _RentalScreenState extends State<RentalScreen> {
                             Radius.circular(20),
                           ),
                         ),
-                        color: Colors.lightBlueAccent,
+                        color: ColorConstant.rBackGround,
                         child: Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -202,119 +201,65 @@ class _RentalScreenState extends State<RentalScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      alignment: Alignment.topCenter,
-                                      child: GestureDetector(
-                                        onTap: () => _selectDate(context),
+                                    GestureDetector(
+                                      onTap: () => _selectDate(context),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
+                                        ),
+                                        width:
+                                            (MediaQuery.of(context).size.width *
+                                                0.22),
+                                        height: 50.0,
+                                        alignment: Alignment.center,
                                         child: AbsorbPointer(
-                                          child: TextFormField(
-                                            textAlign: TextAlign.center,
-                                            controller: yearController,
-                                            keyboardType:
-                                                TextInputType.datetime,
+                                          child: Text(
+                                            "${yearController.text}",
                                             style: bottomContainerTextBold,
-                                            cursorColor: Colors.redAccent,
-                                            readOnly: true,
-                                            decoration: new InputDecoration(
-                                                filled: true,
-                                                fillColor: Colors.white,
-//                                                hintText:
-//                                                AppLocalizations.of(context)
-//                                                    .translate('R_Dob'),
-
-                                                border: OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.red,
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                )),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    /*    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      color: Colors.transparent,
-                                      child: Card(
-                                        margin: EdgeInsets.all(0.0),
-                                        color: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(15),
-                                          ),
+                                    GestureDetector(
+                                      onTap: () => _selectDate(context),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
                                         ),
-                                        child: TextFormField(
-                                          initialValue: "07",
-                                          textAlign: TextAlign.center,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none),
-                                        ),
-                                      ),
-                                    ),*/
-                                    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      alignment: Alignment.topCenter,
-                                      child: GestureDetector(
-                                        onTap: () => _selectDate(context),
+                                        width:
+                                            (MediaQuery.of(context).size.width *
+                                                0.22),
+                                        height: 50.0,
+                                        alignment: Alignment.center,
                                         child: AbsorbPointer(
-                                          child: TextFormField(
-                                            textAlign: TextAlign.center,
-                                            controller: monthController,
-                                            keyboardType:
-                                                TextInputType.datetime,
+                                          child: Text(
+                                            "${monthController.text}",
                                             style: bottomContainerTextBold,
-                                            cursorColor: Colors.redAccent,
-                                            readOnly: true,
-                                            decoration: new InputDecoration(
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              border: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Colors.red,
-                                                    width: 2.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    Container(
-                                      width:
-                                          (MediaQuery.of(context).size.width *
-                                              0.22),
-                                      alignment: Alignment.topCenter,
-                                      child: GestureDetector(
-                                        onTap: () => _selectDate(context),
+                                    GestureDetector(
+                                      onTap: () => _selectDate(context),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
+                                        ),
+                                        width:
+                                            (MediaQuery.of(context).size.width *
+                                                0.22),
+                                        height: 50.0,
+                                        alignment: Alignment.center,
                                         child: AbsorbPointer(
-                                          child: TextFormField(
-                                            textAlign: TextAlign.center,
-                                            controller: dayController,
-                                            keyboardType:
-                                                TextInputType.datetime,
+                                          child: Text(
+                                            "${dayController.text}",
                                             style: bottomContainerTextBold,
-                                            cursorColor: Colors.redAccent,
-                                            readOnly: true,
-                                            decoration: new InputDecoration(
-                                              filled: true,
-                                              fillColor: Colors.white,
-                                              border: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Colors.red,
-                                                    width: 2.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
                                           ),
                                         ),
                                       ),
@@ -336,27 +281,81 @@ class _RentalScreenState extends State<RentalScreen> {
                           height: 50.0,
                           width: MediaQuery.of(context).size.width / 1.75,
                           child: Card(
-                            elevation: 8.0,
+                            elevation: 15.0,
+                            shadowColor: ColorConstant.shadowColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(15),
                               ),
                             ),
-                            child: TextFormField(
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              decoration:
-                                  InputDecoration(border: InputBorder.none),
-                              onChanged: (String value) {
-                                int price = int.parse(value);
-                                double eachdayprice = price /
-                                    totalDays(currentSelected.month,
-                                        currentSelected.year);
-                                ramount.value = int.parse(
-                                    (eachdayprice * days.value)
-                                        .toStringAsFixed(0));
-                                tamount.value = ramount.value + mamount.value;
-                              },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: TextFormField(
+                                    focusNode: rentFocus,
+                                    controller: rentController,
+                                    textAlign: TextAlign.right,
+                                    keyboardType: TextInputType.number,
+                                    textInputAction: TextInputAction.next,
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      counterText: "",
+                                    ),
+                                    onChanged: (String value) {
+                                      if (value == null || value == "") {
+                                        ramount.value = 0;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      } else {
+                                        var rev = japaneseCurrency
+                                            .parse(rentController.text);
+                                        print("$rev");
+                                        int price =
+                                            int.parse(rev.toStringAsFixed(0));
+                                        double eachdayprice = price /
+                                            totalDays(currentSelected.month,
+                                                currentSelected.year);
+                                        ramount.value =
+                                            eachdayprice * days.value;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      }
+                                    },
+                                    onFieldSubmitted: (String val) {
+                                      _fieldFocusChange(context, rentFocus,
+                                          maintainanceFocus);
+                                    },
+                                    onEditingComplete: () {
+                                      var rev = japaneseCurrency
+                                          .parse(rentController.text);
+                                      print("$rev");
+                                      int price =
+                                          int.parse(rev.toStringAsFixed(0));
+                                      double eachdayprice = price /
+                                          totalDays(currentSelected.month,
+                                              currentSelected.year);
+                                      ramount.value = eachdayprice * days.value;
+                                      tamount.value =
+                                          ramount.value + mamount.value;
+                                      String val =
+                                          (japaneseCurrency.format(price))
+                                              .toString();
+                                      print("$val");
+                                      rentController.value = TextEditingValue(
+                                        text: "$val",
+                                        selection: TextSelection.fromPosition(
+                                          TextPosition(offset: val.length),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                    child:
+                                        Text("円", style: bottomContainerText)),
+                              ],
                             ),
                           ),
                         ),
@@ -371,28 +370,75 @@ class _RentalScreenState extends State<RentalScreen> {
                           height: 50.0,
                           width: MediaQuery.of(context).size.width / 1.75,
                           child: Card(
-                            elevation: 8.0,
+                            shadowColor: ColorConstant.shadowColor,
+                            elevation: 15.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(15),
                               ),
                             ),
-                            child: TextFormField(
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              decoration:
-                                  InputDecoration(border: InputBorder.none),
-                              onChanged: (String value) {
-                                int price = int.parse(value);
-                                double eachdayprice = price /
-                                    totalDays(currentSelected.month,
-                                        currentSelected.year);
-                                mamount.value = int.parse(
-                                    (eachdayprice * days.value)
-                                        .toStringAsFixed(0));
-
-                                tamount.value = ramount.value + mamount.value;
-                              },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: TextFormField(
+                                    focusNode: maintainanceFocus,
+                                    controller: maintainceController,
+                                    textAlign: TextAlign.right,
+                                    keyboardType: TextInputType.number,
+                                    textInputAction: TextInputAction.done,
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      counterText: "",
+                                    ),
+                                    onChanged: (String value) {
+                                      if (value == null || value == "") {
+                                        mamount.value = 0;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      } else {
+                                        var rev = japaneseCurrency
+                                            .parse(maintainceController.text);
+                                        print("$rev");
+                                        int price =
+                                            int.parse(rev.toStringAsFixed(0));
+                                        double eachdayprice = price /
+                                            totalDays(currentSelected.month,
+                                                currentSelected.year);
+                                        mamount.value =
+                                            eachdayprice * days.value;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      }
+                                    },
+                                    onFieldSubmitted: (String v) {
+                                      maintainanceFocus.unfocus();
+                                    },
+                                    onEditingComplete: () {
+                                      var rev = japaneseCurrency
+                                          .parse(maintainceController.text);
+                                      print("$rev");
+                                      int price =
+                                          int.parse(rev.toStringAsFixed(0));
+                                      double eachdayprice = price /
+                                          totalDays(currentSelected.month,
+                                              currentSelected.year);
+                                      mamount.value = eachdayprice * days.value;
+                                      tamount.value =
+                                          ramount.value + mamount.value;
+                                      String val =
+                                          (japaneseCurrency.format(price))
+                                              .toString();
+                                      print("$val");
+                                      maintainceController.text = val;
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                    child:
+                                        Text("円", style: bottomContainerText)),
+                              ],
                             ),
                           ),
                         ),
@@ -410,7 +456,7 @@ class _RentalScreenState extends State<RentalScreen> {
                 ),
               ),
               Container(
-                  color: ColorConstant.pirceBackground,
+                  color: ColorConstant.priceBackground,
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 14.0, right: 14.0, top: 20.0, bottom: 20.0),
@@ -422,10 +468,10 @@ class _RentalScreenState extends State<RentalScreen> {
                             Text("賃料", style: bottomContainerText),
                             ValueListenableBuilder(
                                 valueListenable: ramount,
-                                builder: (BuildContext context, int value,
+                                builder: (BuildContext context, double value,
                                     Widget child) {
                                   return Text(
-                                    "$value 円",
+                                    "${japaneseCurrency.format(value)}円",
                                     style: bottomContainerTextBold,
                                   );
                                 }),
@@ -438,10 +484,10 @@ class _RentalScreenState extends State<RentalScreen> {
                             Text("共益費", style: bottomContainerText),
                             ValueListenableBuilder(
                                 valueListenable: mamount,
-                                builder: (BuildContext context, int value,
+                                builder: (BuildContext context, double value,
                                     Widget child) {
                                   return Text(
-                                    "$value 円",
+                                    "${japaneseCurrency.format(value)}円",
                                     style: bottomContainerTextBold,
                                   );
                                 }),
@@ -454,10 +500,10 @@ class _RentalScreenState extends State<RentalScreen> {
                             Text("合計", style: bottomContainerText),
                             ValueListenableBuilder(
                                 valueListenable: tamount,
-                                builder: (BuildContext context, int value,
+                                builder: (BuildContext context, double value,
                                     Widget child) {
                                   return Text(
-                                    "$value 円",
+                                    "${japaneseCurrency.format(value)}円",
                                     style: bottomContainerTextBold,
                                   );
                                 }),
@@ -471,5 +517,11 @@ class _RentalScreenState extends State<RentalScreen> {
         ),
       ),
     );
+  }
+
+  _fieldFocusChange(
+      BuildContext context, FocusNode _currentFocus, FocusNode _nextFocus) {
+    _currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(_nextFocus);
   }
 }

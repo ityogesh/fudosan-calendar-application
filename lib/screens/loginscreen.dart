@@ -5,6 +5,7 @@ import 'package:login_fudosan/models/apiResponseModels/login/loginResponseModel.
 import 'package:login_fudosan/screens/homescreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
+import 'package:login_fudosan/utils/fontHelper.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'registration.dart';
@@ -26,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode passwordFocus = FocusNode();
   bool autoValidate = false;
   bool passwordVisibility = true;
-  ProgressDialog progressDialog;
+  ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -38,14 +39,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkUserStatus() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
-    if (instance.getString('token') != null) {
+    if ((instance.getString('token') != null) &&
+        (instance.getInt('status') == 1)) {
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     }
   }
 
   progressInit() {
-    progressDialog = ProgressDialog(
+    _progressDialog = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
@@ -53,8 +55,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   progressStyle() {
-    progressDialog.style(
-      message: 'Please Wait...',
+    _progressDialog.style(
+      message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -124,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.next,
                       decoration: new InputDecoration(
                         labelText: 'メールアドレス',
-                        labelStyle:
+                        labelStyle: /* FontHelper.hintText, */
                             TextStyle(color: ColorConstant.lHintTextColor),
                       ),
                       validator: (String value) {
@@ -146,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.done,
                       decoration: new InputDecoration(
                         labelText: 'パスワード',
-                        labelStyle:
+                        labelStyle: /* FontHelper.hintText, */
                             TextStyle(color: ColorConstant.lHintTextColor),
                         suffixIcon: IconButton(
                             icon: passwordVisibility
@@ -214,9 +216,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  validateCredentials() {
+  validateCredentials() async {
     if (formKey.currentState.validate()) {
-      progressDialog.show();
+      await _progressDialog.show();
       _loginInitiate();
     } else {
       setState(() {
@@ -236,15 +238,23 @@ class _LoginScreenState extends State<LoginScreen> {
       LoginResponseModel loginResponseModel =
           LoginResponseModel.fromJson(loginResponse);
       print('Login response: ${loginResponseModel.toJson()}');
+      print('success: $loginResponseModel.success');
       print('Token : ${loginResponseModel.success.token}');
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("token", loginResponseModel.success.token);
-      progressDialog.hide();
+      instance.setString("email", loginResponseModel.userDetails.email);
+      instance.setString("id", loginResponseModel.userDetails.id.toString());
+      instance.setInt("status", loginResponseModel.userDetails.status);
+      _progressDialog.hide();
+      Fluttertoast.showToast(
+        msg: "ログインに成功しました",
+      );
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     } else {
-      progressDialog.hide();
+      _progressDialog.hide();
       var error = json.decode(response.body);
+
       if (error['error'] == "User profile not present") {
         Fluttertoast.showToast(
           msg: "ユーザープロファイルが存在しません",

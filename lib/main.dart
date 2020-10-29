@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
+import 'package:login_fudosan/utils/colorconstant.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: ColorConstant.statusBarColor));
     return MaterialApp(
       title: 'Fudosan Calendar',
       theme: ThemeData(
@@ -16,6 +20,13 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginScreen(),
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('ja'),
+      ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+      ],
       debugShowCheckedModeBanner: false,
     );
   }

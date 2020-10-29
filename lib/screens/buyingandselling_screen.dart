@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 
 class BuyingSellingScreen extends StatefulWidget {
@@ -19,8 +20,11 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   int completedDays;
   int remaingDays;
   DateTime date;
-  final ValueNotifier<int> samount = ValueNotifier<int>(0);
-  final ValueNotifier<int> bamount = ValueNotifier<int>(0);
+  var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
+  final ValueNotifier<double> samount = ValueNotifier<double>(0);
+  final ValueNotifier<double> bamount = ValueNotifier<double>(0);
+  FocusNode taxFocus = FocusNode();
+  DateTime sellDate;
 
   @override
   void initState() {
@@ -29,6 +33,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
     completedDays = date.difference(DateTime(date.year, 1, 1)).inDays;
     remaingDays =
         date.year % 4 == 0 ? 366 - completedDays : 365 - completedDays;
+    sellDate = DateTime(date.year, date.month, date.day - 1);
+    sellDate = sellDate.year != date.year
+        ? DateTime(date.year, date.month, date.day)
+        : sellDate;
   }
 
   @override
@@ -66,13 +74,59 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           "売主様負担分",
                           style: cardSmallText,
                         ),
-                        Text(
-                          "1月1日　～　${widget.selectedDate.month}月${widget.selectedDate.day}日",
-                          style: cardSmallText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "1月1日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "～",
+                                style: cardSmallText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "${sellDate.month}月${sellDate.day}日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "合計　${completedDays.toString()}　日分",
-                          style: cardBigText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "合計",
+                                style: cardBigText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "${completedDays.toString()}",
+                                style: cardBigText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "日分",
+                                style: cardBigText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -100,13 +154,59 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                           "買主様負担分",
                           style: cardSmallText,
                         ),
-                        Text(
-                          "${widget.selectedDate.month}月${widget.selectedDate.day + 1}日　～　12月31日",
-                          style: cardSmallText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "${widget.selectedDate.month}月${widget.selectedDate.day}日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "～",
+                                style: cardSmallText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "12月31日",
+                                style: cardSmallText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "合計　${remaingDays.toString()}　日分",
-                          style: cardBigText,
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "合計",
+                                style: cardBigText,
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "${remaingDays.toString()}",
+                                style: cardBigText,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "日分",
+                                style: cardBigText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -122,38 +222,71 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
             Container(
               width: MediaQuery.of(context).size.width / 1.5,
               child: Card(
-                elevation: 8.0,
+                shadowColor: ColorConstant.shadowColor,
+                elevation: 15.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(15),
                   ),
                 ),
-                child: TextFormField(
-                  controller: textEditingController,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      border: InputBorder.none),
-                  onChanged: (String value) {
-                    if (value == null) {
-                      samount.value = 0;
-                      bamount.value = 0;
-                    } else {
-                      int price = int.parse(value);
-                      int totaldays = date.year % 4 == 0 ? 366 : 365;
-                      double eachdayprice = price / totaldays;
-                      samount.value = int.parse(
-                          (eachdayprice * completedDays).toStringAsFixed(0));
-                      bamount.value = int.parse(
-                          (eachdayprice * remaingDays).toStringAsFixed(0));
-                    }
-                  },
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        focusNode: taxFocus,
+                        controller: textEditingController,
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        textAlign: TextAlign.right,
+                        decoration: InputDecoration(
+                            counterText: "", border: InputBorder.none),
+                        onChanged: (String value) {
+                          if (value == null || value == "") {
+                            samount.value = 0;
+                            bamount.value = 0;
+                          } else {
+                            var rev = japaneseCurrency
+                                .parse(textEditingController.text);
+                            int price = int.parse(rev.toStringAsFixed(0));
+                            int totaldays = date.year % 4 == 0 ? 366 : 365;
+                            double eachdayprice = price / totaldays;
+                            samount.value = eachdayprice * completedDays;
+                            bamount.value = eachdayprice * remaingDays;
+                          }
+                        },
+                        onFieldSubmitted: (String v) {
+                          taxFocus.unfocus();
+                        },
+                        onEditingComplete: () {
+                          var rev = japaneseCurrency
+                              .parse(textEditingController.text);
+                          print("$rev");
+                          int price = int.parse(rev.toStringAsFixed(0));
+                          int totaldays = date.year % 4 == 0 ? 366 : 365;
+                          double eachdayprice = price / totaldays;
+                          samount.value = eachdayprice * completedDays;
+                          bamount.value = eachdayprice * remaingDays;
+                          String val =
+                              (japaneseCurrency.format(price)).toString();
+                          print("$val");
+                          textEditingController.value = TextEditingValue(
+                            text: "$val",
+                            selection: TextSelection.fromPosition(
+                              TextPosition(offset: val.length),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Expanded(child: Text("円", style: bottomContainerText)),
+                  ],
                 ),
               ),
             ),
             SizedBox(height: 10.0),
             Container(
-              color: ColorConstant.pirceBackground,
+              color: ColorConstant.priceBackground,
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 10.0, right: 10.0, top: 20.0, bottom: 20.0),
@@ -168,10 +301,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         ),
                         ValueListenableBuilder(
                             valueListenable: samount,
-                            builder: (BuildContext context, int value,
+                            builder: (BuildContext context, double value,
                                 Widget child) {
                               return Text(
-                                "$value 円",
+                                "${japaneseCurrency.format(value)}円",
                                 style: bottomContainerTextBold,
                               );
                             }),
@@ -187,10 +320,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         ),
                         ValueListenableBuilder(
                             valueListenable: bamount,
-                            builder: (BuildContext context, int value,
+                            builder: (BuildContext context, double value,
                                 Widget child) {
                               return Text(
-                                "$value 円",
+                                "${japaneseCurrency.format(value)}円",
                                 style: bottomContainerTextBold,
                               );
                             }),

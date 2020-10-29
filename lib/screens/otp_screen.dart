@@ -36,7 +36,7 @@ class _OtpScreenState extends State<OtpScreen> {
   FocusNode pinCodeFoucs = FocusNode();
   FocusNode createPasswordFocus = FocusNode();
   FocusNode confrimPasswordFocus = FocusNode();
-  ProgressDialog progressDialog;
+  ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   progressInit() {
-    progressDialog = ProgressDialog(
+    _progressDialog = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
@@ -54,8 +54,8 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   progressStyle() {
-    progressDialog.style(
-      message: 'Please Wait...',
+    _progressDialog.style(
+      message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
       elevation: 10.0,
@@ -141,9 +141,11 @@ class _OtpScreenState extends State<OtpScreen> {
                     obscureText: createPasswordVisibility,
                     textInputAction: TextInputAction.next,
                     focusNode: createPasswordFocus,
+                    maxLength: 14,
                     controller: createPassword,
                     keyboardType: TextInputType.emailAddress,
                     decoration: new InputDecoration(
+                      counterText: "",
                       labelText: '新しいパスワード',
                       suffixIcon: IconButton(
                           icon: createPasswordVisibility
@@ -242,10 +244,14 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  checkValidation() {
+  checkValidation() async {
     if (formKey.currentState.validate()) {
-      progressDialog.show();
-      passwordChange();
+      if (ValidateHelper().validatePin(pin.text)) {
+        await _progressDialog.show();
+        passwordChange();
+      } else {
+        Fluttertoast.showToast(msg: "認証コード入力は必須項目なので入力してください。");
+      }
     } else {
       setState(() {
         autoValidate = true;
@@ -269,10 +275,10 @@ class _OtpScreenState extends State<OtpScreen> {
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(json.decode(response.body));
       print(response.body);
-      progressDialog.hide();
+      _progressDialog.hide();
       showSuccessAlert(context);
     } else {
-      progressDialog.hide();
+      _progressDialog.hide();
       Fluttertoast.showToast(
         msg: "認証コードは一致しませんのでもう一度試してください。",
       );
