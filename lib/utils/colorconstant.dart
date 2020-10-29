@@ -17,6 +17,5 @@ class ColorConstant {
   static Color otpButton = Color(0xFF3ECAFD); //HexColor("#3ECAFD");
   static Color priceBackground = Color(0xFFF2F8FF); //HexColor("#F2F8FF");
   static Color shadowColor = Color.fromRGBO(13, 128, 255, 0.16);//Color(0xFF0D80FF28);
-  static Color statusBarLightColor = Color(0xFF3ECAFD);
-  static Color statusBarDarkColor = Color(0xFF3EB7FD);
+  static Color statusBarColor = Color(0xFF3EB7FD);
 }

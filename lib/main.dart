@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: ColorConstant.statusBarLightColor));
+        statusBarColor: ColorConstant.statusBarColor));
     return MaterialApp(
       title: 'Fudosan Calendar',
       theme: ThemeData(

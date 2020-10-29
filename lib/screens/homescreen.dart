@@ -10,7 +10,6 @@ import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 class HomeScreeen extends StatefulWidget {
   @override
@@ -32,7 +31,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   void initState() {
-    FlutterStatusbarcolor.setStatusBarColor(ColorConstant.statusBarDarkColor);
     super.initState();
     getHolidays();
     _calendarController = CalendarController();
