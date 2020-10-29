@@ -32,7 +32,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
   final otpController = new TextEditingController();
 
   String email_otp;
-  ProgressDialog progressDialog;
+  ProgressDialog _progressDialog;
   bool autoValidate = false;
 
   @override
@@ -43,7 +43,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
   }
 
   progressInit() {
-    progressDialog = ProgressDialog(
+    _progressDialog = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
@@ -51,7 +51,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
   }
 
   progressStyle() {
-    progressDialog.style(
+    _progressDialog.style(
       message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
@@ -186,10 +186,10 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
     );
   }
 
-  checkValidation() {
+  checkValidation() async {
     if (formKey.currentState.validate()) {
       if (ValidateHelper().validatePin(otpController.text)) {
-        progressDialog.show();
+        await _progressDialog.show();
         _doUserOtpRegistration();
       } else {
         Fluttertoast.showToast(msg: "認証コード入力は必須項目なので入力してください。");
@@ -235,7 +235,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     } else {
-      progressDialog.hide();
+      _progressDialog.hide();
       var errorData = json.decode(response.body);
       final Map errorResponse = errorData;
       RegisterOtpErrorResponseModel registerOtpErrorResponseModel =

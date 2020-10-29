@@ -21,7 +21,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController emailaddress = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool autoValidate = false;
-  ProgressDialog progressDialog;
+  ProgressDialog _progressDialog;
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   progressInit() {
-    progressDialog = ProgressDialog(
+    _progressDialog = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
@@ -39,7 +39,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   progressStyle() {
-    progressDialog.style(
+    _progressDialog.style(
       message: Constants.progress_msg,
       borderRadius: 10.0,
       backgroundColor: Colors.white,
@@ -132,9 +132,9 @@ class _ResetPasswordState extends State<ResetPassword> {
     );
   }
 
-  checkValidation() {
+  checkValidation() async {
     if (formKey.currentState.validate()) {
-      progressDialog.show();
+      await _progressDialog.show();
       sendOTP();
     } else {
       setState(() {
@@ -154,14 +154,14 @@ class _ResetPasswordState extends State<ResetPassword> {
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(sendOtpResponse);
       print('${response.body}');
-      progressDialog.hide();
+      _progressDialog.hide();
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => OtpScreen(
                   emailaddress.text, forgetPasswordOtpResponseModel.userid)));
     } else {
-      progressDialog.hide();
+      _progressDialog.hide();
       print("Error ${response.body}");
       var error = json.decode(response.body);
       if (error['error'] == "User not found") {
