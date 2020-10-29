@@ -24,14 +24,19 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   final ValueNotifier<double> samount = ValueNotifier<double>(0);
   final ValueNotifier<double> bamount = ValueNotifier<double>(0);
   FocusNode taxFocus = FocusNode();
+  DateTime sellDate;
 
   @override
   void initState() {
     super.initState();
     date = widget.selectedDate;
-    completedDays = date.difference(DateTime(date.year, 1, 1)).inDays + 1;
+    completedDays = date.difference(DateTime(date.year, 1, 1)).inDays;
     remaingDays =
         date.year % 4 == 0 ? 366 - completedDays : 365 - completedDays;
+    sellDate = DateTime(date.year, date.month, date.day - 1);
+    sellDate = sellDate.year != date.year
+        ? DateTime(date.year, date.month, date.day)
+        : sellDate;
   }
 
   @override
@@ -89,7 +94,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                "${widget.selectedDate.month}月${widget.selectedDate.day}日",
+                                "${sellDate.month}月${sellDate.day}日",
                                 style: cardSmallText,
                                 textAlign: TextAlign.left,
                               ),
@@ -154,7 +159,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                "${widget.selectedDate.month}月${widget.selectedDate.day + 1}日",
+                                "${widget.selectedDate.month}月${widget.selectedDate.day}日",
                                 style: cardSmallText,
                                 textAlign: TextAlign.right,
                               ),
