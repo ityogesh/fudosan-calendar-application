@@ -23,12 +23,13 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
   final ValueNotifier<double> samount = ValueNotifier<double>(0);
   final ValueNotifier<double> bamount = ValueNotifier<double>(0);
+  FocusNode taxFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
     date = widget.selectedDate;
-    completedDays = date.difference(DateTime(date.year, 1, 1)).inDays;
+    completedDays = date.difference(DateTime(date.year, 1, 1)).inDays + 1;
     remaingDays =
         date.year % 4 == 0 ? 366 - completedDays : 365 - completedDays;
   }
@@ -228,6 +229,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                     Expanded(
                       flex: 2,
                       child: TextFormField(
+                        focusNode: taxFocus,
                         controller: textEditingController,
                         keyboardType: TextInputType.number,
                         maxLength: 10,
@@ -239,16 +241,40 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             samount.value = 0;
                             bamount.value = 0;
                           } else {
-                            int price = int.parse(value);
+                            var rev = japaneseCurrency
+                                .parse(textEditingController.text);
+                            int price = int.parse(rev.toStringAsFixed(0));
                             int totaldays = date.year % 4 == 0 ? 366 : 365;
                             double eachdayprice = price / totaldays;
                             samount.value = eachdayprice * completedDays;
                             bamount.value = eachdayprice * remaingDays;
                           }
                         },
+                        onFieldSubmitted: (String v) {
+                          taxFocus.unfocus();
+                        },
+                        onEditingComplete: () {
+                          var rev = japaneseCurrency
+                              .parse(textEditingController.text);
+                          print("$rev");
+                          int price = int.parse(rev.toStringAsFixed(0));
+                          int totaldays = date.year % 4 == 0 ? 366 : 365;
+                          double eachdayprice = price / totaldays;
+                          samount.value = eachdayprice * completedDays;
+                          bamount.value = eachdayprice * remaingDays;
+                          String val =
+                              (japaneseCurrency.format(price)).toString();
+                          print("$val");
+                          textEditingController.value = TextEditingValue(
+                            text: "$val",
+                            selection: TextSelection.fromPosition(
+                              TextPosition(offset: val.length),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    Expanded(child: Text(" 円", style: bottomContainerText)),
+                    Expanded(child: Text("円", style: bottomContainerText)),
                   ],
                 ),
               ),
@@ -273,7 +299,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             builder: (BuildContext context, double value,
                                 Widget child) {
                               return Text(
-                                "${japaneseCurrency.format(value)} 円",
+                                "${japaneseCurrency.format(value)}円",
                                 style: bottomContainerTextBold,
                               );
                             }),
@@ -292,7 +318,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             builder: (BuildContext context, double value,
                                 Widget child) {
                               return Text(
-                                "${japaneseCurrency.format(value)} 円",
+                                "${japaneseCurrency.format(value)}円",
                                 style: bottomContainerTextBold,
                               );
                             }),

@@ -484,37 +484,47 @@ class NumberPicker extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                             )
-                          : (value == (selectedIntValue - 1) ||
-                                  value == (selectedIntValue + 1))
+                          : (value == currentDate.year)
                               ? Center(
                                   child: new Text(
                                     getDisplayedValue(value),
                                     style: TextStyle(
                                         fontSize: 16.0,
-                                        color: Colors.white60,
+                                        color: Colors.orange,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 )
-                              : (value == (selectedIntValue - 2) ||
-                                      value == (selectedIntValue + 2))
+                              : (value == (selectedIntValue - 1) ||
+                                      value == (selectedIntValue + 1))
                                   ? Center(
                                       child: new Text(
                                         getDisplayedValue(value),
                                         style: TextStyle(
                                             fontSize: 16.0,
-                                            color: Colors.white38,
+                                            color: Colors.white60,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     )
-                                  : Center(
-                                      child: new Text(
-                                        getDisplayedValue(value),
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.white24,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    );
+                                  : (value == (selectedIntValue - 2) ||
+                                          value == (selectedIntValue + 2))
+                                      ? Center(
+                                          child: new Text(
+                                            getDisplayedValue(value),
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.white38,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      : Center(
+                                          child: new Text(
+                                            getDisplayedValue(value),
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.white24,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        );
                 },
               ),
               _NumberPickerSelectedItemDecoration(

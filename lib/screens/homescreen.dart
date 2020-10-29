@@ -8,7 +8,6 @@ import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
 
 class HomeScreeen extends StatefulWidget {
@@ -158,7 +157,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                         child: Row(
                                           children: [
                                             Radio(
-                                                
                                                 activeColor: Colors.orange,
                                                 value: 1,
                                                 groupValue: _radioValue1,
@@ -280,6 +278,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new NumberPicker.horizontal(
+                currentDate: DateTime.now(),
+                selectedYear: _cyear,
                 ismonth: false,
                 numberToDisplay: 7,
                 zeroPad: false,
@@ -417,7 +417,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   ],
                 )),
             TableCalendar(
-              rowHeight: 65.0,
+              rowHeight: 70.0,
               headerVisible: false,
               holidays: _hdayBuilder(),
               initialCalendarFormat: CalendarFormat.month,
@@ -642,8 +642,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       backgroundcolor == null ? Colors.white : backgroundcolor,
                       otherdays),
           Container(
+            padding: const EdgeInsets.only(top: 0, bottom: 3),
             margin: const EdgeInsets.only(top: 1, bottom: 1),
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
             decoration: BoxDecoration(
                 color: ColorConstant.hRent,
                 borderRadius: BorderRadius.circular(10.0)),
@@ -657,6 +658,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           ),
           val == 'S'
               ? Container(
+                  padding: const EdgeInsets.only(top: 0, bottom: 3),
                   margin: const EdgeInsets.only(top: 1, bottom: 1),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
