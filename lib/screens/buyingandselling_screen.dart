@@ -217,7 +217,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
             Container(
               width: MediaQuery.of(context).size.width / 1.5,
               child: Card(
-                shadowColor: ColorConstant.priceBackground,
+                shadowColor: ColorConstant.shadowColor,
                 elevation: 15.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
@@ -237,7 +237,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         decoration: InputDecoration(
                             counterText: "", border: InputBorder.none),
                         onChanged: (String value) {
-                          if (value == null) {
+                          if (value == null || value == "") {
                             samount.value = 0;
                             bamount.value = 0;
                           } else {

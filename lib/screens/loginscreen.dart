@@ -5,6 +5,7 @@ import 'package:login_fudosan/models/apiResponseModels/login/loginResponseModel.
 import 'package:login_fudosan/screens/homescreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
+import 'package:login_fudosan/utils/fontHelper.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'registration.dart';
@@ -125,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.next,
                       decoration: new InputDecoration(
                         labelText: 'メールアドレス',
-                        labelStyle:
+                        labelStyle: /* FontHelper.hintText, */
                             TextStyle(color: ColorConstant.lHintTextColor),
                       ),
                       validator: (String value) {
@@ -147,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.done,
                       decoration: new InputDecoration(
                         labelText: 'パスワード',
-                        labelStyle:
+                        labelStyle: /* FontHelper.hintText, */
                             TextStyle(color: ColorConstant.lHintTextColor),
                         suffixIcon: IconButton(
                             icon: passwordVisibility

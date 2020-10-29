@@ -282,7 +282,7 @@ class _RentalScreenState extends State<RentalScreen> {
                           width: MediaQuery.of(context).size.width / 1.75,
                           child: Card(
                             elevation: 15.0,
-                            shadowColor: ColorConstant.priceBackground,
+                            shadowColor: ColorConstant.shadowColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(15),
@@ -304,17 +304,24 @@ class _RentalScreenState extends State<RentalScreen> {
                                       counterText: "",
                                     ),
                                     onChanged: (String value) {
-                                      var rev = japaneseCurrency
-                                          .parse(rentController.text);
-                                      print("$rev");
-                                      int price =
-                                          int.parse(rev.toStringAsFixed(0));
-                                      double eachdayprice = price /
-                                          totalDays(currentSelected.month,
-                                              currentSelected.year);
-                                      ramount.value = eachdayprice * days.value;
-                                      tamount.value =
-                                          ramount.value + mamount.value;
+                                      if (value == null || value == "") {
+                                        ramount.value = 0;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      } else {
+                                        var rev = japaneseCurrency
+                                            .parse(rentController.text);
+                                        print("$rev");
+                                        int price =
+                                            int.parse(rev.toStringAsFixed(0));
+                                        double eachdayprice = price /
+                                            totalDays(currentSelected.month,
+                                                currentSelected.year);
+                                        ramount.value =
+                                            eachdayprice * days.value;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      }
                                     },
                                     onFieldSubmitted: (String val) {
                                       _fieldFocusChange(context, rentFocus,
@@ -363,7 +370,7 @@ class _RentalScreenState extends State<RentalScreen> {
                           height: 50.0,
                           width: MediaQuery.of(context).size.width / 1.75,
                           child: Card(
-                            shadowColor: ColorConstant.priceBackground,
+                            shadowColor: ColorConstant.shadowColor,
                             elevation: 15.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
@@ -386,17 +393,24 @@ class _RentalScreenState extends State<RentalScreen> {
                                       counterText: "",
                                     ),
                                     onChanged: (String value) {
-                                      var rev = japaneseCurrency
-                                          .parse(maintainceController.text);
-                                      print("$rev");
-                                      int price =
-                                          int.parse(rev.toStringAsFixed(0));
-                                      double eachdayprice = price /
-                                          totalDays(currentSelected.month,
-                                              currentSelected.year);
-                                      mamount.value = eachdayprice * days.value;
-                                      tamount.value =
-                                          ramount.value + mamount.value;
+                                      if (value == null || value == "") {
+                                        mamount.value = 0;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      } else {
+                                        var rev = japaneseCurrency
+                                            .parse(maintainceController.text);
+                                        print("$rev");
+                                        int price =
+                                            int.parse(rev.toStringAsFixed(0));
+                                        double eachdayprice = price /
+                                            totalDays(currentSelected.month,
+                                                currentSelected.year);
+                                        mamount.value =
+                                            eachdayprice * days.value;
+                                        tamount.value =
+                                            ramount.value + mamount.value;
+                                      }
                                     },
                                     onFieldSubmitted: (String v) {
                                       maintainanceFocus.unfocus();
