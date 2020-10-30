@@ -250,7 +250,8 @@ class _OtpScreenState extends State<OtpScreen> {
         await _progressDialog.show();
         passwordChange();
       } else {
-        Fluttertoast.showToast(msg: "認証コード入力は必須項目なので入力してください。");
+        Fluttertoast.showToast(
+            toastLength: Toast.LENGTH_LONG, msg: "認証コード入力は必須項目なので入力してください。");
       }
     } else {
       setState(() {
@@ -280,6 +281,7 @@ class _OtpScreenState extends State<OtpScreen> {
     } else {
       _progressDialog.hide();
       Fluttertoast.showToast(
+        toastLength: Toast.LENGTH_LONG,
         msg: "認証コードは一致しませんのでもう一度試してください。",
       );
       /*  throw Exception('http.post error: statusCode= ${response.statusCode}'); */
@@ -310,12 +312,9 @@ class _OtpScreenState extends State<OtpScreen> {
                 borderRadius: BorderRadius.circular(16.0),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-//              color: Colors.lightBlueAccent,
                     color: Colors.transparent,
-
-                    blurRadius: 500.0,
-
-//             offset: Offset(6.6, 7.8),
+                    blurRadius: 9000,
+                    offset: Offset(0.0, 0.0),
                   ),
                 ]),
             child: Column(

@@ -14,7 +14,7 @@ class _RentalScreenState extends State<RentalScreen> {
   TextStyle cardSmallText = TextStyle(color: Colors.white);
   TextStyle cardBigText = TextStyle(
       color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold);
-  TextStyle bottomContainerText = TextStyle(fontSize: 18.0);
+  TextStyle bottomContainerText = TextStyle(fontSize: 15.0);
   TextStyle bottomContainerTextBold =
       TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
   TextEditingController rentController = TextEditingController();
@@ -387,6 +387,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                     textAlign: TextAlign.right,
                                     keyboardType: TextInputType.number,
                                     textInputAction: TextInputAction.done,
+//                                    style: TextStyle(fontSize: 18),
                                     maxLength: 10,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -436,8 +437,10 @@ class _RentalScreenState extends State<RentalScreen> {
                                   ),
                                 ),
                                 Expanded(
-                                    child:
-                                        Text("円", style: bottomContainerText)),
+                                    child: Text(
+                                  "円",
+                                  style: bottomContainerText,
+                                )),
                               ],
                             ),
                           ),

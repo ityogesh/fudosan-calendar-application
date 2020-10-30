@@ -11,6 +11,13 @@ class ValidateHelper {
       return null;
   }
 
+  String validateLoginPassword(String value) {
+    if (value.length == 0)
+      return "パスワードを入力してください。";
+    else
+      return null;
+  }
+
   String validatePassword(String value) {
     RegExp passwordRegex = new RegExp(
         r'^(?=.*[0-9])(?=.*[A-Za-z])(?=.*[~!?@#$%^&*_-])[A-Za-z0-9~!?@#$%^&*_-]{8,40}$');

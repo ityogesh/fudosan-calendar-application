@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             }),
                       ),
                       validator: (String value) {
-                        return ValidateHelper().validatePassword(value);
+                        return ValidateHelper().validateLoginPassword(value);
                       },
                       onFieldSubmitted: (String value) {
                         validateCredentials();
@@ -247,7 +247,8 @@ class _LoginScreenState extends State<LoginScreen> {
       instance.setInt("status", loginResponseModel.userDetails.status);
       _progressDialog.hide();
       Fluttertoast.showToast(
-        msg: "ログインに成功しました",
+        toastLength: Toast.LENGTH_LONG,
+        msg: "ログインに成功しました。",
       );
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
@@ -257,15 +258,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (error['error'] == "User profile not present") {
         Fluttertoast.showToast(
-          msg: "ユーザープロファイルが存在しません",
+          toastLength: Toast.LENGTH_LONG,
+          msg: "ユーザープロファイルが存在しません。",
         );
       } else if (error['error'] == "User login password is incorrect") {
         Fluttertoast.showToast(
-          msg: "ユーザーログインパスワードが正しくありません",
+          toastLength: Toast.LENGTH_LONG,
+          msg: "ユーザーログインパスワードが正しくありません。",
         );
       } else if (error['error'] == "User not activated") {
         Fluttertoast.showToast(
-          msg: "ユーザーがアクティブ化されていません",
+          toastLength: Toast.LENGTH_LONG,
+          msg: "ユーザーがアクティブ化されていません。",
         );
       }
     }
