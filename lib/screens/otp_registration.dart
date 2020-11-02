@@ -192,7 +192,8 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
         await _progressDialog.show();
         _doUserOtpRegistration();
       } else {
-        Fluttertoast.showToast(msg: "認証コード入力は必須項目なので入力してください。");
+        Fluttertoast.showToast(
+            toastLength: Toast.LENGTH_LONG, msg: "認証コード入力は必須項目なので入力してください。");
       }
     } else {
       setState(() {
@@ -243,6 +244,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       print(registerOtpErrorResponseModel.error);
       if (registerOtpErrorResponseModel.error == "OTP verification failed") {
         Fluttertoast.showToast(
+          toastLength: Toast.LENGTH_LONG,
           msg: "認証コードは一致しませんのでもう一度試してください。",
         );
       }

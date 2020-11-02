@@ -111,7 +111,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     height: 50,
                     child: RaisedButton(
                       child: Text(
-                        '信送',
+                        '送信',
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       color: ColorConstant.otpButton,
@@ -166,7 +166,8 @@ class _ResetPasswordState extends State<ResetPassword> {
       var error = json.decode(response.body);
       if (error['error'] == "User not found") {
         Fluttertoast.showToast(
-          msg: "ユーザーが見つかりません",
+          toastLength: Toast.LENGTH_LONG,
+          msg: "ユーザーが見つかりません。",
         );
       }
       //throw Exception('http.post error: statusCode= ${response.statusCode}');
