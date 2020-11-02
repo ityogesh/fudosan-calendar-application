@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/screens/rentalscreen.dart';
@@ -50,7 +49,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          brightness: Brightness.light,
           elevation: 0.0,
           backgroundColor: ColorConstant.appBar,
           title: Row(
@@ -644,9 +642,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       backgroundcolor == null ? Colors.white : backgroundcolor,
                       otherdays),
           Container(
-            padding: const EdgeInsets.only(top: 0, bottom: 3),
-            margin: const EdgeInsets.only(top: 1, bottom: 1),
-            alignment: Alignment.topCenter,
+          //  height: 15.0,
+          //  padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+            margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
+            alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: ColorConstant.hRent,
                 borderRadius: BorderRadius.circular(10.0)),
@@ -660,8 +659,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
           ),
           val == 'S'
               ? Container(
-                  padding: const EdgeInsets.only(top: 0, bottom: 3),
-                  margin: const EdgeInsets.only(top: 1, bottom: 1),
+                 // height: 15.0,
+                  //padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+                  margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: ColorConstant.hSeller,
