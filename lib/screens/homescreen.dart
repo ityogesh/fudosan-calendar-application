@@ -26,7 +26,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
   List<Map<DateTime, List<dynamic>>> sample =
       List<Map<DateTime, List<dynamic>>>();
   String val = "R";
+  NumberPicker yearPicker;
+  NumberPicker monthPicker;
   DateTime selectedDate;
+  DateTime vdate;
 
   @override
   void initState() {
@@ -245,6 +248,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
       _currentmonth = selectedmonth;
       _calendarController
           .setFocusedDay(DateTime(_cfocus.year, _currentmonth, _cfocus.day));
+      // monthPicker.animateInt(_currentmonth);
     });
     print("Changed month: $_currentmonth");
   }
@@ -255,8 +259,24 @@ class _HomeScreeenState extends State<HomeScreeen> {
       _cyear = selectedmonth;
       _calendarController
           .setFocusedDay(DateTime(_cyear, _cfocus.month, _cfocus.day));
+      // yearPicker.animateInt(_cyear);
     });
     print("Changed month: $_cyear");
+  }
+
+  changeMonthPickerVal(int focusedMonth) {
+   // setState(() {
+      _currentmonth = focusedMonth;
+     // print("Focused Month: $focusedMonth");
+      monthPicker.animateInt(focusedMonth);
+   // });
+  }
+
+  changeYearPickerVal(int focusedYear) {
+    //  setState(() {
+    _cyear = focusedYear;
+    yearPicker.animateInt(focusedYear);
+    //   });
   }
 
   Map<DateTime, List<dynamic>> _hdayBuilder() {
@@ -268,6 +288,21 @@ class _HomeScreeenState extends State<HomeScreeen> {
   }
 
   buildYearPicker() {
+    yearPicker = NumberPicker.horizontal(
+      currentDate: DateTime.now(),
+      selectedYear: _cyear,
+      ismonth: false,
+      numberToDisplay: 7,
+      zeroPad: false,
+      initialValue: _cyear,
+      minValue: 2000,
+      maxValue: 2050,
+      onChanged: (newValue) => setState(() {
+        if (newValue != _cyear) {
+          changeYear(newValue);
+        }
+      }),
+    );
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: SizedBox(
@@ -277,7 +312,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new NumberPicker.horizontal(
+              yearPicker,
+              /*   NumberPicker.horizontal(
                 currentDate: DateTime.now(),
                 selectedYear: _cyear,
                 ismonth: false,
@@ -289,7 +325,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 onChanged: (newValue) => setState(() {
                   changeYear(newValue);
                 }),
-              )
+              ) */
             ],
           ),
         ),
@@ -298,6 +334,21 @@ class _HomeScreeenState extends State<HomeScreeen> {
   }
 
   buildMonthPicker() {
+    monthPicker = NumberPicker.horizontal(
+      currentDate: DateTime.now(),
+      selectedYear: _cyear,
+      ismonth: true,
+      numberToDisplay: 7,
+      zeroPad: false,
+      initialValue: _currentmonth,
+      minValue: 1,
+      maxValue: 12,
+      onChanged: (newValue) => setState(() {
+        if ((newValue != _currentmonth)) {
+          changeMonth(newValue);
+        }
+      }),
+    );
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizedBox(
@@ -307,7 +358,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new NumberPicker.horizontal(
+              monthPicker,
+              /* NumberPicker.horizontal(
                 currentDate: DateTime.now(),
                 selectedYear: _cyear,
                 ismonth: true,
@@ -319,7 +371,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 onChanged: (newValue) => setState(() {
                   changeMonth(newValue);
                 }),
-              )
+              ) */
             ],
           ),
         ),
@@ -423,32 +475,39 @@ class _HomeScreeenState extends State<HomeScreeen> {
               initialCalendarFormat: CalendarFormat.month,
               calendarController: _calendarController,
               onVisibleDaysChanged: (date1, date2, cformat) {
-                if (_initialProcess == 1) {
-                  print("1:$date1");
-                  print("2:$date2");
+                if (_initialProcess == 1 && vdate != date1) {
+                  vdate = date1;
+                  print("1 :$date1");
+                  print("2  :$date2");
                   if (date1.year == date2.year) {
+                    if (date1.year != _cyear) {
+                      changeYearPickerVal(date1.year);
+                    }
                     if (date1.month == date2.month - 1) {
                       if (date1.day == 1) {
-                        changeMonth(date1.month);
+                        changeMonthPickerVal(date1.month);
                       } else {
-                        changeMonth(date2.month);
+                        changeMonthPickerVal(date2.month);
                       }
                     } else if (date1.month == date2.month - 2) {
-                      changeMonth(date1.month + 1);
+                      changeMonthPickerVal(date1.month + 1);
                     } else if (date1.month == date2.month) {
-                      changeMonth(date1.month);
+                      changeMonthPickerVal(date1.month);
                     }
                   } else {
                     if (date1.month == 11) {
-                      changeYear(date1.year);
-                      changeMonth(date1.month + 1);
+                      changeYearPickerVal(date1.year);
+                      changeMonthPickerVal(date1.month + 1);
                     } else {
                       if (date1.month == 12 && date1.day == 1) {
-                        changeYear(date1.year);
-                        changeMonth(date1.month);
+                        changeYearPickerVal(date1.year);
+                        changeMonthPickerVal(date1.month);
                       } else if (date1.month == 12 && date1.day != 1) {
-                        changeYear(date2.year);
-                        changeMonth(1);
+                        changeYearPickerVal(date2.year);
+                        changeMonthPickerVal(1);
+                      } else if (date1.month == 1) {
+                        changeYearPickerVal(date2.year);
+                        changeMonthPickerVal(1);
                       }
                     }
                   }
@@ -457,7 +516,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 }
               },
               initialSelectedDay: DateTime(0, 0, 0),
-              availableGestures: AvailableGestures.none,
+              availableGestures: AvailableGestures.horizontalSwipe,
               calendarStyle: CalendarStyle(
                   outsideDaysVisible: true,
                   outsideStyle: TextStyle(color: Colors.grey),
@@ -642,8 +701,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       backgroundcolor == null ? Colors.white : backgroundcolor,
                       otherdays),
           Container(
-          //  height: 15.0,
-          //  padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+            //  height: 15.0,
+            //  padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
             margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -659,7 +718,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           ),
           val == 'S'
               ? Container(
-                 // height: 15.0,
+                  // height: 15.0,
                   //padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
                   margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
                   alignment: Alignment.center,

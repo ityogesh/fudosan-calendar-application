@@ -446,10 +446,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     departmentName =
         _myActivity == "その他" ? departmentNameController.text : _myActivity;
 
-    /*var headers = {
+  /*   var headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
-    };*/
+    }; */
     registerRequestModel = new RegisterRequestModel(
         fullname: userName,
         email: email,

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:infinite_listview/infinite_listview.dart';
-import 'package:login_fudosan/utils/colorconstant.dart';
 
 /// Created by Marcin Szałek
 ///Define a text mapper to transform the text displayed by the picker
@@ -234,6 +233,7 @@ class NumberPicker extends StatelessWidget {
 
   /// Used to animate integer number picker to new selected index
   void animateIntToIndex(int index) {
+    print("$index");
     _animate(intScrollController, index * itemExtent);
   }
 
@@ -810,8 +810,11 @@ class NumberPicker extends StatelessWidget {
 
   ///scroll to selected value
   _animate(ScrollController scrollController, double value) {
+    scrollController.jumpTo(value);
+/* 
     scrollController.animateTo(value,
         duration: new Duration(seconds: 1), curve: new ElasticOutCurve());
+ */
   }
 }
 
