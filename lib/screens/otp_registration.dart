@@ -79,105 +79,110 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Form(
-        key: formKey,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox(
-                    child: Text(
-                      "本人確認のため、ご登録の${widget.email}\n に届いた認証コードを入力し、「確認」ボタンを\n クリックしてください。",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PinCodeTextField(
-                    controller: otpController,
-                    appContext: context,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.done,
-                    length: 4,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    onChanged: (val) {},
-                    onCompleted: (val) {},
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                    enableActiveFill: true,
-                    pinTheme: PinTheme(
-                        borderRadius: BorderRadius.circular(10.0),
-                        selectedFillColor: Colors.grey[300],
-                        selectedColor: Colors.grey[300],
-                        inactiveFillColor: Colors.grey[300],
-                        inactiveColor: Colors.grey[300],
-                        activeColor: Colors.orange,
-                        fieldWidth: 50.0,
-                        activeFillColor: Colors.orange,
-                        shape: PinCodeFieldShape.box),
-                  ),
-
-                  /*  OTPTextField(
-                    length: 4,
-                    fieldWidth: 60.0,
-                    width: MediaQuery.of(context).size.width,
-                    style: TextStyle(fontSize: 20, color: Colors.black),
-                    textFieldAlignment: MainAxisAlignment.spaceEvenly,
-                    fieldStyle: FieldStyle.box,
-                    onCompleted: (pin) {
-                      print("Completed: " + pin);
-//              userOTP = pin;
-                    },
-                  ),*/
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    child: RaisedButton(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Form(
+          key: formKey,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
                       child: Text(
-                        '確認',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      color: ColorConstant.otpButton,
-                      onPressed: () {
-                        checkValidation();
-
-                        /*Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    HomeScreeen()));*/
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                        "本人確認のため、ご登録の${widget.email}\n に届いた認証コードを入力し、「確認」ボタンを\n クリックしてください。",
+                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('認証コードは届いていない場合?'),
-                      SizedBox(width: 5),
-                      InkWell(
-                        child: InkWell(
-                          onTap: progress,
-                          child: Text(
-                            '再送信',
-                            style: TextStyle(color: ColorConstant.otpButton),
-                          ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    PinCodeTextField(
+                      controller: otpController,
+                      appContext: context,
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      length: 4,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      onChanged: (val) {},
+                      onCompleted: (val) {},
+                      textStyle: TextStyle(fontSize: 20, color: Colors.white),
+                      enableActiveFill: true,
+                      pinTheme: PinTheme(
+                          borderRadius: BorderRadius.circular(10.0),
+                          selectedFillColor: Colors.grey[300],
+                          selectedColor: Colors.grey[300],
+                          inactiveFillColor: Colors.grey[300],
+                          inactiveColor: Colors.grey[300],
+                          activeColor: Colors.orange,
+                          fieldWidth: 50.0,
+                          activeFillColor: Colors.orange,
+                          shape: PinCodeFieldShape.box),
+                    ),
+
+                    /*  OTPTextField(
+                      length: 4,
+                      fieldWidth: 60.0,
+                      width: MediaQuery.of(context).size.width,
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      textFieldAlignment: MainAxisAlignment.spaceEvenly,
+                      fieldStyle: FieldStyle.box,
+                      onCompleted: (pin) {
+                        print("Completed: " + pin);
+//              userOTP = pin;
+                      },
+                    ),*/
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: RaisedButton(
+                        child: Text(
+                          '確認',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        color: ColorConstant.otpButton,
+                        onPressed: () {
+                          checkValidation();
+
+                          /*Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      HomeScreeen()));*/
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('認証コードは届いていない場合?'),
+                        SizedBox(width: 5),
+                        InkWell(
+                          child: InkWell(
+                            onTap: progress,
+                            child: Text(
+                              '再送信',
+                              style: TextStyle(color: ColorConstant.otpButton),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

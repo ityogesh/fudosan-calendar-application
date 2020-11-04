@@ -97,118 +97,123 @@ class _LoginScreenState extends State<LoginScreen> {
           )
         ],
       ),
-      body: Form(
-        key: formKey,
-        autovalidate: autoValidate,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'ようこそ',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800, fontSize: 25.0),
-                    ),
-                    Text(
-                      'アプリを使用するにはログインしてください。',
-                      style: TextStyle(color: ColorConstant.lSubtextColor),
-                    ),
-                    SizedBox(
-                      height: 7,
-                    ),
-                    TextFormField(
-                      focusNode: emailaddressFocus,
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      decoration: new InputDecoration(
-                        labelText: 'メールアドレス',
-                        labelStyle: /* FontHelper.hintText, */
-                            TextStyle(color: ColorConstant.lHintTextColor),
-                      ),
-                      validator: (String value) {
-                        return ValidateHelper().validateEmail(value);
-                      },
-                      onFieldSubmitted: (String value) {
-                        _fieldFocusChange(
-                            context, emailaddressFocus, passwordFocus);
-                      },
-                    ),
-                    SizedBox(
-                      height: 7,
-                    ),
-                    TextFormField(
-                      focusNode: passwordFocus,
-                      controller: passwordController,
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: passwordVisibility,
-                      textInputAction: TextInputAction.done,
-                      decoration: new InputDecoration(
-                        labelText: 'パスワード',
-                        labelStyle: /* FontHelper.hintText, */
-                            TextStyle(color: ColorConstant.lHintTextColor),
-                        suffixIcon: IconButton(
-                            icon: passwordVisibility
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                            onPressed: () {
-                              setState(() {
-                                passwordVisibility = !passwordVisibility;
-                              });
-                            }),
-                      ),
-                      validator: (String value) {
-                        return ValidateHelper().validateLoginPassword(value);
-                      },
-                      onFieldSubmitted: (String value) {
-                        validateCredentials();
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ResetPassword()));
-                      },
-                      child: Text(
-                        'パスワードを忘れた方はこちら',
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Form(
+          key: formKey,
+          autovalidate: autoValidate,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'ようこそ',
                         style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: ColorConstant.lSubtextColor,
-                        ),
+                            fontWeight: FontWeight.w800, fontSize: 25.0),
                       ),
-                    ),
-                    SizedBox(
-                      height: 22,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      child: RaisedButton(
-                        child: Text(
-                          'ログイン',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                      Text(
+                        'アプリを使用するにはログインしてください。',
+                        style: TextStyle(color: ColorConstant.lSubtextColor),
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      TextFormField(
+                        focusNode: emailaddressFocus,
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        decoration: new InputDecoration(
+                          labelText: 'メールアドレス',
+                          labelStyle: /* FontHelper.hintText, */
+                              TextStyle(color: ColorConstant.lHintTextColor),
                         ),
-                        color: ColorConstant.lButton,
-                        onPressed: () {
+                        validator: (String value) {
+                          return ValidateHelper().validateEmail(value);
+                        },
+                        onFieldSubmitted: (String value) {
+                          _fieldFocusChange(
+                              context, emailaddressFocus, passwordFocus);
+                        },
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      TextFormField(
+                        focusNode: passwordFocus,
+                        controller: passwordController,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: passwordVisibility,
+                        textInputAction: TextInputAction.done,
+                        decoration: new InputDecoration(
+                          labelText: 'パスワード',
+                          labelStyle: /* FontHelper.hintText, */
+                              TextStyle(color: ColorConstant.lHintTextColor),
+                          suffixIcon: IconButton(
+                              icon: passwordVisibility
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
+                              onPressed: () {
+                                setState(() {
+                                  passwordVisibility = !passwordVisibility;
+                                });
+                              }),
+                        ),
+                        validator: (String value) {
+                          return ValidateHelper().validateLoginPassword(value);
+                        },
+                        onFieldSubmitted: (String value) {
                           validateCredentials();
                         },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ResetPassword()));
+                        },
+                        child: Text(
+                          'パスワードを忘れた方はこちら',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: ColorConstant.lSubtextColor,
+                          ),
                         ),
                       ),
-                    )
-                  ],
+                      SizedBox(
+                        height: 22,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 50,
+                        child: RaisedButton(
+                          child: Text(
+                            'ログイン',
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          color: ColorConstant.lButton,
+                          onPressed: () {
+                            validateCredentials();
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
