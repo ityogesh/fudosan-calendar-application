@@ -152,163 +152,189 @@ class _RentalScreenState extends State<RentalScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: 8.0),
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                  "下記の情報をご記入ください。",
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Column(
+              children: [
+                Center(
+                  child: Text(
+                    "下記の情報をご記入ください。",
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 120.0,
-                      child: Card(
-                        margin: EdgeInsets.all(0.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 120.0,
+                        child: Card(
+                          margin: EdgeInsets.all(0.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
                           ),
-                        ),
-                        color: ColorConstant.rBackGround,
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              widget.choice == 0
-                                  ? Text(
-                                      "入居日",
-                                      style: cardBigText,
-                                    )
-                                  : Text(
-                                      "退居日",
-                                      style: cardBigText,
-                                    ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () => _selectDate(context),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: Colors.white,
-                                        ),
-                                        width:
-                                            (MediaQuery.of(context).size.width *
-                                                0.22),
-                                        height: 50.0,
-                                        alignment: Alignment.center,
-                                        child: AbsorbPointer(
-                                          child: Text(
-                                            "${yearController.text}",
-                                            style: bottomContainerTextBold,
+                          color: ColorConstant.rBackGround,
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                widget.choice == 0
+                                    ? Text(
+                                        "入居日",
+                                        style: cardBigText,
+                                      )
+                                    : Text(
+                                        "退居日",
+                                        style: cardBigText,
+                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => _selectDate(context),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: Colors.white,
+                                          ),
+                                          width: (MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.22),
+                                          height: 50.0,
+                                          alignment: Alignment.center,
+                                          child: AbsorbPointer(
+                                            child: Text(
+                                              "${yearController.text}",
+                                              style: bottomContainerTextBold,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () => _selectDate(context),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: Colors.white,
-                                        ),
-                                        width:
-                                            (MediaQuery.of(context).size.width *
-                                                0.22),
-                                        height: 50.0,
-                                        alignment: Alignment.center,
-                                        child: AbsorbPointer(
-                                          child: Text(
-                                            "${monthController.text}",
-                                            style: bottomContainerTextBold,
+                                      GestureDetector(
+                                        onTap: () => _selectDate(context),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: Colors.white,
+                                          ),
+                                          width: (MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.22),
+                                          height: 50.0,
+                                          alignment: Alignment.center,
+                                          child: AbsorbPointer(
+                                            child: Text(
+                                              "${monthController.text}",
+                                              style: bottomContainerTextBold,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () => _selectDate(context),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          color: Colors.white,
-                                        ),
-                                        width:
-                                            (MediaQuery.of(context).size.width *
-                                                0.22),
-                                        height: 50.0,
-                                        alignment: Alignment.center,
-                                        child: AbsorbPointer(
-                                          child: Text(
-                                            "${dayController.text}",
-                                            style: bottomContainerTextBold,
+                                      GestureDetector(
+                                        onTap: () => _selectDate(context),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            color: Colors.white,
+                                          ),
+                                          width: (MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.22),
+                                          height: 50.0,
+                                          alignment: Alignment.center,
+                                          child: AbsorbPointer(
+                                            child: Text(
+                                              "${dayController.text}",
+                                              style: bottomContainerTextBold,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("賃料/月*", style: bottomContainerText),
-                        Container(
-                          height: 50.0,
-                          width: MediaQuery.of(context).size.width / 1.75,
-                          child: Card(
-                            elevation: 15.0,
-                            shadowColor: ColorConstant.shadowColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
+                      SizedBox(height: 10.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("賃料/月*", style: bottomContainerText),
+                          Container(
+                            height: 50.0,
+                            width: MediaQuery.of(context).size.width / 1.75,
+                            child: Card(
+                              elevation: 15.0,
+                              shadowColor: ColorConstant.shadowColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: TextFormField(
-                                    focusNode: rentFocus,
-                                    controller: rentController,
-                                    textAlign: TextAlign.right,
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.next,
-                                    maxLength: 10,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      counterText: "",
-                                    ),
-                                    onChanged: (String value) {
-                                      if (value == null || value == "") {
-                                        ramount.value = 0;
-                                        tamount.value =
-                                            ramount.value + mamount.value;
-                                      } else {
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: TextFormField(
+                                      focusNode: rentFocus,
+                                      controller: rentController,
+                                      textAlign: TextAlign.right,
+                                      keyboardType: TextInputType.number,
+                                      textInputAction: TextInputAction.next,
+                                      maxLength: 10,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        counterText: "",
+                                      ),
+                                      onChanged: (String value) {
+                                        if (value == null || value == "") {
+                                          ramount.value = 0;
+                                          tamount.value =
+                                              ramount.value + mamount.value;
+                                        } else {
+                                          var rev = japaneseCurrency
+                                              .parse(rentController.text);
+                                          print("$rev");
+                                          int price =
+                                              int.parse(rev.toStringAsFixed(0));
+                                          double eachdayprice = price /
+                                              totalDays(currentSelected.month,
+                                                  currentSelected.year);
+                                          ramount.value =
+                                              eachdayprice * days.value;
+                                          tamount.value =
+                                              ramount.value + mamount.value;
+                                        }
+                                      },
+                                      onFieldSubmitted: (String val) {
+                                        _fieldFocusChange(context, rentFocus,
+                                            maintainanceFocus);
+                                      },
+                                      onEditingComplete: () {
                                         var rev = japaneseCurrency
                                             .parse(rentController.text);
                                         print("$rev");
@@ -321,84 +347,91 @@ class _RentalScreenState extends State<RentalScreen> {
                                             eachdayprice * days.value;
                                         tamount.value =
                                             ramount.value + mamount.value;
-                                      }
-                                    },
-                                    onFieldSubmitted: (String val) {
-                                      _fieldFocusChange(context, rentFocus,
-                                          maintainanceFocus);
-                                    },
-                                    onEditingComplete: () {
-                                      var rev = japaneseCurrency
-                                          .parse(rentController.text);
-                                      print("$rev");
-                                      int price =
-                                          int.parse(rev.toStringAsFixed(0));
-                                      double eachdayprice = price /
-                                          totalDays(currentSelected.month,
-                                              currentSelected.year);
-                                      ramount.value = eachdayprice * days.value;
-                                      tamount.value =
-                                          ramount.value + mamount.value;
-                                      String val =
-                                          (japaneseCurrency.format(price))
-                                              .toString();
-                                      print("$val");
-                                      rentController.value = TextEditingValue(
-                                        text: "$val",
-                                        selection: TextSelection.fromPosition(
-                                          TextPosition(offset: val.length),
-                                        ),
-                                      );
-                                    },
+                                        String val =
+                                            (japaneseCurrency.format(price))
+                                                .toString();
+                                        print("$val");
+                                        rentController.value = TextEditingValue(
+                                          text: "$val",
+                                          selection: TextSelection.fromPosition(
+                                            TextPosition(offset: val.length),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                    child:
-                                        Text("円", style: bottomContainerText)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("共益費/月*", style: bottomContainerText),
-                        Container(
-                          height: 50.0,
-                          width: MediaQuery.of(context).size.width / 1.75,
-                          child: Card(
-                            shadowColor: ColorConstant.shadowColor,
-                            elevation: 15.0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
+                                  Expanded(
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      initialValue: "円",
+                                      style: bottomContainerText,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none),
+                                    ),
+                                    /*  Text("円", style: bottomContainerText) */
+                                  ),
+                                ],
                               ),
                             ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: TextFormField(
-                                    focusNode: maintainanceFocus,
-                                    controller: maintainceController,
-                                    textAlign: TextAlign.right,
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.done,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("共益費/月*", style: bottomContainerText),
+                          Container(
+                            height: 50.0,
+                            width: MediaQuery.of(context).size.width / 1.75,
+                            child: Card(
+                              shadowColor: ColorConstant.shadowColor,
+                              elevation: 15.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: TextFormField(
+                                      focusNode: maintainanceFocus,
+                                      controller: maintainceController,
+                                      textAlign: TextAlign.right,
+                                      keyboardType: TextInputType.number,
+                                      textInputAction: TextInputAction.done,
 //                                    style: TextStyle(fontSize: 18),
-                                    maxLength: 10,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      counterText: "",
-                                    ),
-                                    onChanged: (String value) {
-                                      if (value == null || value == "") {
-                                        mamount.value = 0;
-                                        tamount.value =
-                                            ramount.value + mamount.value;
-                                      } else {
+                                      maxLength: 10,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        counterText: "",
+                                      ),
+                                      onChanged: (String value) {
+                                        if (value == null || value == "") {
+                                          mamount.value = 0;
+                                          tamount.value =
+                                              ramount.value + mamount.value;
+                                        } else {
+                                          var rev = japaneseCurrency
+                                              .parse(maintainceController.text);
+                                          print("$rev");
+                                          int price =
+                                              int.parse(rev.toStringAsFixed(0));
+                                          double eachdayprice = price /
+                                              totalDays(currentSelected.month,
+                                                  currentSelected.year);
+                                          mamount.value =
+                                              eachdayprice * days.value;
+                                          tamount.value =
+                                              ramount.value + mamount.value;
+                                        }
+                                      },
+                                      onFieldSubmitted: (String v) {
+                                        maintainanceFocus.unfocus();
+                                      },
+                                      onEditingComplete: () {
                                         var rev = japaneseCurrency
                                             .parse(maintainceController.text);
                                         print("$rev");
@@ -411,111 +444,102 @@ class _RentalScreenState extends State<RentalScreen> {
                                             eachdayprice * days.value;
                                         tamount.value =
                                             ramount.value + mamount.value;
-                                      }
-                                    },
-                                    onFieldSubmitted: (String v) {
-                                      maintainanceFocus.unfocus();
-                                    },
-                                    onEditingComplete: () {
-                                      var rev = japaneseCurrency
-                                          .parse(maintainceController.text);
-                                      print("$rev");
-                                      int price =
-                                          int.parse(rev.toStringAsFixed(0));
-                                      double eachdayprice = price /
-                                          totalDays(currentSelected.month,
-                                              currentSelected.year);
-                                      mamount.value = eachdayprice * days.value;
-                                      tamount.value =
-                                          ramount.value + mamount.value;
-                                      String val =
-                                          (japaneseCurrency.format(price))
-                                              .toString();
-                                      print("$val");
-                                      maintainceController.text = val;
-                                    },
+                                        String val =
+                                            (japaneseCurrency.format(price))
+                                                .toString();
+                                        print("$val");
+                                        maintainceController.text = val;
+                                      },
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                    child: Text(
-                                  "円",
-                                  style: bottomContainerText,
-                                )),
-                              ],
+                                  Expanded(
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      initialValue: "円",
+                                      style: bottomContainerText,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none),
+                                    ), /*  Text(
+                                    "円",
+                                    style: bottomContainerText,
+                                  ) */
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.0),
-                    ValueListenableBuilder(
-                        valueListenable: days,
-                        builder:
-                            (BuildContext context, int value, Widget child) {
-                          return Text("日割計算:　$value日分",
-                              style: bottomContainerText);
-                        }),
-                  ],
+                        ],
+                      ),
+                      SizedBox(height: 10.0),
+                      ValueListenableBuilder(
+                          valueListenable: days,
+                          builder:
+                              (BuildContext context, int value, Widget child) {
+                            return Text("日割計算:　$value日分",
+                                style: bottomContainerText);
+                          }),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                  color: ColorConstant.priceBackground,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 14.0, right: 14.0, top: 20.0, bottom: 20.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("賃料", style: bottomContainerText),
-                            ValueListenableBuilder(
-                                valueListenable: ramount,
-                                builder: (BuildContext context, double value,
-                                    Widget child) {
-                                  return Text(
-                                    "${japaneseCurrency.format(value)}円",
-                                    style: bottomContainerTextBold,
-                                  );
-                                }),
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("共益費", style: bottomContainerText),
-                            ValueListenableBuilder(
-                                valueListenable: mamount,
-                                builder: (BuildContext context, double value,
-                                    Widget child) {
-                                  return Text(
-                                    "${japaneseCurrency.format(value)}円",
-                                    style: bottomContainerTextBold,
-                                  );
-                                }),
-                          ],
-                        ),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("合計", style: bottomContainerText),
-                            ValueListenableBuilder(
-                                valueListenable: tamount,
-                                builder: (BuildContext context, double value,
-                                    Widget child) {
-                                  return Text(
-                                    "${japaneseCurrency.format(value)}円",
-                                    style: bottomContainerTextBold,
-                                  );
-                                }),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ))
-            ],
+                Container(
+                    color: ColorConstant.priceBackground,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 14.0, right: 14.0, top: 20.0, bottom: 20.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("賃料", style: bottomContainerText),
+                              ValueListenableBuilder(
+                                  valueListenable: ramount,
+                                  builder: (BuildContext context, double value,
+                                      Widget child) {
+                                    return Text(
+                                      "${japaneseCurrency.format(value)}円",
+                                      style: bottomContainerTextBold,
+                                    );
+                                  }),
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("共益費", style: bottomContainerText),
+                              ValueListenableBuilder(
+                                  valueListenable: mamount,
+                                  builder: (BuildContext context, double value,
+                                      Widget child) {
+                                    return Text(
+                                      "${japaneseCurrency.format(value)}円",
+                                      style: bottomContainerTextBold,
+                                    );
+                                  }),
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("合計", style: bottomContainerText),
+                              ValueListenableBuilder(
+                                  valueListenable: tamount,
+                                  builder: (BuildContext context, double value,
+                                      Widget child) {
+                                    return Text(
+                                      "${japaneseCurrency.format(value)}円",
+                                      style: bottomContainerTextBold,
+                                    );
+                                  }),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ))
+              ],
+            ),
           ),
         ),
       ),

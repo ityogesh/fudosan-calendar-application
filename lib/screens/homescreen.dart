@@ -265,11 +265,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
   }
 
   changeMonthPickerVal(int focusedMonth) {
-   // setState(() {
-      _currentmonth = focusedMonth;
-     // print("Focused Month: $focusedMonth");
-      monthPicker.animateInt(focusedMonth);
-   // });
+    // setState(() {
+    _currentmonth = focusedMonth;
+    // print("Focused Month: $focusedMonth");
+    monthPicker.animateInt(focusedMonth);
+    // });
   }
 
   changeYearPickerVal(int focusedYear) {
@@ -701,11 +701,13 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       backgroundcolor == null ? Colors.white : backgroundcolor,
                       otherdays),
           Container(
-            //  height: 15.0,
-            //  padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+            //  height: 18.0,
+            padding: const EdgeInsets.only(
+                top: 1.0, bottom: 2.0, left: 2.0, right: 2.0),
             margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
+              
                 color: ColorConstant.hRent,
                 borderRadius: BorderRadius.circular(10.0)),
             child: FittedBox(
@@ -719,7 +721,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
           val == 'S'
               ? Container(
                   // height: 15.0,
-                  //padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+                  padding: const EdgeInsets.only(
+                      top: 1.0, bottom: 2.0, left: 2.0, right: 2.0),
                   margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
