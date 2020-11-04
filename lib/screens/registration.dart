@@ -97,6 +97,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 15, right: 20),

@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         actions: [
           Padding(
             padding: const EdgeInsets.only(top: 15, right: 20),
