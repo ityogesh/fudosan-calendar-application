@@ -84,9 +84,10 @@ class DropDownFormField extends FormField<dynamic> {
                                   ),
                                   hint: Text(
                                     hintText,
-                                    style: TextStyle(color: Colors.black),
+                                    style: TextStyle(color: Colors.grey),
                                   ),
                                   value: value == '' ? null : value,
+                                  style: TextStyle(color: Colors.grey),
                                   onChanged: (dynamic newValue) {
                                     state.didChange(newValue);
                                     onChanged(newValue);

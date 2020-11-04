@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,8 +8,27 @@ import 'package:login_fudosan/screens/rentalscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase.dart';
+import 'package:showcaseview/showcase_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
+
+/*class Show extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ShowCaseWidget(
+        autoPlay: true,
+        autoPlayDelay: Duration(seconds: 15),
+        autoPlayLockEnable: true,
+        builder: Builder(
+          builder: (context) => HomeScreeen(),
+        ),
+      ),
+    );
+  }
+}*/
 
 class HomeScreeen extends StatefulWidget {
   @override
@@ -28,6 +48,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
   String val = "R";
   DateTime selectedDate;
 
+  GlobalKey _nadal = GlobalKey();
+  GlobalKey _messi = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +68,47 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   Widget build(BuildContext context) {
+    /*WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ShowCaseWidget.of(context).startShowCase([_one, _two]));*/
+    SharedPreferences preferences;
+
+    /*  displayShowcase() async {
+      preferences = await SharedPreferences.getInstance();
+      bool showcaseVisibilityStatus = preferences.getBool("showShowcase");
+      if (showcaseVisibilityStatus == null) {
+        preferences.setBool("showShowcase", false).then((bool success) {
+          if (success)
+            print("success");
+          else
+            print("failure");
+        });
+        return true;
+      }
+      return false;
+    }*/
+    /* displayShowcase() async {
+      preferences = await SharedPreferences.getInstance();
+      bool showcaseVisibilityStatus = preferences.getBool("showShowcase");
+
+      if (showcaseVisibilityStatus == null) {
+        preferences.setBool("showShowcase", false).then((bool success) {
+          if (success)
+            print("Successfull in writing showshoexase");
+          else
+            print("some bloody problem occured");
+        });
+
+        return true;
+      }
+
+      return false;
+    }
+
+    displayShowcase().then((status) {
+      if (status) {
+        ShowCaseWidget.of(context).startShowCase([_nadal, _messi]);
+      }
+    });*/
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
@@ -642,8 +706,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       backgroundcolor == null ? Colors.white : backgroundcolor,
                       otherdays),
           Container(
-          //  height: 15.0,
-          //  padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
+            //  height: 15.0,
+            //  padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
             margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -659,7 +723,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           ),
           val == 'S'
               ? Container(
-                 // height: 15.0,
+                  // height: 15.0,
                   //padding: const EdgeInsets.only(top: 2.0, bottom: 2.0),
                   margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
                   alignment: Alignment.center,

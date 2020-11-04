@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/models/apiRequestModels/login/loginRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/login/loginResponseModel.dart';
@@ -8,6 +9,7 @@ import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/fontHelper.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase_widget.dart';
 import 'registration.dart';
 import 'forget_password.dart';
 import 'package:http/http.dart' as http;
@@ -250,6 +252,18 @@ class _LoginScreenState extends State<LoginScreen> {
         toastLength: Toast.LENGTH_LONG,
         msg: "ログインに成功しました。",
       );
+      /* ShowCaseWidget(
+        onStart: (index, key) {
+          log('onStart: $index, $key');
+        },
+        onComplete: (index, key) {
+          log('onComplete: $index, $key');
+        },
+        builder: Builder(builder: (context) => HomeScreeen()),
+        autoPlay: true,
+        autoPlayDelay: Duration(seconds: 3),
+        autoPlayLockEnable: true,
+      );*/
       Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
     } else {
