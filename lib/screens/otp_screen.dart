@@ -84,7 +84,6 @@ class _OtpScreenState extends State<OtpScreen> {
           },
         ),
       ),
-      backgroundColor: Colors.white,
       body: Form(
         key: formKey,
         autovalidate: autoValidate,

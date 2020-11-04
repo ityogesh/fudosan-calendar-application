@@ -288,7 +288,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   }
 
   getHolidays() async {
-    var apikey = "AIzaSyCkL0pE18bOJu8MyKn9sN0UZMHCQxi8jvo";
+    var apikey = "AIzaSyDlk3pLmu5sRel-6gWImm9hyNiRlQQast0";
     var url =
         "https://www.googleapis.com/calendar/v3/calendars/en.japanese%23holiday%40group.v.calendar.google.com/events?key=$apikey";
     try {
@@ -771,7 +771,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
             margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              
                 color: ColorConstant.hRent,
                 borderRadius: BorderRadius.circular(10.0)),
             child: FittedBox(

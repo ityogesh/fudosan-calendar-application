@@ -78,7 +78,6 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
           },
         ),
       ),
-      backgroundColor: Colors.white,
       body: Form(
         key: formKey,
         child: Center(

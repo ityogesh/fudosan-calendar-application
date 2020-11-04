@@ -23,4 +23,6 @@ class FontHelper {
     fontSize: buttonTextSize,
     fontWeight: FontWeight.bold,
   );
+
+ // static TextStyle 
 }
