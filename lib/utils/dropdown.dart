@@ -49,7 +49,7 @@ class DropDownFormField extends FormField<dynamic> {
                     InputDecorator(
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.transparent,
                         focusColor: Colors.red,
                         contentPadding: contentPadding,
                       ),
