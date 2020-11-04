@@ -140,6 +140,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   TextFormField(
                     readOnly: readonly,
+                    style: readonly
+                        ? TextStyle(color: Colors.grey)
+                        : TextStyle(color: Colors.black),
                     focusNode: nameFocus,
                     controller: userNameController,
                     keyboardType: TextInputType.text,
@@ -178,6 +181,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   TextFormField(
                     readOnly: readonly,
+                    style: readonly
+                        ? TextStyle(color: Colors.grey)
+                        : TextStyle(color: Colors.black),
                     focusNode: passwordFocus,
                     controller: passwordController,
                     obscureText: passwordVisibility,
@@ -209,6 +215,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   TextFormField(
                     readOnly: readonly,
+                    style: readonly
+                        ? TextStyle(color: Colors.grey)
+                        : TextStyle(color: Colors.black),
                     focusNode: confirmpasswordFocus,
                     controller: confirmPasswordController,
                     obscureText: confirmPasswordVisibility,
@@ -242,6 +251,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   TextFormField(
                     readOnly: readonly,
+                    style: readonly
+                        ? TextStyle(color: Colors.grey)
+                        : TextStyle(color: Colors.black),
                     focusNode: companynameFocus,
                     controller: organizationController,
                     keyboardType: TextInputType.text,
@@ -341,6 +353,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     visible: visible,
                     child: TextFormField(
                         readOnly: readonly,
+                        style: readonly
+                            ? TextStyle(color: Colors.grey)
+                            : TextStyle(color: Colors.black),
                         controller: departmentNameController,
                         decoration: new InputDecoration(
                           labelText: '部署名（任意）',
