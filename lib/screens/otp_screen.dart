@@ -113,6 +113,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       focusNode: pinCodeFoucs,
                       keyboardType: TextInputType.number,
                       appContext: context,
+                      backgroundColor: Colors.transparent,
                       length: 4,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       onSubmitted: (val) {

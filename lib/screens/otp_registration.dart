@@ -78,7 +78,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
           },
         ),
       ),
-     body: GestureDetector(
+      body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
@@ -107,6 +107,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                       textInputAction: TextInputAction.done,
                       length: 4,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      backgroundColor: Colors.transparent,
                       onChanged: (val) {},
                       onCompleted: (val) {},
                       textStyle: TextStyle(fontSize: 20, color: Colors.white),
