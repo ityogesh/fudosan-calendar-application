@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
@@ -26,7 +27,6 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   FocusNode taxFocus = FocusNode();
   DateTime sellDate;
   int maxLength = 10;
-  
 
   @override
   void initState() {
@@ -242,7 +242,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         child: TextFormField(
                           focusNode: taxFocus,
                           controller: textEditingController,
-                          keyboardType:TextInputType.numberWithOptions(signed: true, decimal: true),// TextInputType.number,
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: true,
+                              decimal: true), // TextInputType.number,
                           maxLength: maxLength,
                           textAlign: TextAlign.right,
                           decoration: InputDecoration(
@@ -276,6 +278,16 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             String val =
                                 (japaneseCurrency.format(price)).toString();
                             print("$val");
+                            setState(() {
+                              maxLength = textEditingController.text.length ==
+                                      10
+                                  ? 13
+                                  : textEditingController.text.length >= 7
+                                      ? 12
+                                      : textEditingController.text.length >= 4
+                                          ? 11
+                                          : 10;
+                            });
                             textEditingController.value = TextEditingValue(
                               text: "$val",
                               selection: TextSelection.fromPosition(
@@ -318,7 +330,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               builder: (BuildContext context, double value,
                                   Widget child) {
                                 return Text(
-                                  "${japaneseCurrency.format(value)}円",
+                                  "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
+                                  //"${japaneseCurrency.format(value)}円",
                                   style: bottomContainerTextBold,
                                 );
                               }),
@@ -337,7 +350,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               builder: (BuildContext context, double value,
                                   Widget child) {
                                 return Text(
-                                  "${japaneseCurrency.format(value)}円",
+                                  "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
+                                  // "${japaneseCurrency.format(value)}円",
                                   style: bottomContainerTextBold,
                                 );
                               }),

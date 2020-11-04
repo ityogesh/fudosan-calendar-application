@@ -37,6 +37,7 @@ dependencies:
   progress_dialog: ^1.2.4
   intl: any
   showcaseview: ^0.1.6
+  flutter_statusbarcolor: ^0.2.3
 
 
   # The following adds the Cupertino Icons font to your application.

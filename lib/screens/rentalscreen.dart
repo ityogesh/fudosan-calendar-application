@@ -33,6 +33,8 @@ class _RentalScreenState extends State<RentalScreen> {
   String _selectedYear = 'Tap to select date';
   String _selectedMonth = '';
   String _selectedDay = '';
+  int rMaxLength = 10;
+  int mMaxLength = 10;
   final ValueNotifier<double> ramount = ValueNotifier<double>(0.0);
   final ValueNotifier<double> mamount = ValueNotifier<double>(0.0);
   final ValueNotifier<int> days = ValueNotifier<int>(0);
@@ -303,9 +305,13 @@ class _RentalScreenState extends State<RentalScreen> {
                                       focusNode: rentFocus,
                                       controller: rentController,
                                       textAlign: TextAlign.right,
-                                      keyboardType: TextInputType.number,
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              signed: true,
+                                              decimal:
+                                                  true), // TextInputType.number,
                                       textInputAction: TextInputAction.next,
-                                      maxLength: 10,
+                                      maxLength: rMaxLength,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         counterText: "",
@@ -351,6 +357,19 @@ class _RentalScreenState extends State<RentalScreen> {
                                             (japaneseCurrency.format(price))
                                                 .toString();
                                         print("$val");
+                                        setState(() {
+                                          rMaxLength = rentController
+                                                      .text.length ==
+                                                  10
+                                              ? 13
+                                              : rentController.text.length >= 7
+                                                  ? 12
+                                                  : rentController
+                                                              .text.length >=
+                                                          4
+                                                      ? 11
+                                                      : 10;
+                                        });
                                         rentController.value = TextEditingValue(
                                           text: "$val",
                                           selection: TextSelection.fromPosition(
@@ -400,10 +419,14 @@ class _RentalScreenState extends State<RentalScreen> {
                                       focusNode: maintainanceFocus,
                                       controller: maintainceController,
                                       textAlign: TextAlign.right,
-                                      keyboardType: TextInputType.number,
+                                      keyboardType:
+                                          TextInputType.numberWithOptions(
+                                              signed: true,
+                                              decimal:
+                                                  true), // TextInputType.number,
                                       textInputAction: TextInputAction.done,
 //                                    style: TextStyle(fontSize: 18),
-                                      maxLength: 10,
+                                      maxLength: mMaxLength,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         counterText: "",
@@ -448,6 +471,21 @@ class _RentalScreenState extends State<RentalScreen> {
                                             (japaneseCurrency.format(price))
                                                 .toString();
                                         print("$val");
+                                        setState(() {
+                                          mMaxLength = maintainceController
+                                                      .text.length ==
+                                                  10
+                                              ? 13
+                                              : maintainceController
+                                                          .text.length >=
+                                                      7
+                                                  ? 12
+                                                  : maintainceController
+                                                              .text.length >=
+                                                          4
+                                                      ? 11
+                                                      : 10;
+                                        });
                                         maintainceController.text = val;
                                       },
                                     ),
@@ -497,7 +535,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                   builder: (BuildContext context, double value,
                                       Widget child) {
                                     return Text(
-                                      "${japaneseCurrency.format(value)}円",
+                                      "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
                                       style: bottomContainerTextBold,
                                     );
                                   }),
@@ -513,7 +551,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                   builder: (BuildContext context, double value,
                                       Widget child) {
                                     return Text(
-                                      "${japaneseCurrency.format(value)}円",
+                                      "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
                                       style: bottomContainerTextBold,
                                     );
                                   }),
@@ -529,7 +567,8 @@ class _RentalScreenState extends State<RentalScreen> {
                                   builder: (BuildContext context, double value,
                                       Widget child) {
                                     return Text(
-                                      "${japaneseCurrency.format(value)}円",
+                                      "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
+                                      //"${japaneseCurrency.format(value)}円",
                                       style: bottomContainerTextBold,
                                     );
                                   }),

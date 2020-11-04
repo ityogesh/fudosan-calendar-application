@@ -163,7 +163,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     focusNode: emailaddressFocus,
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
+                    textInputAction:
+                        readonly ? TextInputAction.done : TextInputAction.next,
                     decoration: new InputDecoration(
                       labelText: 'メールアドレス*',
                     ),
@@ -460,7 +461,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     departmentName =
         _myActivity == "その他" ? departmentNameController.text : _myActivity;
 
-  /*   var headers = {
+    /*   var headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
     }; */
