@@ -287,7 +287,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         children: [
                           Container(
                             margin: EdgeInsets.all(0.0),
-                            color: Colors.white,
+                            color: Colors.transparent,
 
 //                    padding: EdgeInsets.all(16),
                             child: DropDownFormField(

@@ -84,6 +84,7 @@ class _OtpScreenState extends State<OtpScreen> {
           },
         ),
       ),
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
