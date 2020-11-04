@@ -168,7 +168,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                       SizedBox(width: 5),
                       InkWell(
                         child: InkWell(
-                          onTap: _reSendOtp,
+                          onTap: progress,
                           child: Text(
                             '再送信',
                             style: TextStyle(color: ColorConstant.otpButton),
@@ -200,6 +200,11 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
         autoValidate = true;
       });
     }
+  }
+
+  progress() async {
+    await _progressDialog.show();
+    _reSendOtp();
   }
 
   _doUserOtpRegistration() async {
@@ -242,6 +247,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       RegisterOtpErrorResponseModel registerOtpErrorResponseModel =
           RegisterOtpErrorResponseModel.fromJson(errorResponse);
       print(registerOtpErrorResponseModel.error);
+
       if (registerOtpErrorResponseModel.error == "OTP verification failed") {
         Fluttertoast.showToast(
           toastLength: Toast.LENGTH_LONG,
@@ -275,6 +281,13 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       resendOtpRegisterResponseModel =
           ResendOtpResponseModel.fromJson(registerResponse);
       print(resendOtpRegisterResponseModel.success);
+      _progressDialog.hide();
+      if (responseData['success'] == "OTP resented successfully") {
+        Fluttertoast.showToast(
+          toastLength: Toast.LENGTH_LONG,
+          msg: "認証コードは正常に再送信されました。",
+        );
+      }
     } else {
       print('response error');
       throw Exception();

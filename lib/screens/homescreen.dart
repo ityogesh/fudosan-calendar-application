@@ -70,9 +70,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
   Widget build(BuildContext context) {
     /*WidgetsBinding.instance.addPostFrameCallback(
         (_) => ShowCaseWidget.of(context).startShowCase([_one, _two]));*/
-    SharedPreferences preferences;
+    /* SharedPreferences preferences;
 
-    /*  displayShowcase() async {
+     displayShowcase() async {
       preferences = await SharedPreferences.getInstance();
       bool showcaseVisibilityStatus = preferences.getBool("showShowcase");
       if (showcaseVisibilityStatus == null) {
@@ -86,7 +86,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
       }
       return false;
     }*/
-    /* displayShowcase() async {
+    /*  displayShowcase() async {
       preferences = await SharedPreferences.getInstance();
       bool showcaseVisibilityStatus = preferences.getBool("showShowcase");
 
