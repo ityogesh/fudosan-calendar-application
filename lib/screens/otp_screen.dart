@@ -84,157 +84,162 @@ class _OtpScreenState extends State<OtpScreen> {
           },
         ),
       ),
-      body: Form(
-        key: formKey,
-        autovalidate: autoValidate,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox(
-                    child: Text(
-                      "${widget.email}に届いた認証コード及び\n 新しいパスワードを入力し、「パスワードを\n 再設定する」ボタンをクリックしてください。",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  PinCodeTextField(
-                    controller: pin,
-                    textInputAction: TextInputAction.next,
-                    focusNode: pinCodeFoucs,
-                    keyboardType: TextInputType.number,
-                    appContext: context,
-                    length: 4,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    onSubmitted: (val) {
-                      _fieldFocusChange(
-                          context, pinCodeFoucs, createPasswordFocus);
-                    },
-                    onChanged: (val) {},
-                    onCompleted: (val) {
-                      _fieldFocusChange(
-                          context, pinCodeFoucs, createPasswordFocus);
-                    },
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                    enableActiveFill: true,
-                    pinTheme: PinTheme(
-                        borderRadius: BorderRadius.circular(10.0),
-                        selectedFillColor: Colors.grey[300],
-                        selectedColor: Colors.grey[300],
-                        inactiveFillColor: Colors.grey[300],
-                        inactiveColor: Colors.grey[300],
-                        activeColor: Colors.orange,
-                        fieldWidth: 50.0,
-                        activeFillColor: Colors.orange,
-                        shape: PinCodeFieldShape.box),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  TextFormField(
-                    obscureText: createPasswordVisibility,
-                    textInputAction: TextInputAction.next,
-                    focusNode: createPasswordFocus,
-                    maxLength: 14,
-                    controller: createPassword,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: new InputDecoration(
-                      counterText: "",
-                      labelText: '新しいパスワード',
-                      suffixIcon: IconButton(
-                          icon: createPasswordVisibility
-                              ? Icon(Icons.visibility_off)
-                              : Icon(Icons.visibility),
-                          onPressed: () {
-                            setState(() {
-                              createPasswordVisibility =
-                                  !createPasswordVisibility;
-                            });
-                          }),
-                    ),
-                    validator: (String value) {
-                      return ValidateHelper().validatePassword(value);
-                    },
-                    onFieldSubmitted: (String value) {
-                      _fieldFocusChange(
-                          context, createPasswordFocus, confrimPasswordFocus);
-                    },
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    obscureText: confirmPasswordVisibility,
-                    textInputAction: TextInputAction.done,
-                    focusNode: confrimPasswordFocus,
-                    controller: confirmpassword,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: new InputDecoration(
-                      labelText: '新しいパスワード(確認)',
-                      suffixIcon: IconButton(
-                          icon: confirmPasswordVisibility
-                              ? Icon(Icons.visibility_off)
-                              : Icon(Icons.visibility),
-                          onPressed: () {
-                            setState(() {
-                              confirmPasswordVisibility =
-                                  !confirmPasswordVisibility;
-                            });
-                          }),
-                    ),
-                    validator: (String value) {
-                      return ValidateHelper()
-                          .validateConfirmPassword(value, createPassword.text);
-                    },
-                    onFieldSubmitted: (String value) {
-                      checkValidation();
-                    },
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    child: RaisedButton(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Form(
+          key: formKey,
+          autovalidate: autoValidate,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
                       child: Text(
-                        'パスワードを再設定する',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        "${widget.email}に届いた認証コード及び\n 新しいパスワードを入力し、「パスワードを\n 再設定する」ボタンをクリックしてください。",
+                        textAlign: TextAlign.center,
                       ),
-                      color: ColorConstant.otpButton,
-                      onPressed: () {
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    PinCodeTextField(
+                      controller: pin,
+                      textInputAction: TextInputAction.next,
+                      focusNode: pinCodeFoucs,
+                      keyboardType: TextInputType.number,
+                      appContext: context,
+                      length: 4,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      onSubmitted: (val) {
+                        _fieldFocusChange(
+                            context, pinCodeFoucs, createPasswordFocus);
+                      },
+                      onChanged: (val) {},
+                      onCompleted: (val) {
+                        _fieldFocusChange(
+                            context, pinCodeFoucs, createPasswordFocus);
+                      },
+                      textStyle: TextStyle(fontSize: 20, color: Colors.white),
+                      enableActiveFill: true,
+                      pinTheme: PinTheme(
+                          borderRadius: BorderRadius.circular(10.0),
+                          selectedFillColor: Colors.grey[300],
+                          selectedColor: Colors.grey[300],
+                          inactiveFillColor: Colors.grey[300],
+                          inactiveColor: Colors.grey[300],
+                          activeColor: Colors.orange,
+                          fieldWidth: 50.0,
+                          activeFillColor: Colors.orange,
+                          shape: PinCodeFieldShape.box),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    TextFormField(
+                      obscureText: createPasswordVisibility,
+                      textInputAction: TextInputAction.next,
+                      focusNode: createPasswordFocus,
+                      maxLength: 14,
+                      controller: createPassword,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: new InputDecoration(
+                        counterText: "",
+                        labelText: '新しいパスワード',
+                        suffixIcon: IconButton(
+                            icon: createPasswordVisibility
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                createPasswordVisibility =
+                                    !createPasswordVisibility;
+                              });
+                            }),
+                      ),
+                      validator: (String value) {
+                        return ValidateHelper().validatePassword(value);
+                      },
+                      onFieldSubmitted: (String value) {
+                        _fieldFocusChange(
+                            context, createPasswordFocus, confrimPasswordFocus);
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      obscureText: confirmPasswordVisibility,
+                      textInputAction: TextInputAction.done,
+                      focusNode: confrimPasswordFocus,
+                      controller: confirmpassword,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: new InputDecoration(
+                        labelText: '新しいパスワード(確認)',
+                        suffixIcon: IconButton(
+                            icon: confirmPasswordVisibility
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                confirmPasswordVisibility =
+                                    !confirmPasswordVisibility;
+                              });
+                            }),
+                      ),
+                      validator: (String value) {
+                        return ValidateHelper().validateConfirmPassword(
+                            value, createPassword.text);
+                      },
+                      onFieldSubmitted: (String value) {
                         checkValidation();
                       },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('認証コードは届いていない場合?'),
-                      SizedBox(width: 5),
-                      InkWell(
-                        child: InkWell(
-                          onTap: progress,
-                          child: Text(
-                            '再送信',
-                            style: TextStyle(color: ColorConstant.otpButton),
-                          ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: RaisedButton(
+                        child: Text(
+                          'パスワードを再設定する',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        color: ColorConstant.otpButton,
+                        onPressed: () {
+                          checkValidation();
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('認証コードは届いていない場合?'),
+                        SizedBox(width: 5),
+                        InkWell(
+                          child: InkWell(
+                            onTap: progress,
+                            child: Text(
+                              '再送信',
+                              style: TextStyle(color: ColorConstant.otpButton),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -69,60 +69,65 @@ class _ResetPasswordState extends State<ResetPassword> {
           },
         ),
       ),
-      body: Form(
-        key: formKey,
-        autovalidate: autoValidate,
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox(
-                    child: Text(
-                      "パスワードを再設定するための認証コードを送信\n しますので、ご登録いただいているメールアドレスを\n ご入力の上「送信」ボタンをクリックしてください。",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: emailaddress,
-                    textInputAction: TextInputAction.done,
-                    decoration: new InputDecoration(
-                      labelText: 'メールアドレス',
-                    ),
-                    validator: (String value) {
-                      return ValidateHelper().validateEmail(value);
-                    },
-                    onFieldSubmitted: (String value) {
-                      checkValidation();
-                    },
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 50,
-                    child: RaisedButton(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Form(
+          key: formKey,
+          autovalidate: autoValidate,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
                       child: Text(
-                        '送信',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        "パスワードを再設定するための認証コードを送信\n しますので、ご登録いただいているメールアドレスを\n ご入力の上「送信」ボタンをクリックしてください。",
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      color: ColorConstant.otpButton,
-                      onPressed: () {
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailaddress,
+                      textInputAction: TextInputAction.done,
+                      decoration: new InputDecoration(
+                        labelText: 'メールアドレス',
+                      ),
+                      validator: (String value) {
+                        return ValidateHelper().validateEmail(value);
+                      },
+                      onFieldSubmitted: (String value) {
                         checkValidation();
                       },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
                     ),
-                  )
-                ],
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: RaisedButton(
+                        child: Text(
+                          '送信',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        color: ColorConstant.otpButton,
+                        onPressed: () {
+                          checkValidation();
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
