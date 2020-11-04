@@ -25,6 +25,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   final ValueNotifier<double> bamount = ValueNotifier<double>(0);
   FocusNode taxFocus = FocusNode();
   DateTime sellDate;
+  int maxLength = 10;
+  
 
   @override
   void initState() {
@@ -240,8 +242,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         child: TextFormField(
                           focusNode: taxFocus,
                           controller: textEditingController,
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
+                          keyboardType:TextInputType.numberWithOptions(signed: true, decimal: true),// TextInputType.number,
+                          maxLength: maxLength,
                           textAlign: TextAlign.right,
                           decoration: InputDecoration(
                               counterText: "", border: InputBorder.none),
