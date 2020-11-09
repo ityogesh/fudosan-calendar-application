@@ -14,6 +14,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'popup.dart';
 import 'homescreen.dart';
 import 'dart:convert';
 
@@ -287,7 +288,9 @@ class _OtpScreenState extends State<OtpScreen> {
           ForgetPasswordOtpResponseModel.fromJson(json.decode(response.body));
       print(response.body);
       _progressDialog.hide();
-      showSuccessAlert(context);
+//      showSuccessAlert(context);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) => Popup()));
     } else {
       _progressDialog.hide();
       Fluttertoast.showToast(
@@ -305,61 +308,68 @@ class _OtpScreenState extends State<OtpScreen> {
     FocusScope.of(context).requestFocus(_nextFocus);
   }
 
-  showSuccessAlert(BuildContext context) {
+  /* showSuccessAlert(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) => Dialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)), //this right here
+      builder: (BuildContext context) => Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/popup.png'),
+              fit: BoxFit.cover),
+        ),
+        child: Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)), //this right here
 
-          child: Container(
-            padding: EdgeInsets.all(15),
-            width: MediaQuery.of(context).size.width * 0.9,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(16.0),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.transparent,
-                    blurRadius: 9000,
-                    offset: Offset(0.0, 0.0),
-                  ),
-                ]),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset("assets/images/Success_popup.png"),
-                SizedBox(
-                  height: 10,
-                ),
-                Text('パスワードを更新いたしました。'),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 45,
-                  child: RaisedButton(
-                    child: Text(
-                      'OK',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+            child: Container(
+              padding: EdgeInsets.all(15),
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(16.0),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.transparent,
+                      blurRadius: 9000,
+                      offset: Offset(0.0, 0.0),
                     ),
-                    color: ColorConstant.otpButton,
-                    onPressed: () {
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                  ]),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset("assets/images/Success_popup.png"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('パスワードを更新いたしました。'),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 45,
+                    child: RaisedButton(
+                      child: Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      color: ColorConstant.otpButton,
+                      onPressed: () {
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )),
+                ],
+              ),
+            )),
+      ),
     );
-  }
+  }*/
 
   ResendOtpResponseModel resendOtpRegisterResponseModel =
       ResendOtpResponseModel();
