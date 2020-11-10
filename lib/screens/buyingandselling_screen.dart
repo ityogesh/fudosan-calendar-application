@@ -2,6 +2,28 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase_widget.dart';
+import 'package:showcaseview/showcaseview.dart';
+
+class ShowCaseBuyandSell extends StatelessWidget {
+  final DateTime selectedDate;
+  ShowCaseBuyandSell(this.selectedDate);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ShowCaseWidget(
+        autoPlay: true,
+        autoPlayDelay: Duration(seconds: 15),
+        //autoPlayLockEnable: true,
+
+        builder: Builder(
+          builder: (context) => BuyingSellingScreen(selectedDate),
+        ),
+      ),
+    );
+  }
+}
 
 class BuyingSellingScreen extends StatefulWidget {
   final DateTime selectedDate;
@@ -27,6 +49,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   FocusNode taxFocus = FocusNode();
   DateTime sellDate;
   int maxLength = 10;
+  final GlobalKey _one = GlobalKey();
+  SharedPreferences preferences;
 
   @override
   void initState() {
@@ -41,8 +65,27 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
         : sellDate;
   }
 
+  showShowCaseBuyandSeller() async {
+    preferences = await SharedPreferences.getInstance();
+    bool showcaseVisibilityStatus =
+        preferences.getBool("showShowcaseBuyandSeller");
+    if (showcaseVisibilityStatus == null) {
+      preferences
+          .setBool("showShowcaseBuyandSeller", false)
+          .then((bool success) {
+        if (success)
+          ShowCaseWidget.of(context).startShowCase([_one]);
+        else
+          print("failure");
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ShowCaseWidget.of(context).startShowCase([_one]);
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text("固定資産税 日割計算"),
@@ -235,78 +278,85 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                       Radius.circular(15),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: TextFormField(
-                          focusNode: taxFocus,
-                          controller: textEditingController,
-                          keyboardType: TextInputType.numberWithOptions(
-                              signed: true,
-                              decimal: true), // TextInputType.number,
-                          maxLength: maxLength,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                              counterText: "", border: InputBorder.none),
-                          onChanged: (String value) {
-                            if (value == null || value == "") {
-                              samount.value = 0;
-                              bamount.value = 0;
-                            } else {
+                  child: Showcase(
+                    key: _one,
+                    description: '金額を入力すると売買の料金が計算されて表示される。',
+                    disposeOnTap: true,
+                    onTargetClick: () {},
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: TextFormField(
+                            focusNode: taxFocus,
+                            controller: textEditingController,
+                            keyboardType: TextInputType.numberWithOptions(
+                                signed: true,
+                                decimal: true), // TextInputType.number,
+                            maxLength: maxLength,
+                            textAlign: TextAlign.right,
+                            decoration: InputDecoration(
+                                counterText: "", border: InputBorder.none),
+                            onChanged: (String value) {
+                              if (value == null || value == "") {
+                                samount.value = 0;
+                                bamount.value = 0;
+                              } else {
+                                var rev = japaneseCurrency
+                                    .parse(textEditingController.text);
+                                int price = int.parse(rev.toStringAsFixed(0));
+                                int totaldays = date.year % 4 == 0 ? 366 : 365;
+                                double eachdayprice = price / totaldays;
+                                samount.value = eachdayprice * completedDays;
+                                bamount.value = eachdayprice * remaingDays;
+                              }
+                            },
+                            onFieldSubmitted: (String v) {
+                              taxFocus.unfocus();
+                            },
+                            onEditingComplete: () {
                               var rev = japaneseCurrency
                                   .parse(textEditingController.text);
+                              print("$rev");
                               int price = int.parse(rev.toStringAsFixed(0));
                               int totaldays = date.year % 4 == 0 ? 366 : 365;
                               double eachdayprice = price / totaldays;
                               samount.value = eachdayprice * completedDays;
                               bamount.value = eachdayprice * remaingDays;
-                            }
-                          },
-                          onFieldSubmitted: (String v) {
-                            taxFocus.unfocus();
-                          },
-                          onEditingComplete: () {
-                            var rev = japaneseCurrency
-                                .parse(textEditingController.text);
-                            print("$rev");
-                            int price = int.parse(rev.toStringAsFixed(0));
-                            int totaldays = date.year % 4 == 0 ? 366 : 365;
-                            double eachdayprice = price / totaldays;
-                            samount.value = eachdayprice * completedDays;
-                            bamount.value = eachdayprice * remaingDays;
-                            String val =
-                                (japaneseCurrency.format(price)).toString();
-                            print("$val");
-                            setState(() {
-                              maxLength = textEditingController.text.length ==
-                                      10
-                                  ? 13
-                                  : textEditingController.text.length >= 7
-                                      ? 12
-                                      : textEditingController.text.length >= 4
-                                          ? 11
-                                          : 10;
-                            });
-                            textEditingController.value = TextEditingValue(
-                              text: "$val",
-                              selection: TextSelection.fromPosition(
-                                TextPosition(offset: val.length),
-                              ),
-                            );
-                          },
+                              String val =
+                                  (japaneseCurrency.format(price)).toString();
+                              print("$val");
+                              setState(() {
+                                maxLength = textEditingController.text.length ==
+                                        10
+                                    ? 13
+                                    : textEditingController.text.length >= 7
+                                        ? 12
+                                        : textEditingController.text.length >= 4
+                                            ? 11
+                                            : 10;
+                              });
+                              textEditingController.value = TextEditingValue(
+                                text: "$val",
+                                selection: TextSelection.fromPosition(
+                                  TextPosition(offset: val.length),
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          readOnly: true,
-                          initialValue: "円",
-                          style: bottomContainerText,
-                          decoration: InputDecoration(border: InputBorder.none),
+                        Expanded(
+                          child: TextFormField(
+                            readOnly: true,
+                            initialValue: "円",
+                            style: bottomContainerText,
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
+                          ),
+                          /*  Text("円", style: bottomContainerText) */
                         ),
-                        /*  Text("円", style: bottomContainerText) */
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

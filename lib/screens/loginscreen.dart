@@ -43,8 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences instance = await SharedPreferences.getInstance();
     if ((instance.getString('token') != null) &&
         (instance.getInt('status') == 1)) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => Show(), //HomeScreeen(),
+        ),
+      );
     }
   }
 
@@ -268,8 +272,12 @@ class _LoginScreenState extends State<LoginScreen> {
         autoPlayDelay: Duration(seconds: 3),
         autoPlayLockEnable: true,
       );*/
-      Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => Show(), //HomeScreeen(),
+        ),
+      );
     } else {
       _progressDialog.hide();
       var error = json.decode(response.body);
