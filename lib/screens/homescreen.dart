@@ -87,7 +87,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         if (success) {
           controller
               .animateTo(controller.position.maxScrollExtent,
-                  duration: new Duration(seconds: 7),
+                  duration: new Duration(seconds: 5),
                   curve: new ElasticOutCurve())
               .then((value) => ShowCaseWidget.of(context)
                   .startShowCase([_one, _two, _three, _four]));
