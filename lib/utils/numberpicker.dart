@@ -233,7 +233,7 @@ class NumberPicker extends StatelessWidget {
 
   /// Used to animate integer number picker to new selected index
   void animateIntToIndex(int index) {
-    print("$index");
+ //   print("$index");
     _animate(intScrollController, index * itemExtent);
   }
 
@@ -682,10 +682,10 @@ class NumberPicker extends StatelessWidget {
       }
       int intValueInTheMiddle = _intValueFromIndex(intIndexOfMiddleElement +
           numberToDisplay ~/ 2); //3=> +1, 5=> +2, 7=> +3
-      print("index: $intIndexOfMiddleElement");
-      print("middle value: $intValueInTheMiddle");
+     /*  print("index: $intIndexOfMiddleElement");
+      print("middle value: $intValueInTheMiddle"); */
       intValueInTheMiddle = _normalizeIntegerMiddleValue(intValueInTheMiddle);
-      print("normalized middle value: $intValueInTheMiddle");
+    //  print("normalized middle value: $intValueInTheMiddle");
 
       if (_userStoppedScrolling(notification, intScrollController)) {
         //center selected value

@@ -73,10 +73,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
       preferences
           .setBool("showShowcaseBuyandSeller", false)
           .then((bool success) {
-        if (success)
-          ShowCaseWidget.of(context).startShowCase([_one]);
-        else
-          print("failure");
+        if (success) ShowCaseWidget.of(context).startShowCase([_one]);
       });
     }
   }
@@ -84,7 +81,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     showShowCaseBuyandSeller();
+      showShowCaseBuyandSeller();
     });
     return Scaffold(
       appBar: AppBar(
@@ -317,7 +314,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             onEditingComplete: () {
                               var rev = japaneseCurrency
                                   .parse(textEditingController.text);
-                              print("$rev");
+                             // print("$rev");
                               int price = int.parse(rev.toStringAsFixed(0));
                               int totaldays = date.year % 4 == 0 ? 366 : 365;
                               double eachdayprice = price / totaldays;
@@ -325,7 +322,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               bamount.value = eachdayprice * remaingDays;
                               String val =
                                   (japaneseCurrency.format(price)).toString();
-                              print("$val");
+                             // print("$val");
                               setState(() {
                                 maxLength = textEditingController.text.length ==
                                         10
@@ -380,7 +377,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               builder: (BuildContext context, double value,
                                   Widget child) {
                                 return Text(
-                                 "${japaneseCurrency.format(value)}円",
+                                  "${japaneseCurrency.format(value)}円",
                                   style: bottomContainerTextBold,
                                 );
                               }),
@@ -399,7 +396,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               builder: (BuildContext context, double value,
                                   Widget child) {
                                 return Text(
-                                 "${japaneseCurrency.format(value)}円",
+                                  "${japaneseCurrency.format(value)}円",
                                   style: bottomContainerTextBold,
                                 );
                               }),

@@ -172,8 +172,8 @@ class _RentalScreenState extends State<RentalScreen> {
       preferences.setBool("showShowcaseRent", false).then((bool success) {
         if (success)
           ShowCaseWidget.of(context).startShowCase([_one]);
-        else
-          print("failure");
+       /*  else
+          print("failure"); */
       });
     }
   }
@@ -378,7 +378,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                               } else {
                                                 var rev = japaneseCurrency
                                                     .parse(rentController.text);
-                                                print("$rev");
+                                               // print("$rev");
                                                 int price = int.parse(
                                                     rev.toStringAsFixed(0));
                                                 double eachdayprice = price /
@@ -403,7 +403,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                             onEditingComplete: () {
                                               var rev = japaneseCurrency
                                                   .parse(rentController.text);
-                                              print("$rev");
+                                            //  print("$rev");
                                               int price = int.parse(
                                                   rev.toStringAsFixed(0));
                                               double eachdayprice = price /
@@ -422,7 +422,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                               String val = (japaneseCurrency
                                                       .format(price))
                                                   .toString();
-                                              print("$val");
+                                            //  print("$val");
                                               setState(() {
                                                 rMaxLength = rentController
                                                             .text.length ==
@@ -519,7 +519,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                 var rev = japaneseCurrency
                                                     .parse(maintainceController
                                                         .text);
-                                                print("$rev");
+                                             //   print("$rev");
                                                 int price = int.parse(
                                                     rev.toStringAsFixed(0));
                                                 double eachdayprice = price /
@@ -544,7 +544,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                             onEditingComplete: () {
                                               var rev = japaneseCurrency.parse(
                                                   maintainceController.text);
-                                              print("$rev");
+                                           //   print("$rev");
                                               int price = int.parse(
                                                   rev.toStringAsFixed(0));
                                               double eachdayprice = price /
@@ -563,7 +563,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                               String val = (japaneseCurrency
                                                       .format(price))
                                                   .toString();
-                                              print("$val");
+                                            //  print("$val");
                                               setState(() {
                                                 mMaxLength = maintainceController
                                                             .text.length ==
