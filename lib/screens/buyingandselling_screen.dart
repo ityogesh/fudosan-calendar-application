@@ -84,7 +84,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      ShowCaseWidget.of(context).startShowCase([_one]);
+     showShowCaseBuyandSeller();
     });
     return Scaffold(
       appBar: AppBar(
@@ -380,8 +380,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               builder: (BuildContext context, double value,
                                   Widget child) {
                                 return Text(
-                                  "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
-                                  //"${japaneseCurrency.format(value)}円",
+                                 "${japaneseCurrency.format(value)}円",
                                   style: bottomContainerTextBold,
                                 );
                               }),
@@ -400,8 +399,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               builder: (BuildContext context, double value,
                                   Widget child) {
                                 return Text(
-                                  "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
-                                  // "${japaneseCurrency.format(value)}円",
+                                 "${japaneseCurrency.format(value)}円",
                                   style: bottomContainerTextBold,
                                 );
                               }),

@@ -61,6 +61,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
   GlobalKey _one = GlobalKey();
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
+  GlobalKey _four = GlobalKey();
+  Map<DateTime, List<dynamic>> holiday;
 
   @override
   void initState() {
@@ -88,7 +90,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   duration: new Duration(seconds: 10),
                   curve: new ElasticOutCurve())
               .then((value) => ShowCaseWidget.of(context)
-                  .startShowCase([_one, _two, _three]));
+                  .startShowCase([_one, _two, _three,_four]));
         else
           print("failure");
       });
@@ -98,7 +100,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      showShowCase();
+     showShowCase();
       /* controller.jumpTo(controller.position.maxScrollExtent); */
 
       //showShowCase();
@@ -153,11 +155,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             minWidth: MediaQuery.of(context).size.width * 0.33,
                             child: Showcase(
                               key: _two,
-                              description: '賃貸料金/売買料金を計算するため,\n ボタンを選択してください',
+                              description: '各賃貸/売買ボタンをタップして計算してください。',
                               disposeOnTap: true,
                               onTargetClick: () {
                                 ShowCaseWidget.of(context)
-                                    .startShowCase([_three]);
+                                    .startShowCase([_three,_four]);
                               },
                               child: own.CustomRadioButton(
                                 padding: 5.0,
@@ -190,69 +192,78 @@ class _HomeScreeenState extends State<HomeScreeen> {
                               ? Theme(
                                   data: ThemeData(
                                       unselectedWidgetColor: Colors.white),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 16.0),
+                                  child: Showcase(
+                                    key: _three,
+                                    description: '計算タイプを選択して（>）を押下してください。\n',
+                                    disposeOnTap: true,
+                                    onTargetClick: () {
+                                      ShowCaseWidget.of(context)
+                                          .startShowCase([_four]);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 16.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Radio(
+                                                  focusColor: Colors.orange,
+                                                  activeColor: Colors.orange,
+                                                  value: 0,
+                                                  groupValue: _radioValue1,
+                                                  onChanged: (val) {
+                                                    setState(
+                                                      () {
+                                                        _radioValue1 = val;
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                                Text(
+                                                  "入居",
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
                                             children: [
                                               Radio(
-                                                focusColor: Colors.orange,
-                                                activeColor: Colors.orange,
-                                                value: 0,
-                                                groupValue: _radioValue1,
-                                                onChanged: (val) {
-                                                  setState(
-                                                    () {
-                                                      _radioValue1 = val;
-                                                    },
-                                                  );
-                                                },
-                                              ),
+                                                  activeColor: Colors.orange,
+                                                  value: 1,
+                                                  groupValue: _radioValue1,
+                                                  onChanged: (val) {
+                                                    setState(
+                                                      () {
+                                                        _radioValue1 = val;
+                                                      },
+                                                    );
+                                                  }),
                                               Text(
-                                                "入居",
+                                                "退居",
                                                 style: TextStyle(
                                                     color: Colors.white),
                                               ),
                                             ],
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: Row(
-                                          children: [
-                                            Radio(
-                                                activeColor: Colors.orange,
-                                                value: 1,
-                                                groupValue: _radioValue1,
-                                                onChanged: (val) {
-                                                  setState(
-                                                    () {
-                                                      _radioValue1 = val;
-                                                    },
-                                                  );
-                                                }),
-                                            Text(
-                                              "退居",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 )
                               : Container(),
                           Showcase(
-                            key: _three,
-                            description: '計算画面に移動するため、（>）アイコンを選択してください',
+                            key: _four,
+                            description: '計算画面に移動するため、（>）を押下してください。',
                             disposeOnTap: true,
-                            onTargetClick: (){},
+                            onTargetClick: () {},
                             child: InkWell(
                               onTap: () {
                                 selectedDate == null
@@ -270,7 +281,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                             MaterialPageRoute(
                                                 builder:
                                                     (BuildContext context) =>
-                                                        RentalScreen(
+                                                        ShowCaseViewRental(
                                                             _radioValue1,
                                                             selectedDate)));
                               },
@@ -355,7 +366,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   }
 
   Map<DateTime, List<dynamic>> _hdayBuilder() {
-    Map<DateTime, List<dynamic>> holiday = Map<DateTime, List<dynamic>>();
+    holiday = Map<DateTime, List<dynamic>>();
     for (var date in _holidayModel) {
       holiday[date.eventdate] = [];
     }
@@ -457,12 +468,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
   buildCalendar() {
     return Showcase(
       key: _one,
-      description: '計算するため、日付を選択してください',
+      description: '計算するため、日付を選択してください。',
       disposeOnTap: true,
       onTargetClick: () {
         print("Hello");
         setState(() {
-          ShowCaseWidget.of(context).startShowCase([_two, _three]);
+          ShowCaseWidget.of(context).startShowCase([_two, _three,_four]);
         });
       },
       child: Card(
@@ -678,11 +689,15 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   ),
                   todayDayBuilder: (context, date, events) => dayBuilder(
                       date: date,
-                      otherdays: ColorConstant.hHighlight,
-                      sunday: ColorConstant.hHighlight,
-                      saturday: ColorConstant.hHighlight,
+                      otherdays:
+                          holiday[DateTime(date.year, date.month, date.day)] !=
+                                  null
+                              ? ColorConstant.hHolidayy
+                              : Colors.black,
+                      sunday: ColorConstant.hHolidayy,
+                      saturday: ColorConstant.hSaturday,
                       backgroundcolor: Colors.white,
-                      istoday: true),
+                      isToday: true),
                 ),
               ),
             ],
@@ -756,7 +771,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     Color saturday,
     Color sunday,
     Color backgroundcolor,
-    bool istoday,
+    bool isToday,
   }) {
     DateTime firstday = val == "S"
         ? DateTime(date.year, 1, 1)
@@ -801,31 +816,39 @@ class _HomeScreeenState extends State<HomeScreeen> {
             //7th day Sunday -  6th Saturday
             date.weekday == 6
                 ? dateBuilder(
-                    istoday,
+                    isToday,
                     date,
-                    backgroundcolor == null ? Colors.white : backgroundcolor,
+                    isToday == true
+                        ? ColorConstant.hHighlight
+                        : backgroundcolor == null
+                            ? Colors.white
+                            : backgroundcolor,
                     saturday)
                 : date.weekday == 7
                     ? dateBuilder(
-                        istoday,
+                        isToday,
                         date,
-                        backgroundcolor == null
-                            ? Colors.white
-                            : backgroundcolor,
+                        isToday == true
+                            ? ColorConstant.hHighlight
+                            : backgroundcolor == null
+                                ? Colors.white
+                                : backgroundcolor,
                         sunday)
                     : dateBuilder(
-                        istoday,
+                        isToday,
                         date,
-                        backgroundcolor == null
-                            ? Colors.white
-                            : backgroundcolor,
+                        isToday == true
+                            ? ColorConstant.hHighlight
+                            : backgroundcolor == null
+                                ? Colors.white
+                                : backgroundcolor,
                         otherdays),
             SizedBox(height: 1.5),
             Container(
               //  height: 18.0,
               padding: const EdgeInsets.only(
                   top: 1.0, bottom: 2.0, left: 2.0, right: 2.0),
-              margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
+              margin: const EdgeInsets.only(top:1.0, bottom: 1.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: ColorConstant.hRent,
@@ -880,28 +903,28 @@ class _HomeScreeenState extends State<HomeScreeen> {
           )
         : Container(
             decoration: BoxDecoration(
-              border: Border(
-                right: BorderSide(
-                  color: Colors.orange,
-                  width: 1,
-                ),
-                top: BorderSide(
-                  color: Colors.orange,
-                  width: 1,
-                ),
-                bottom: BorderSide(
-                  color: Colors.orange,
-                  width: 1,
-                ),
-                left: BorderSide(
-                  color: Colors.orange,
-                  width: 1,
-                ),
-              ),
-            ),
+                //color: backgroundcolor,
+                border:Border(
+                        right: BorderSide(
+                          color: ColorConstant.hHighlight,
+                          width: 1.5,
+                        ),
+                        top: BorderSide(
+                          color: ColorConstant.hHighlight,
+                          width: 1.5,
+                        ),
+                        bottom: BorderSide(
+                          color: ColorConstant.hHighlight,
+                          width: 1.5,
+                        ),
+                        left: BorderSide(
+                          color: ColorConstant.hHighlight,
+                          width: 1.5,
+                        ),
+                      )),
             child: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Text(
+              child: Text(date.day<10?" ${date.day} ":
                 date.day.toString(),
                 style: TextStyle(
                     color: textcolor,
