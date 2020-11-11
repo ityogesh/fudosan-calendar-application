@@ -90,7 +90,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   duration: new Duration(seconds: 10),
                   curve: new ElasticOutCurve())
               .then((value) => ShowCaseWidget.of(context)
-                  .startShowCase([_one, _two, _three,_four]));
+                  .startShowCase([_one, _two, _three, _four]));
         else
           print("failure");
       });
@@ -100,7 +100,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     showShowCase();
+      showShowCase();
       /* controller.jumpTo(controller.position.maxScrollExtent); */
 
       //showShowCase();
@@ -159,7 +159,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                               disposeOnTap: true,
                               onTargetClick: () {
                                 ShowCaseWidget.of(context)
-                                    .startShowCase([_three,_four]);
+                                    .startShowCase([_three, _four]);
                               },
                               child: own.CustomRadioButton(
                                 padding: 5.0,
@@ -392,7 +392,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: SizedBox(
-        height: 15.0,
+        height: 20.0,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -473,7 +473,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
       onTargetClick: () {
         print("Hello");
         setState(() {
-          ShowCaseWidget.of(context).startShowCase([_two, _three,_four]);
+          ShowCaseWidget.of(context).startShowCase([_two, _three, _four]);
         });
       },
       child: Card(
@@ -818,37 +818,29 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 ? dateBuilder(
                     isToday,
                     date,
-                    isToday == true
-                        ? ColorConstant.hHighlight
-                        : backgroundcolor == null
-                            ? Colors.white
-                            : backgroundcolor,
+                    backgroundcolor == null ? Colors.white : backgroundcolor,
                     saturday)
                 : date.weekday == 7
                     ? dateBuilder(
                         isToday,
                         date,
-                        isToday == true
-                            ? ColorConstant.hHighlight
-                            : backgroundcolor == null
-                                ? Colors.white
-                                : backgroundcolor,
+                        backgroundcolor == null
+                            ? Colors.white
+                            : backgroundcolor,
                         sunday)
                     : dateBuilder(
                         isToday,
                         date,
-                        isToday == true
-                            ? ColorConstant.hHighlight
-                            : backgroundcolor == null
-                                ? Colors.white
-                                : backgroundcolor,
+                        backgroundcolor == null
+                            ? Colors.white
+                            : backgroundcolor,
                         otherdays),
             SizedBox(height: 1.5),
             Container(
               //  height: 18.0,
               padding: const EdgeInsets.only(
                   top: 1.0, bottom: 2.0, left: 2.0, right: 2.0),
-              margin: const EdgeInsets.only(top:1.0, bottom: 1.0),
+              margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: ColorConstant.hRent,
@@ -857,7 +849,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 fit: BoxFit.fill,
                 child: Text(
                   "$remaing 日分",
-                  style: TextStyle(color: Colors.white, fontSize: 10.0),
+                  style: TextStyle(color: Colors.white, fontSize: 9.0),
                 ),
               ),
             ),
@@ -875,7 +867,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       fit: BoxFit.fill,
                       child: Text(
                         "$completed 日分",
-                        style: TextStyle(color: Colors.white, fontSize: 10.0),
+                        style: TextStyle(color: Colors.white, fontSize: 9.0),
                       ),
                     ),
                   )
@@ -888,51 +880,83 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   dateBuilder(
       bool isToday, DateTime date, Color backgroundcolor, Color textcolor) {
-    return isToday == null
-        ? CircleAvatar(
-            radius: 12.0,
-            backgroundColor:
-                backgroundcolor == null ? Colors.white : backgroundcolor,
-            child: Text(
-              date.day.toString(),
-              style: TextStyle(
-                  color: textcolor,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        : Container(
+    return isToday == true
+        ? Container(
             decoration: BoxDecoration(
                 //color: backgroundcolor,
-                border:Border(
-                        right: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                        top: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                        bottom: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                        left: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                      )),
+                border: Border(
+              right: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+              top: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+              bottom: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+              left: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+            )),
             child: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Text(date.day<10?" ${date.day} ":
-                date.day.toString(),
+              child: Text(
+                date.day < 10 ? " ${date.day} " : date.day.toString(),
                 style: TextStyle(
                     color: textcolor,
-                    fontSize: 15.0,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold),
               ),
             ),
-          );
+          )
+        : backgroundcolor == Colors.white
+            ? Container(
+                decoration: BoxDecoration(
+                    //color: backgroundcolor,
+                    border: Border(
+                  right: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                  top: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                  bottom: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                  left: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                )),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(
+                    date.day < 10 ? " ${date.day} " : date.day.toString(),
+                    style: TextStyle(
+                        color: textcolor,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            : CircleAvatar(
+                radius: 13.0,
+                backgroundColor: backgroundcolor,
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(
+                      color: textcolor,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              );
   }
 
   showDateSelectAlert(BuildContext context) {

@@ -245,7 +245,8 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 //      instance.setString("token", registerResponseModel.success.token);
 
       Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
+          MaterialPageRoute(builder: (BuildContext context) => Show()//HomeScreeen()
+          ));
     } else {
       _progressDialog.hide();
       var errorData = json.decode(response.body);
