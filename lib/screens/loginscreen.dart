@@ -247,9 +247,9 @@ class _LoginScreenState extends State<LoginScreen> {
       final Map loginResponse = responseData;
       LoginResponseModel loginResponseModel =
           LoginResponseModel.fromJson(loginResponse);
-      print('Login response: ${loginResponseModel.toJson()}');
+     /*  print('Login response: ${loginResponseModel.toJson()}');
       print('success: $loginResponseModel.success');
-      print('Token : ${loginResponseModel.success.token}');
+      print('Token : ${loginResponseModel.success.token}'); */
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("token", loginResponseModel.success.token);
       instance.setString("email", loginResponseModel.userDetails.email);

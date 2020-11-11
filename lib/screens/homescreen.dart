@@ -90,9 +90,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   duration: new Duration(seconds: 10),
                   curve: new ElasticOutCurve())
               .then((value) => ShowCaseWidget.of(context)
-                  .startShowCase([_one, _two, _three,_four]));
-        else
-          print("failure");
+                  .startShowCase([_one, _two, _three, _four]));
+        /* else
+          print("failure"); */
       });
     }
   }
@@ -100,7 +100,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-     showShowCase();
+      showShowCase();
       /* controller.jumpTo(controller.position.maxScrollExtent); */
 
       //showShowCase();
@@ -159,7 +159,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                               disposeOnTap: true,
                               onTargetClick: () {
                                 ShowCaseWidget.of(context)
-                                    .startShowCase([_three,_four]);
+                                    .startShowCase([_three, _four]);
                               },
                               child: own.CustomRadioButton(
                                 padding: 5.0,
@@ -179,7 +179,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                   "R",
                                 ],
                                 radioButtonValue: (value) {
-                                  print(value);
+                                 // print(value);
                                   setState(() {
                                     val = value;
                                   });
@@ -324,7 +324,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         });
       }
     } catch (e) {
-      print("Exception : $e");
+    //  print("Exception : $e");
     }
   }
 
@@ -336,7 +336,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           .setFocusedDay(DateTime(_cfocus.year, _currentmonth, _cfocus.day));
       // monthPicker.animateInt(_currentmonth);
     });
-    print("Changed month: $_currentmonth");
+   // print("Changed month: $_currentmonth");
   }
 
   changeYear(int selectedmonth) {
@@ -347,7 +347,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           .setFocusedDay(DateTime(_cyear, _cfocus.month, _cfocus.day));
       // yearPicker.animateInt(_cyear);
     });
-    print("Changed month: $_cyear");
+  //  print("Changed month: $_cyear");
   }
 
   changeMonthPickerVal(int focusedMonth) {
@@ -392,7 +392,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: SizedBox(
-        height: 15.0,
+        height: 20.0,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -471,9 +471,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
       description: '計算するため、日付を選択してください。',
       disposeOnTap: true,
       onTargetClick: () {
-        print("Hello");
+       // print("Hello");
         setState(() {
-          ShowCaseWidget.of(context).startShowCase([_two, _three,_four]);
+          ShowCaseWidget.of(context).startShowCase([_two, _three, _four]);
         });
       },
       child: Card(
@@ -573,8 +573,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 onVisibleDaysChanged: (date1, date2, cformat) {
                   if (_initialProcess == 1 && vdate != date1) {
                     vdate = date1;
-                    print("1 :$date1");
-                    print("2  :$date2");
+                  //  print("1 :$date1");
+//print("2  :$date2");
                     if (date1.year == date2.year) {
                       if (date1.year != _cyear) {
                         changeYearPickerVal(date1.year);
@@ -634,8 +634,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 startingDayOfWeek: StartingDayOfWeek.sunday,
                 onUnavailableDaySelected: () {},
                 onDaySelected: (date, events) {
-                  print(date.microsecondsSinceEpoch);
-                  print(date.toIso8601String());
+                //  print(date.microsecondsSinceEpoch);
+                //  print(date.toIso8601String());
                   selectedDate = date;
                   // _calendarController.setFocusedDay(DateTime.now());
                 },
@@ -818,37 +818,29 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 ? dateBuilder(
                     isToday,
                     date,
-                    isToday == true
-                        ? ColorConstant.hHighlight
-                        : backgroundcolor == null
-                            ? Colors.white
-                            : backgroundcolor,
+                    backgroundcolor == null ? Colors.white : backgroundcolor,
                     saturday)
                 : date.weekday == 7
                     ? dateBuilder(
                         isToday,
                         date,
-                        isToday == true
-                            ? ColorConstant.hHighlight
-                            : backgroundcolor == null
-                                ? Colors.white
-                                : backgroundcolor,
+                        backgroundcolor == null
+                            ? Colors.white
+                            : backgroundcolor,
                         sunday)
                     : dateBuilder(
                         isToday,
                         date,
-                        isToday == true
-                            ? ColorConstant.hHighlight
-                            : backgroundcolor == null
-                                ? Colors.white
-                                : backgroundcolor,
+                        backgroundcolor == null
+                            ? Colors.white
+                            : backgroundcolor,
                         otherdays),
             SizedBox(height: 1.5),
             Container(
               //  height: 18.0,
               padding: const EdgeInsets.only(
                   top: 1.0, bottom: 2.0, left: 2.0, right: 2.0),
-              margin: const EdgeInsets.only(top:1.0, bottom: 1.0),
+              margin: const EdgeInsets.only(top: 1.0, bottom: 1.0),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: ColorConstant.hRent,
@@ -857,7 +849,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 fit: BoxFit.fill,
                 child: Text(
                   "$remaing 日分",
-                  style: TextStyle(color: Colors.white, fontSize: 10.0),
+                  style: TextStyle(color: Colors.white, fontSize: 9.0),
                 ),
               ),
             ),
@@ -875,7 +867,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       fit: BoxFit.fill,
                       child: Text(
                         "$completed 日分",
-                        style: TextStyle(color: Colors.white, fontSize: 10.0),
+                        style: TextStyle(color: Colors.white, fontSize: 9.0),
                       ),
                     ),
                   )
@@ -888,51 +880,83 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   dateBuilder(
       bool isToday, DateTime date, Color backgroundcolor, Color textcolor) {
-    return isToday == null
-        ? CircleAvatar(
-            radius: 12.0,
-            backgroundColor:
-                backgroundcolor == null ? Colors.white : backgroundcolor,
-            child: Text(
-              date.day.toString(),
-              style: TextStyle(
-                  color: textcolor,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold),
-            ),
-          )
-        : Container(
+    return isToday == true
+        ? Container(
             decoration: BoxDecoration(
                 //color: backgroundcolor,
-                border:Border(
-                        right: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                        top: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                        bottom: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                        left: BorderSide(
-                          color: ColorConstant.hHighlight,
-                          width: 1.5,
-                        ),
-                      )),
+                border: Border(
+              right: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+              top: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+              bottom: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+              left: BorderSide(
+                color: ColorConstant.hHighlight,
+                width: 1.5,
+              ),
+            )),
             child: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Text(date.day<10?" ${date.day} ":
-                date.day.toString(),
+              child: Text(
+                date.day < 10 ? " ${date.day} " : date.day.toString(),
                 style: TextStyle(
                     color: textcolor,
-                    fontSize: 15.0,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold),
               ),
             ),
-          );
+          )
+        : backgroundcolor == Colors.white
+            ? Container(
+                decoration: BoxDecoration(
+                    //color: backgroundcolor,
+                    border: Border(
+                  right: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                  top: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                  bottom: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                  left: BorderSide(
+                    color: backgroundcolor,
+                    width: 1.5,
+                  ),
+                )),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Text(
+                    date.day < 10 ? " ${date.day} " : date.day.toString(),
+                    style: TextStyle(
+                        color: textcolor,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            : CircleAvatar(
+                radius: 13.0,
+                backgroundColor: backgroundcolor,
+                child: Text(
+                  date.day.toString(),
+                  style: TextStyle(
+                      color: textcolor,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              );
   }
 
   showDateSelectAlert(BuildContext context) {

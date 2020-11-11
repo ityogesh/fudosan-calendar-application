@@ -216,28 +216,28 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
   _doUserOtpRegistration() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
 //    email = instance.getString("email");
-    print('click me');
+ //   print('click me');
     RegisterOtpRequestModel registerOtpRequestModel;
     email_otp = otpController.text;
-    print('click me');
+   // print('click me');
     /*var headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
     };*/
     registerOtpRequestModel =
         new RegisterOtpRequestModel(email: widget.email, emailOtp: email_otp);
-    print('click me');
+  //  print('click me');
     var response = await http.post(Constants.register_Otp_URL,
         body: registerOtpRequestModel.toJson());
-    print('click me');
+  //  print('click me');
     if (response.statusCode == 200) {
       var responseData = json.decode(response.body);
       final Map registerOtpResponse = responseData;
       registerOtpResponseModel =
           RegisterOtpResponseModel.fromJson(registerOtpResponse);
-      print('Register response');
+    /*   print('Register response');
       print(registerOtpResponseModel.toJson());
-      print('success : ${registerOtpResponseModel.success}');
+      print('success : ${registerOtpResponseModel.success}'); */
 //      print('Token : ${registerOtpResponseModel.success.token}');
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setInt("status", 1);
@@ -245,14 +245,15 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
 //      instance.setString("token", registerResponseModel.success.token);
 
       Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) => HomeScreeen()));
+          MaterialPageRoute(builder: (BuildContext context) => Show()//HomeScreeen()
+          ));
     } else {
       _progressDialog.hide();
       var errorData = json.decode(response.body);
       final Map errorResponse = errorData;
       RegisterOtpErrorResponseModel registerOtpErrorResponseModel =
           RegisterOtpErrorResponseModel.fromJson(errorResponse);
-      print(registerOtpErrorResponseModel.error);
+   //   print(registerOtpErrorResponseModel.error);
 
       if (registerOtpErrorResponseModel.error == "OTP verification failed") {
         Fluttertoast.showToast(
@@ -267,7 +268,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       ResendOtpResponseModel();
   String id;
   _reSendOtp() async {
-    print('hi');
+   // print('hi');
     ResendOtpRequestModel resendOtpRequestModel;
     SharedPreferences instance = await SharedPreferences.getInstance();
     id = instance.getString('id');
@@ -286,7 +287,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
       final Map registerResponse = responseData;
       resendOtpRegisterResponseModel =
           ResendOtpResponseModel.fromJson(registerResponse);
-      print(resendOtpRegisterResponseModel.success);
+    //  print(resendOtpRegisterResponseModel.success);
       _progressDialog.hide();
       if (responseData['success'] == "OTP resented successfully") {
         Fluttertoast.showToast(
@@ -295,7 +296,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
         );
       }
     } else {
-      print('response error');
+    //  print('response error');
       throw Exception();
     }
   }

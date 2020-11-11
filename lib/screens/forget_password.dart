@@ -148,7 +148,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   sendOTP() async {
-    print("Sending OTP");
+  //  print("Sending OTP");
     ForgetPasswordOtpRequestModel forgetPasswordOtpRequestModel =
         ForgetPasswordOtpRequestModel(email: emailaddress.text);
     var response = await http.post(Constants.forgot_password_Otp_URL,
@@ -157,7 +157,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       Map sendOtpResponse = json.decode(response.body);
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(sendOtpResponse);
-      print('${response.body}');
+    //  print('${response.body}');
       _progressDialog.hide();
       Navigator.push(
           context,
@@ -166,7 +166,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   emailaddress.text, forgetPasswordOtpResponseModel.userid)));
     } else {
       _progressDialog.hide();
-      print("Error ${response.body}");
+     // print("Error ${response.body}");
       var error = json.decode(response.body);
       if (error['error'] == "User not found") {
         Fluttertoast.showToast(

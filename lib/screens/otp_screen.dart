@@ -251,9 +251,10 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   checkValidation() async {
-    Navigator.push(context,
+    /* Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => Popup()));
-   /*  if (formKey.currentState.validate()) {
+    */
+     if (formKey.currentState.validate()) {
       if (ValidateHelper().validatePin(pin.text)) {
         await _progressDialog.show();
         passwordChange();
@@ -265,7 +266,7 @@ class _OtpScreenState extends State<OtpScreen> {
       setState(() {
         autoValidate = true;
       });
-    } */
+    }
   }
 
   progress() async {
@@ -288,7 +289,7 @@ class _OtpScreenState extends State<OtpScreen> {
     if (response.statusCode == 200) {
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(json.decode(response.body));
-      print(response.body);
+   //   print(response.body);
       _progressDialog.hide();
 //      showSuccessAlert(context);
       Navigator.push(context,
@@ -301,7 +302,7 @@ class _OtpScreenState extends State<OtpScreen> {
       );
       /*  throw Exception('http.post error: statusCode= ${response.statusCode}'); */
     }
-    print(response.body);
+ //   print(response.body);
   }
 
   _fieldFocusChange(
@@ -377,7 +378,7 @@ class _OtpScreenState extends State<OtpScreen> {
       ResendOtpResponseModel();
 
   _reSendOtp() async {
-    print('hi');
+   // print('hi');
     ResendOtpRequestModel resendOtpRequestModel;
     SharedPreferences instance = await SharedPreferences.getInstance();
 
@@ -396,7 +397,7 @@ class _OtpScreenState extends State<OtpScreen> {
       final Map registerResponse = responseData;
       resendOtpRegisterResponseModel =
           ResendOtpResponseModel.fromJson(registerResponse);
-      print(resendOtpRegisterResponseModel.success);
+   //   print(resendOtpRegisterResponseModel.success);
       _progressDialog.hide();
       if (responseData['success'] == "OTP resented successfully") {
         Fluttertoast.showToast(
@@ -405,7 +406,7 @@ class _OtpScreenState extends State<OtpScreen> {
         );
       }
     } else {
-      print('response error');
+   //   print('response error');
       throw Exception();
     }
   }
