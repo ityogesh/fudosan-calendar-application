@@ -84,13 +84,14 @@ class _HomeScreeenState extends State<HomeScreeen> {
     bool showcaseVisibilityStatus = preferences.getBool("showShowcase");
     if (showcaseVisibilityStatus == null) {
       preferences.setBool("showShowcase", false).then((bool success) {
-        if (success)
-          return controller
+        if (success) {
+          controller
               .animateTo(controller.position.maxScrollExtent,
-                  duration: new Duration(seconds: 10),
+                  duration: new Duration(seconds: 7),
                   curve: new ElasticOutCurve())
               .then((value) => ShowCaseWidget.of(context)
                   .startShowCase([_one, _two, _three, _four]));
+        }
         /* else
           print("failure"); */
       });
@@ -99,7 +100,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_)  {
       showShowCase();
       /* controller.jumpTo(controller.position.maxScrollExtent); */
 
@@ -179,7 +180,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                   "R",
                                 ],
                                 radioButtonValue: (value) {
-                                 // print(value);
+                                  // print(value);
                                   setState(() {
                                     val = value;
                                   });
@@ -324,7 +325,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         });
       }
     } catch (e) {
-    //  print("Exception : $e");
+      //  print("Exception : $e");
     }
   }
 
@@ -336,7 +337,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           .setFocusedDay(DateTime(_cfocus.year, _currentmonth, _cfocus.day));
       // monthPicker.animateInt(_currentmonth);
     });
-   // print("Changed month: $_currentmonth");
+    // print("Changed month: $_currentmonth");
   }
 
   changeYear(int selectedmonth) {
@@ -347,7 +348,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           .setFocusedDay(DateTime(_cyear, _cfocus.month, _cfocus.day));
       // yearPicker.animateInt(_cyear);
     });
-  //  print("Changed month: $_cyear");
+    //  print("Changed month: $_cyear");
   }
 
   changeMonthPickerVal(int focusedMonth) {
@@ -471,7 +472,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
       description: '計算するため、日付を選択してください。',
       disposeOnTap: true,
       onTargetClick: () {
-       // print("Hello");
+        // print("Hello");
         setState(() {
           ShowCaseWidget.of(context).startShowCase([_two, _three, _four]);
         });
@@ -573,7 +574,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 onVisibleDaysChanged: (date1, date2, cformat) {
                   if (_initialProcess == 1 && vdate != date1) {
                     vdate = date1;
-                  //  print("1 :$date1");
+                    //  print("1 :$date1");
 //print("2  :$date2");
                     if (date1.year == date2.year) {
                       if (date1.year != _cyear) {
@@ -634,8 +635,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 startingDayOfWeek: StartingDayOfWeek.sunday,
                 onUnavailableDaySelected: () {},
                 onDaySelected: (date, events) {
-                //  print(date.microsecondsSinceEpoch);
-                //  print(date.toIso8601String());
+                  //  print(date.microsecondsSinceEpoch);
+                  //  print(date.toIso8601String());
                   selectedDate = date;
                   // _calendarController.setFocusedDay(DateTime.now());
                 },
