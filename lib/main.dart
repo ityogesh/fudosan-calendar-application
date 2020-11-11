@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         statusBarColor: ColorConstant.statusBarColor));
      */
     return MaterialApp(
-      title: 'Fudosan Calendar',
+      title: '不動産カレンダー',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

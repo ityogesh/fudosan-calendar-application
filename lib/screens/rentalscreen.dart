@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
+
+class ShowCaseViewRental extends StatelessWidget {
+  final int choice;
+  final DateTime selecteddate;
+  ShowCaseViewRental(this.choice, this.selecteddate);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ShowCaseWidget(
+        autoPlay: true,
+        autoPlayDelay: Duration(seconds: 15),
+        //autoPlayLockEnable: true,
+        builder: Builder(
+          builder: (context) => RentalScreen(choice, selecteddate),
+        ),
+      ),
+    );
+  }
+}
 
 class RentalScreen extends StatefulWidget {
   final int choice;
@@ -40,6 +61,8 @@ class _RentalScreenState extends State<RentalScreen> {
   final ValueNotifier<int> days = ValueNotifier<int>(0);
   final ValueNotifier<double> tamount = ValueNotifier<double>(0.0);
   var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
+  SharedPreferences preferences;
+  final GlobalKey _one = GlobalKey();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -142,8 +165,24 @@ class _RentalScreenState extends State<RentalScreen> {
     }
   }
 
+  showShowCaseRent() async {
+    preferences = await SharedPreferences.getInstance();
+    bool showcaseVisibilityStatus = preferences.getBool("showShowcaseRent");
+    if (showcaseVisibilityStatus == null) {
+      preferences.setBool("showShowcaseRent", false).then((bool success) {
+        if (success)
+          ShowCaseWidget.of(context).startShowCase([_one]);
+        else
+          print("failure");
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      showShowCaseRent();
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text("賃料 日割計算"),
@@ -282,231 +321,289 @@ class _RentalScreenState extends State<RentalScreen> {
                         ),
                       ),
                       SizedBox(height: 10.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("賃料/月*", style: bottomContainerText),
-                          Container(
-                            height: 50.0,
-                            width: MediaQuery.of(context).size.width / 1.75,
-                            child: Card(
-                              elevation: 15.0,
-                              shadowColor: ColorConstant.shadowColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextFormField(
-                                      focusNode: rentFocus,
-                                      controller: rentController,
-                                      textAlign: TextAlign.right,
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              signed: true,
-                                              decimal:
-                                                  true), // TextInputType.number,
-                                      textInputAction: TextInputAction.next,
-                                      maxLength: rMaxLength,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: "",
+                      Showcase(
+                        key: _one,
+                        description: '金額を入力すると日割分が計算されて表示される。',
+                        disposeOnTap: true,
+                        onTargetClick: () {},
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("賃料/月*", style: bottomContainerText),
+                                Container(
+                                  height: 50.0,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.75,
+                                  child: Card(
+                                    elevation: 15.0,
+                                    shadowColor: ColorConstant.shadowColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
                                       ),
-                                      onChanged: (String value) {
-                                        if (value == null || value == "") {
-                                          ramount.value = 0;
-                                          tamount.value =
-                                              ramount.value + mamount.value;
-                                        } else {
-                                          var rev = japaneseCurrency
-                                              .parse(rentController.text);
-                                          print("$rev");
-                                          int price =
-                                              int.parse(rev.toStringAsFixed(0));
-                                          double eachdayprice = price /
-                                              totalDays(currentSelected.month,
-                                                  currentSelected.year);
-                                          ramount.value =
-                                              eachdayprice * days.value;
-                                          tamount.value =
-                                              ramount.value + mamount.value;
-                                        }
-                                      },
-                                      onFieldSubmitted: (String val) {
-                                        _fieldFocusChange(context, rentFocus,
-                                            maintainanceFocus);
-                                      },
-                                      onEditingComplete: () {
-                                        var rev = japaneseCurrency
-                                            .parse(rentController.text);
-                                        print("$rev");
-                                        int price =
-                                            int.parse(rev.toStringAsFixed(0));
-                                        double eachdayprice = price /
-                                            totalDays(currentSelected.month,
-                                                currentSelected.year);
-                                        ramount.value =
-                                            eachdayprice * days.value;
-                                        tamount.value =
-                                            ramount.value + mamount.value;
-                                        String val =
-                                            (japaneseCurrency.format(price))
-                                                .toString();
-                                        print("$val");
-                                        setState(() {
-                                          rMaxLength = rentController
-                                                      .text.length ==
-                                                  10
-                                              ? 13
-                                              : rentController.text.length >= 7
-                                                  ? 12
-                                                  : rentController
-                                                              .text.length >=
-                                                          4
-                                                      ? 11
-                                                      : 10;
-                                        });
-                                        rentController.value = TextEditingValue(
-                                          text: "$val",
-                                          selection: TextSelection.fromPosition(
-                                            TextPosition(offset: val.length),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: TextFormField(
+                                            focusNode: rentFocus,
+                                            controller: rentController,
+                                            textAlign: TextAlign.right,
+                                            keyboardType:
+                                                TextInputType.numberWithOptions(
+                                                    signed: true,
+                                                    decimal:
+                                                        true), // TextInputType.number,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            maxLength: rMaxLength,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              counterText: "",
+                                            ),
+                                            onChanged: (String value) {
+                                              if (value == null ||
+                                                  value == "") {
+                                                ramount.value = 0;
+                                                tamount.value = japaneseCurrency
+                                                        .parse(japaneseCurrency
+                                                            .format(ramount
+                                                                .value)) +
+                                                    japaneseCurrency.parse(
+                                                        japaneseCurrency.format(
+                                                            mamount.value));
+                                              } else {
+                                                var rev = japaneseCurrency
+                                                    .parse(rentController.text);
+                                                print("$rev");
+                                                int price = int.parse(
+                                                    rev.toStringAsFixed(0));
+                                                double eachdayprice = price /
+                                                    totalDays(
+                                                        currentSelected.month,
+                                                        currentSelected.year);
+                                                ramount.value =
+                                                    eachdayprice * days.value;
+                                                tamount.value = japaneseCurrency
+                                                        .parse(japaneseCurrency
+                                                            .format(ramount
+                                                                .value)) +
+                                                    japaneseCurrency.parse(
+                                                        japaneseCurrency.format(
+                                                            mamount.value));
+                                              }
+                                            },
+                                            onFieldSubmitted: (String val) {
+                                              _fieldFocusChange(context,
+                                                  rentFocus, maintainanceFocus);
+                                            },
+                                            onEditingComplete: () {
+                                              var rev = japaneseCurrency
+                                                  .parse(rentController.text);
+                                              print("$rev");
+                                              int price = int.parse(
+                                                  rev.toStringAsFixed(0));
+                                              double eachdayprice = price /
+                                                  totalDays(
+                                                      currentSelected.month,
+                                                      currentSelected.year);
+                                              ramount.value =
+                                                  eachdayprice * days.value;
+                                              tamount.value = japaneseCurrency
+                                                      .parse(japaneseCurrency
+                                                          .format(
+                                                              ramount.value)) +
+                                                  japaneseCurrency.parse(
+                                                      japaneseCurrency.format(
+                                                          mamount.value));
+                                              String val = (japaneseCurrency
+                                                      .format(price))
+                                                  .toString();
+                                              print("$val");
+                                              setState(() {
+                                                rMaxLength = rentController
+                                                            .text.length ==
+                                                        10
+                                                    ? 13
+                                                    : rentController
+                                                                .text.length >=
+                                                            7
+                                                        ? 12
+                                                        : rentController.text
+                                                                    .length >=
+                                                                4
+                                                            ? 11
+                                                            : 10;
+                                              });
+                                              rentController.value =
+                                                  TextEditingValue(
+                                                text: "$val",
+                                                selection:
+                                                    TextSelection.fromPosition(
+                                                  TextPosition(
+                                                      offset: val.length),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
+                                        ),
+                                        Expanded(
+                                          child: TextFormField(
+                                            readOnly: true,
+                                            initialValue: "円",
+                                            style: bottomContainerText,
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none),
+                                          ),
+                                          /*  Text("円", style: bottomContainerText) */
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      readOnly: true,
-                                      initialValue: "円",
-                                      style: bottomContainerText,
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none),
-                                    ),
-                                    /*  Text("円", style: bottomContainerText) */
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("共益費/月*", style: bottomContainerText),
-                          Container(
-                            height: 50.0,
-                            width: MediaQuery.of(context).size.width / 1.75,
-                            child: Card(
-                              shadowColor: ColorConstant.shadowColor,
-                              elevation: 15.0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
                                 ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextFormField(
-                                      focusNode: maintainanceFocus,
-                                      controller: maintainceController,
-                                      textAlign: TextAlign.right,
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              signed: true,
-                                              decimal:
-                                                  true), // TextInputType.number,
-                                      textInputAction: TextInputAction.done,
-//                                    style: TextStyle(fontSize: 18),
-                                      maxLength: mMaxLength,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: "",
+                              ],
+                            ),
+                            SizedBox(height: 10.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("共益費/月*", style: bottomContainerText),
+                                Container(
+                                  height: 50.0,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.75,
+                                  child: Card(
+                                    shadowColor: ColorConstant.shadowColor,
+                                    elevation: 15.0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(15),
                                       ),
-                                      onChanged: (String value) {
-                                        if (value == null || value == "") {
-                                          mamount.value = 0;
-                                          tamount.value =
-                                              ramount.value + mamount.value;
-                                        } else {
-                                          var rev = japaneseCurrency
-                                              .parse(maintainceController.text);
-                                          print("$rev");
-                                          int price =
-                                              int.parse(rev.toStringAsFixed(0));
-                                          double eachdayprice = price /
-                                              totalDays(currentSelected.month,
-                                                  currentSelected.year);
-                                          mamount.value =
-                                              eachdayprice * days.value;
-                                          tamount.value =
-                                              ramount.value + mamount.value;
-                                        }
-                                      },
-                                      onFieldSubmitted: (String v) {
-                                        maintainanceFocus.unfocus();
-                                      },
-                                      onEditingComplete: () {
-                                        var rev = japaneseCurrency
-                                            .parse(maintainceController.text);
-                                        print("$rev");
-                                        int price =
-                                            int.parse(rev.toStringAsFixed(0));
-                                        double eachdayprice = price /
-                                            totalDays(currentSelected.month,
-                                                currentSelected.year);
-                                        mamount.value =
-                                            eachdayprice * days.value;
-                                        tamount.value =
-                                            ramount.value + mamount.value;
-                                        String val =
-                                            (japaneseCurrency.format(price))
-                                                .toString();
-                                        print("$val");
-                                        setState(() {
-                                          mMaxLength = maintainceController
-                                                      .text.length ==
-                                                  10
-                                              ? 13
-                                              : maintainceController
-                                                          .text.length >=
-                                                      7
-                                                  ? 12
-                                                  : maintainceController
-                                                              .text.length >=
-                                                          4
-                                                      ? 11
-                                                      : 10;
-                                        });
-                                        maintainceController.text = val;
-                                      },
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: TextFormField(
+                                            focusNode: maintainanceFocus,
+                                            controller: maintainceController,
+                                            textAlign: TextAlign.right,
+                                            keyboardType:
+                                                TextInputType.numberWithOptions(
+                                                    signed: true,
+                                                    decimal:
+                                                        true), // TextInputType.number,
+                                            textInputAction:
+                                                TextInputAction.done,
+//                                    style: TextStyle(fontSize: 18),
+                                            maxLength: mMaxLength,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              counterText: "",
+                                            ),
+                                            onChanged: (String value) {
+                                              if (value == null ||
+                                                  value == "") {
+                                                mamount.value = 0;
+                                                tamount.value = japaneseCurrency
+                                                        .parse(japaneseCurrency
+                                                            .format(ramount
+                                                                .value)) +
+                                                    japaneseCurrency.parse(
+                                                        japaneseCurrency.format(
+                                                            mamount.value));
+                                              } else {
+                                                var rev = japaneseCurrency
+                                                    .parse(maintainceController
+                                                        .text);
+                                                print("$rev");
+                                                int price = int.parse(
+                                                    rev.toStringAsFixed(0));
+                                                double eachdayprice = price /
+                                                    totalDays(
+                                                        currentSelected.month,
+                                                        currentSelected.year);
+                                                mamount.value =
+                                                    eachdayprice * days.value;
+                                                tamount.value = japaneseCurrency
+                                                        .parse(japaneseCurrency
+                                                            .format(ramount
+                                                                .value)) +
+                                                    japaneseCurrency.parse(
+                                                        japaneseCurrency.format(
+                                                            mamount.value));
+                                                // ramount.value + mamount.value;
+                                              }
+                                            },
+                                            onFieldSubmitted: (String v) {
+                                              maintainanceFocus.unfocus();
+                                            },
+                                            onEditingComplete: () {
+                                              var rev = japaneseCurrency.parse(
+                                                  maintainceController.text);
+                                              print("$rev");
+                                              int price = int.parse(
+                                                  rev.toStringAsFixed(0));
+                                              double eachdayprice = price /
+                                                  totalDays(
+                                                      currentSelected.month,
+                                                      currentSelected.year);
+                                              mamount.value =
+                                                  eachdayprice * days.value;
+                                              tamount.value = japaneseCurrency
+                                                      .parse(japaneseCurrency
+                                                          .format(
+                                                              ramount.value)) +
+                                                  japaneseCurrency.parse(
+                                                      japaneseCurrency.format(
+                                                          mamount.value));
+                                              String val = (japaneseCurrency
+                                                      .format(price))
+                                                  .toString();
+                                              print("$val");
+                                              setState(() {
+                                                mMaxLength = maintainceController
+                                                            .text.length ==
+                                                        10
+                                                    ? 13
+                                                    : maintainceController
+                                                                .text.length >=
+                                                            7
+                                                        ? 12
+                                                        : maintainceController
+                                                                    .text
+                                                                    .length >=
+                                                                4
+                                                            ? 11
+                                                            : 10;
+                                              });
+                                              maintainceController.text = val;
+                                            },
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: TextFormField(
+                                            readOnly: true,
+                                            initialValue: "円",
+                                            style: bottomContainerText,
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none),
+                                          ), /*  Text(
+                                      "円",
+                                      style: bottomContainerText,
+                                    ) */
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Expanded(
-                                    child: TextFormField(
-                                      readOnly: true,
-                                      initialValue: "円",
-                                      style: bottomContainerText,
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none),
-                                    ), /*  Text(
-                                    "円",
-                                    style: bottomContainerText,
-                                  ) */
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(height: 10.0),
                       ValueListenableBuilder(
@@ -535,7 +632,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                   builder: (BuildContext context, double value,
                                       Widget child) {
                                     return Text(
-                                      "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
+                                      "${japaneseCurrency.format(value)}円",
                                       style: bottomContainerTextBold,
                                     );
                                   }),
@@ -551,7 +648,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                   builder: (BuildContext context, double value,
                                       Widget child) {
                                     return Text(
-                                      "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
+                                      "${japaneseCurrency.format(value)}円",
                                       style: bottomContainerTextBold,
                                     );
                                   }),
@@ -567,8 +664,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                   builder: (BuildContext context, double value,
                                       Widget child) {
                                     return Text(
-                                      "${NumberFormat.decimalPattern("ja_JP").format(value)}円",
-                                      //"${japaneseCurrency.format(value)}円",
+                                      "${japaneseCurrency.format(value)}円",
                                       style: bottomContainerTextBold,
                                     );
                                   }),
