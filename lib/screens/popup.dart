@@ -10,28 +10,31 @@ class Popup extends StatefulWidget {
 class _PopupState extends State<Popup> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: () {
-            return null;
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/popup.png'),
-                  fit: BoxFit.cover),
-            ),
-            child: Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.0)),
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
-              child: dialogContent(context),
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              return null;
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/images/popbg.png'),
+                    fit: BoxFit.cover),
+              ),
+              child: Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0)),
+                elevation: 0.0,
+                backgroundColor: Colors.transparent,
+                child: dialogContent(context),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

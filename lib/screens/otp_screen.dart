@@ -251,7 +251,9 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   checkValidation() async {
-    if (formKey.currentState.validate()) {
+    Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) => Popup()));
+   /*  if (formKey.currentState.validate()) {
       if (ValidateHelper().validatePin(pin.text)) {
         await _progressDialog.show();
         passwordChange();
@@ -263,7 +265,7 @@ class _OtpScreenState extends State<OtpScreen> {
       setState(() {
         autoValidate = true;
       });
-    }
+    } */
   }
 
   progress() async {
@@ -369,7 +371,7 @@ class _OtpScreenState extends State<OtpScreen> {
             )),
       ),
     );
-  }*/
+  } */
 
   ResendOtpResponseModel resendOtpRegisterResponseModel =
       ResendOtpResponseModel();
