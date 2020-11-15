@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -280,6 +282,12 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                     description: '金額を入力すると売買の料金が計算されて表示される。',
                     disposeOnTap: true,
                     onTargetClick: () {},
+                    contentPadding: EdgeInsets.all(8.0),
+                    showcaseBackgroundColor: ColorConstant.hHighlight,
+                    descTextStyle: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                     child: Row(
                       children: [
                         Expanded(
@@ -294,6 +302,17 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             textAlign: TextAlign.right,
                             decoration: InputDecoration(
                                 counterText: "", border: InputBorder.none),
+                            validator: (String value) {
+                              bool msg = ValidateHelper().validateAmount(value);
+                              msg == true
+                                  ? Fluttertoast.showToast(
+                                      toastLength: Toast.LENGTH_LONG,
+                                      msg: "正しい通貨値を入力してください。",
+                                    )
+                                  : Container();
+                              return null;
+                            },
+                            autovalidate: true,
                             onChanged: (String value) {
                               if (value == null || value == "") {
                                 samount.value = 0;
@@ -314,7 +333,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                             onEditingComplete: () {
                               var rev = japaneseCurrency
                                   .parse(textEditingController.text);
-                             // print("$rev");
+                              // print("$rev");
                               int price = int.parse(rev.toStringAsFixed(0));
                               int totaldays = date.year % 4 == 0 ? 366 : 365;
                               double eachdayprice = price / totaldays;
@@ -322,7 +341,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               bamount.value = eachdayprice * remaingDays;
                               String val =
                                   (japaneseCurrency.format(price)).toString();
-                             // print("$val");
+                              // print("$val");
                               setState(() {
                                 maxLength = textEditingController.text.length ==
                                         10

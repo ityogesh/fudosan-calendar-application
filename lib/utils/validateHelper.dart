@@ -66,4 +66,15 @@ class ValidateHelper {
       return true;
     }
   }
+
+  bool validateAmount(String value) {
+    RegExp passwordRegex =
+        new RegExp(r'(?=.*?\d)^\$?(([1-9]\d{0,2}(,\d{0,10})*)|\d+)?$');
+    if (value.length == 0) {
+      return false;
+    } else if (!passwordRegex.hasMatch(value)) {
+      return true;
+    } else
+      return false;
+  }
 }

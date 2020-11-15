@@ -22,13 +22,24 @@ class Show extends StatelessWidget {
     return Scaffold(
       body: ShowCaseWidget(
         autoPlay: true,
-        autoPlayDelay: Duration(seconds: 15),
+        autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
+        onStart: (index, key) {
+            log('onStart: $index, $key');
+          },
+          onComplete: (index, key) {
+            log('onComplete: $index, $key');
+          },
         onFinish: () {
           controller.animateTo(controller.position.minScrollExtent,
               duration: new Duration(seconds: 10),
               curve: new ElasticOutCurve());
         },
+        /*   onComplete:()  {
+          return controller.animateTo(controller.position.minScrollExtent,
+              duration: new Duration(seconds: 10),
+              curve: new ElasticOutCurve());
+        }, */
         builder: Builder(
           builder: (context) => HomeScreeen(),
         ),
@@ -100,7 +111,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_)  {
+     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      /* controller
+          .animateTo(controller.position.maxScrollExtent,
+              duration: new Duration(seconds: 5), curve: new ElasticOutCurve())
+          .then((value) => ShowCaseWidget.of(context)
+              .startShowCase([_one, _two, _three, _four])); */
       showShowCase();
       /* controller.jumpTo(controller.position.maxScrollExtent); */
 
@@ -157,6 +173,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             child: Showcase(
                               key: _two,
                               description: '各賃貸/売買ボタンをタップして計算してください。',
+                              contentPadding: EdgeInsets.all(8.0),
+                              showcaseBackgroundColor: ColorConstant.hHighlight,
+                              descTextStyle: TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
                               disposeOnTap: true,
                               onTargetClick: () {
                                 ShowCaseWidget.of(context)
@@ -194,8 +216,15 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                   data: ThemeData(
                                       unselectedWidgetColor: Colors.white),
                                   child: Showcase(
+                                    contentPadding: EdgeInsets.all(8.0),
                                     key: _three,
-                                    description: '計算タイプを選択して（>）を押下してください。\n',
+                                    description: '計算タイプを選択して（>）を押下してください。',
+                                    showcaseBackgroundColor:
+                                        ColorConstant.hHighlight,
+                                    descTextStyle: TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
                                     disposeOnTap: true,
                                     onTargetClick: () {
                                       ShowCaseWidget.of(context)
@@ -263,6 +292,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
                           Showcase(
                             key: _four,
                             description: '計算画面に移動するため、（>）を押下してください。',
+                            contentPadding: EdgeInsets.all(8.0),
+                            showcaseBackgroundColor: ColorConstant.hHighlight,
+                            descTextStyle: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                             disposeOnTap: true,
                             onTargetClick: () {},
                             child: InkWell(
@@ -470,6 +505,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
     return Showcase(
       key: _one,
       description: '計算するため、日付を選択してください。',
+      contentPadding: EdgeInsets.all(8.0),
+      showcaseBackgroundColor: ColorConstant.hHighlight,
+      descTextStyle: TextStyle(
+          fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white),
       disposeOnTap: true,
       onTargetClick: () {
         // print("Hello");

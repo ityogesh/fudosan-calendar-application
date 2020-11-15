@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -170,9 +172,8 @@ class _RentalScreenState extends State<RentalScreen> {
     bool showcaseVisibilityStatus = preferences.getBool("showShowcaseRent");
     if (showcaseVisibilityStatus == null) {
       preferences.setBool("showShowcaseRent", false).then((bool success) {
-        if (success)
-          ShowCaseWidget.of(context).startShowCase([_one]);
-       /*  else
+        if (success) ShowCaseWidget.of(context).startShowCase([_one]);
+        /*  else
           print("failure"); */
       });
     }
@@ -325,6 +326,12 @@ class _RentalScreenState extends State<RentalScreen> {
                         key: _one,
                         description: '金額を入力すると日割分が計算されて表示される。',
                         disposeOnTap: true,
+                        contentPadding: EdgeInsets.all(8.0),
+                        showcaseBackgroundColor: ColorConstant.hHighlight,
+                        descTextStyle: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                         onTargetClick: () {},
                         child: Column(
                           children: [
@@ -364,6 +371,19 @@ class _RentalScreenState extends State<RentalScreen> {
                                               border: InputBorder.none,
                                               counterText: "",
                                             ),
+                                            validator: (String value) {
+                                              bool msg = ValidateHelper()
+                                                  .validateAmount(value);
+                                              msg == true
+                                                  ? Fluttertoast.showToast(
+                                                      toastLength:
+                                                          Toast.LENGTH_LONG,
+                                                      msg: "正しい通貨値を入力してください。",
+                                                    )
+                                                  : Container();
+                                              return null;
+                                            },
+                                            autovalidate: true,
                                             onChanged: (String value) {
                                               if (value == null ||
                                                   value == "") {
@@ -378,7 +398,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                               } else {
                                                 var rev = japaneseCurrency
                                                     .parse(rentController.text);
-                                               // print("$rev");
+                                                // print("$rev");
                                                 int price = int.parse(
                                                     rev.toStringAsFixed(0));
                                                 double eachdayprice = price /
@@ -403,7 +423,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                             onEditingComplete: () {
                                               var rev = japaneseCurrency
                                                   .parse(rentController.text);
-                                            //  print("$rev");
+                                              //  print("$rev");
                                               int price = int.parse(
                                                   rev.toStringAsFixed(0));
                                               double eachdayprice = price /
@@ -422,7 +442,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                               String val = (japaneseCurrency
                                                       .format(price))
                                                   .toString();
-                                            //  print("$val");
+                                              //  print("$val");
                                               setState(() {
                                                 rMaxLength = rentController
                                                             .text.length ==
@@ -500,6 +520,19 @@ class _RentalScreenState extends State<RentalScreen> {
                                                 TextInputAction.done,
 //                                    style: TextStyle(fontSize: 18),
                                             maxLength: mMaxLength,
+                                            validator: (String value) {
+                                              bool msg = ValidateHelper()
+                                                  .validateAmount(value);
+                                              msg == true
+                                                  ? Fluttertoast.showToast(
+                                                      toastLength:
+                                                          Toast.LENGTH_LONG,
+                                                      msg: "正しい通貨値を入力してください。",
+                                                    )
+                                                  : Container();
+                                              return null;
+                                            },
+                                            autovalidate: true,
                                             decoration: InputDecoration(
                                               border: InputBorder.none,
                                               counterText: "",
@@ -519,7 +552,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                 var rev = japaneseCurrency
                                                     .parse(maintainceController
                                                         .text);
-                                             //   print("$rev");
+                                                //   print("$rev");
                                                 int price = int.parse(
                                                     rev.toStringAsFixed(0));
                                                 double eachdayprice = price /
@@ -540,11 +573,20 @@ class _RentalScreenState extends State<RentalScreen> {
                                             },
                                             onFieldSubmitted: (String v) {
                                               maintainanceFocus.unfocus();
+                                              var rev = japaneseCurrency
+                                                  .parse(rentController.text);
+                                              //   print("$rev");
+                                              int price = int.parse(
+                                                  rev.toStringAsFixed(0));
+                                              String rval = (japaneseCurrency
+                                                      .format(price))
+                                                  .toString();
+                                              rentController.text = rval;
                                             },
                                             onEditingComplete: () {
                                               var rev = japaneseCurrency.parse(
                                                   maintainceController.text);
-                                           //   print("$rev");
+                                              //   print("$rev");
                                               int price = int.parse(
                                                   rev.toStringAsFixed(0));
                                               double eachdayprice = price /
@@ -563,7 +605,8 @@ class _RentalScreenState extends State<RentalScreen> {
                                               String val = (japaneseCurrency
                                                       .format(price))
                                                   .toString();
-                                            //  print("$val");
+
+                                              //  print("$val");
                                               setState(() {
                                                 mMaxLength = maintainceController
                                                             .text.length ==
@@ -579,8 +622,8 @@ class _RentalScreenState extends State<RentalScreen> {
                                                                 4
                                                             ? 11
                                                             : 10;
+                                                maintainceController.text = val;
                                               });
-                                              maintainceController.text = val;
                                             },
                                           ),
                                         ),
