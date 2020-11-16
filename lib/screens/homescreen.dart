@@ -25,11 +25,11 @@ class Show extends StatelessWidget {
         autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
         onStart: (index, key) {
-            log('onStart: $index, $key');
-          },
-          onComplete: (index, key) {
-            log('onComplete: $index, $key');
-          },
+          log('onStart: $index, $key');
+        },
+        onComplete: (index, key) {
+          log('onComplete: $index, $key');
+        },
         onFinish: () {
           controller.animateTo(controller.position.minScrollExtent,
               duration: new Duration(seconds: 10),
@@ -111,8 +111,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   Widget build(BuildContext context) {
-     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      /* controller
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      /*   controller
           .animateTo(controller.position.maxScrollExtent,
               duration: new Duration(seconds: 5), curve: new ElasticOutCurve())
           .then((value) => ShowCaseWidget.of(context)
@@ -179,7 +179,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                   fontSize: 12.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
-                              disposeOnTap: true,
+                              disposeOnTap: false,
                               onTargetClick: () {
                                 ShowCaseWidget.of(context)
                                     .startShowCase([_three, _four]);
@@ -225,7 +225,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),
-                                    disposeOnTap: true,
+                                    disposeOnTap: false,
                                     onTargetClick: () {
                                       ShowCaseWidget.of(context)
                                           .startShowCase([_four]);
@@ -298,7 +298,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
-                            disposeOnTap: true,
+                            disposeOnTap: false,
                             onTargetClick: () {},
                             child: InkWell(
                               onTap: () {
@@ -502,110 +502,113 @@ class _HomeScreeenState extends State<HomeScreeen> {
   }
 
   buildCalendar() {
-    return Showcase(
-      key: _one,
-      description: '計算するため、日付を選択してください。',
-      contentPadding: EdgeInsets.all(8.0),
-      showcaseBackgroundColor: ColorConstant.hHighlight,
-      descTextStyle: TextStyle(
-          fontSize: 12.0, fontWeight: FontWeight.bold, color: Colors.white),
-      disposeOnTap: true,
-      onTargetClick: () {
-        // print("Hello");
-        setState(() {
-          ShowCaseWidget.of(context).startShowCase([_two, _three, _four]);
-        });
-      },
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(30),
-          ),
-          // side: BorderSide(width: 5, color: Colors.green),
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
         ),
-        elevation: 10.0,
-        margin: EdgeInsets.only(left: 10.0, right: 10.0),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 6.0),
-          child: Column(
-            children: [
-              Card(
-                  elevation: 0.0,
-                  margin: EdgeInsets.all(0.0),
-                  color: Colors.blue[50],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                    // side: BorderSide(width: 5, color: Colors.green),
+        // side: BorderSide(width: 5, color: Colors.green),
+      ),
+      elevation: 10.0,
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 6.0),
+        child: Column(
+          children: [
+            Card(
+                elevation: 0.0,
+                margin: EdgeInsets.all(0.0),
+                color: Colors.blue[50],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(30),
                   ),
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.only(top: 14.0),
-                          child: val == 'S'
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          height: 15.0,
-                                          width: 15.0,
-                                          child: Container(
-                                            color: ColorConstant.hRent,
-                                          ),
+                  // side: BorderSide(width: 5, color: Colors.green),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(top: 14.0),
+                        child: val == 'S'
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 15.0,
+                                        width: 15.0,
+                                        child: Container(
+                                          color: ColorConstant.hRent,
                                         ),
-                                        SizedBox(width: 10.0),
-                                        Text(
-                                          "買主様ご負担日数",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          height: 15.0,
-                                          width: 15.0,
-                                          child: Container(
-                                            color: ColorConstant.hSeller,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10.0),
-                                        Text(
-                                          "売主様ご負担日数",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      height: 15.0,
-                                      width: 15.0,
-                                      child: Container(
-                                        color: ColorConstant.hRent,
                                       ),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Text("家賃日割日数",
+                                      SizedBox(width: 10.0),
+                                      Text(
+                                        "買主様ご負担日数",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                )),
-                      buildDays(),
-                    ],
-                  )),
-              TableCalendar(
-                rowHeight: 75.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 15.0,
+                                        width: 15.0,
+                                        child: Container(
+                                          color: ColorConstant.hSeller,
+                                        ),
+                                      ),
+                                      SizedBox(width: 10.0),
+                                      Text(
+                                        "売主様ご負担日数",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 15.0,
+                                    width: 15.0,
+                                    child: Container(
+                                      color: ColorConstant.hRent,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.0),
+                                  Text("家賃日割日数",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              )),
+                    buildDays(),
+                  ],
+                )),
+            Showcase(
+              key: _one,
+              description: '計算するため、日付を選択してください。',
+              contentPadding: EdgeInsets.all(8.0),
+              showcaseBackgroundColor: ColorConstant.hHighlight,
+              descTextStyle: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+              disposeOnTap: false,
+              onTargetClick: () {
+                // print("Hello");
+                setState(() {
+                  ShowCaseWidget.of(context)
+                      .startShowCase([_two, _three, _four]);
+                });
+              },
+              child: TableCalendar(
+                rowHeight: val == "S" ? 75.0 : 60.0,
                 headerVisible: false,
                 holidays: _hdayBuilder(),
                 initialCalendarFormat: CalendarFormat.month,
@@ -684,9 +687,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 },
                 builders: CalendarBuilders(
                   dowWeekdayBuilder: (context, day) {
-                    return Container(
-                      child: Text(''),
-                    );
+                    return Container();
                   },
                   dayBuilder: (context, date, events) => dayBuilder(
                     date: date,
@@ -740,8 +741,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                       isToday: true),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -823,31 +824,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
     return Container(
       margin: const EdgeInsets.all(1.5),
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-          // color: istoday == null ? Colors.white : Colors.orange[200],
-
-          /*  border: istoday == null
-            ? Border()
-            : Border(
-                right: BorderSide(
-                  color: Colors.orange,
-                  width: 3,
-                ),
-                top: BorderSide(
-                  color: Colors.orange,
-                  width: 3,
-                ),
-                bottom: BorderSide(
-                  color: Colors.orange,
-                  width: 3,
-                ),
-                left: BorderSide(
-                  color: Colors.orange,
-                  width: 3,
-                ),
-              ), */
-          // borderRadius: BorderRadius.circular(5.0)
-          ),
       child: Padding(
         padding: const EdgeInsets.all(1.5),
         child: Column(
