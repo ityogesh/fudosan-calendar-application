@@ -117,7 +117,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
               duration: new Duration(seconds: 5), curve: new ElasticOutCurve())
           .then((value) => ShowCaseWidget.of(context)
               .startShowCase([_one, _two, _three, _four])); */
-     // showShowCase();
+      showShowCase();
       /* controller.jumpTo(controller.position.maxScrollExtent); */
 
       //showShowCase();
