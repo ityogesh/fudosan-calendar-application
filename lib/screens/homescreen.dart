@@ -112,12 +112,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      /*   controller
+       /*  controller
           .animateTo(controller.position.maxScrollExtent,
               duration: new Duration(seconds: 5), curve: new ElasticOutCurve())
           .then((value) => ShowCaseWidget.of(context)
               .startShowCase([_one, _two, _three, _four])); */
-      showShowCase();
+     // showShowCase();
       /* controller.jumpTo(controller.position.maxScrollExtent); */
 
       //showShowCase();
@@ -172,7 +172,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             minWidth: MediaQuery.of(context).size.width * 0.33,
                             child: Showcase(
                               key: _two,
-                              description: '各賃貸/売買ボタンをタップして計算してください。',
+                              description: '各賃貸/売買ボタンをタップ\nして計算してください。',
                               contentPadding: EdgeInsets.all(8.0),
                               showcaseBackgroundColor: ColorConstant.hHighlight,
                               descTextStyle: TextStyle(
@@ -218,7 +218,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                   child: Showcase(
                                     contentPadding: EdgeInsets.all(8.0),
                                     key: _three,
-                                    description: '計算タイプを選択して（>）を押下してください。',
+                                    description: '計算タイプを選択して\n（>）を押下してください。',
                                     showcaseBackgroundColor:
                                         ColorConstant.hHighlight,
                                     descTextStyle: TextStyle(

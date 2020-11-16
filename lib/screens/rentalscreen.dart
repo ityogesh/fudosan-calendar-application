@@ -185,7 +185,7 @@ class _RentalScreenState extends State<RentalScreen> {
       showShowCaseRent();
     });
     return Scaffold(
-      appBar: AppBar(
+     appBar: AppBar(
         title: Text("賃料 日割計算"),
         centerTitle: true,
         backgroundColor: ColorConstant.appBar,
@@ -334,12 +334,14 @@ class _RentalScreenState extends State<RentalScreen> {
                             color: Colors.white),
                         onTargetClick: () {},
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("賃料/月*", style: bottomContainerText),
                                 Container(
+                                  alignment: Alignment.center,
                                   height: 50.0,
                                   width:
                                       MediaQuery.of(context).size.width / 1.75,
@@ -371,16 +373,20 @@ class _RentalScreenState extends State<RentalScreen> {
                                               border: InputBorder.none,
                                               counterText: "",
                                             ),
-                                            validator: (String value) {
+                                           validator: (String value) {
                                               bool msg = ValidateHelper()
                                                   .validateAmount(value);
-                                              msg == true
-                                                  ? Fluttertoast.showToast(
-                                                      toastLength:
-                                                          Toast.LENGTH_LONG,
-                                                      msg: "正しい通貨値を入力してください。",
-                                                    )
-                                                  : Container();
+                                              if (msg) {
+                                                FocusScope.of(context)
+                                                    .requestFocus(
+                                                        new FocusNode());
+                                                Fluttertoast.showToast(
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG,
+                                                  msg: "正しい金額値を入力してください。",
+                                                );
+                                              }
+
                                               return null;
                                             },
                                             autovalidate: true,
@@ -523,13 +529,17 @@ class _RentalScreenState extends State<RentalScreen> {
                                             validator: (String value) {
                                               bool msg = ValidateHelper()
                                                   .validateAmount(value);
-                                              msg == true
-                                                  ? Fluttertoast.showToast(
-                                                      toastLength:
-                                                          Toast.LENGTH_LONG,
-                                                      msg: "正しい通貨値を入力してください。",
-                                                    )
-                                                  : Container();
+                                              if (msg) {
+                                                FocusScope.of(context)
+                                                    .requestFocus(
+                                                        new FocusNode());
+                                                Fluttertoast.showToast(
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG,
+                                                  msg: "正しい金額値を入力してください。",
+                                                );
+                                              }
+
                                               return null;
                                             },
                                             autovalidate: true,

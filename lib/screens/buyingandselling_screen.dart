@@ -304,12 +304,15 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                 counterText: "", border: InputBorder.none),
                             validator: (String value) {
                               bool msg = ValidateHelper().validateAmount(value);
-                              msg == true
-                                  ? Fluttertoast.showToast(
-                                      toastLength: Toast.LENGTH_LONG,
-                                      msg: "正しい通貨値を入力してください。",
-                                    )
-                                  : Container();
+                              if (msg) {
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                Fluttertoast.showToast(
+                                  toastLength: Toast.LENGTH_LONG,
+                                  msg: "正しい金額値を入力してください。",
+                                );
+                              }
+
                               return null;
                             },
                             autovalidate: true,
