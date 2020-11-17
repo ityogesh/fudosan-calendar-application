@@ -304,7 +304,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 if (value == "その他") {
                                   setState(() {
                                     _myActivity = value;
-                                    visible = !visible;
+                                    visible = true; // !visible;
                                   });
                                 } else {
                                   setState(() {
@@ -437,7 +437,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       RegisterUpdateResponseModel registerUpdateResponseModel =
           RegisterUpdateResponseModel.fromJson(json.decode(response.body));
       instance.setString("email", registerUpdateResponseModel.email);
-    //  print(response.body);
+      //  print(response.body);
       _progressDialog.hide();
       Navigator.push(
           context,
@@ -448,7 +448,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       _progressDialog.hide();
       RegisterErrorResponseModel registerErrorResponseModel =
           RegisterErrorResponseModel.fromJson(json.decode(response.body));
-    //  print(registerErrorResponseModel.error.email[0]);
+      //  print(registerErrorResponseModel.error.email[0]);
       if (registerErrorResponseModel.error.email[0] ==
           "The email has already been taken.") {
         Fluttertoast.showToast(
@@ -489,7 +489,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       var responseData = json.decode(response.body);
       final Map registerResponse = responseData;
       registerResponseModel = RegisterResponseModel.fromJson(registerResponse);
-     /*  print('Register response');
+      /*  print('Register response');
       print(registerResponseModel.toJson());
       print('User id : ${registerResponseModel.userid}');
       print('Token : ${registerResponseModel.success.token}'); */
@@ -513,7 +513,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       final Map responseError = error;
       RegisterErrorResponseModel registerErrorResponseModel =
           RegisterErrorResponseModel.fromJson(responseError);
-    //  print(registerErrorResponseModel.error.email[0]);
+      //  print(registerErrorResponseModel.error.email[0]);
       if (registerErrorResponseModel.error.email[0] ==
           "The email has already been taken.") {
         Fluttertoast.showToast(
