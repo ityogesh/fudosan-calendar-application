@@ -132,7 +132,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/Homepage_logo.png',
+                'assets/images/HomeScreenLogo.png',
                 height: 35.0,
                 width: 35.0,
               ),

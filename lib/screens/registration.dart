@@ -36,7 +36,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final passwordController = new TextEditingController();
   final confirmPasswordController = new TextEditingController();
   final organizationController = new TextEditingController();
-//  final companyController = new TextEditingController();
   final departmentNameController = new TextEditingController();
 
   final FocusNode nameFocus = FocusNode();
@@ -265,7 +264,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       focusNode: companynameFocus,
                       controller: organizationController,
                       keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
+                      textInputAction: TextInputAction.done,
                       decoration: new InputDecoration(
                         labelText: '会社名*',
                       ),
@@ -273,8 +272,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         return ValidateHelper().validateCompanyName(value);
                       },
                       onFieldSubmitted: (String value) {
-                        _fieldFocusChange(
-                            context, companynameFocus, departmentFocus);
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        /*  _fieldFocusChange(
+                            context, companynameFocus, departmentFocus); */
                       },
                     ),
                     SizedBox(
@@ -288,8 +288,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Container(
                             margin: EdgeInsets.all(0.0),
                             color: Colors.transparent,
-
-//                    padding: EdgeInsets.all(16),
                             child: DropDownFormField(
                               enabled: !readonly,
                               titleText: null,
@@ -386,11 +384,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         color: ColorConstant.rButton,
                         onPressed: () {
                           validateCredentials();
-                          /*        Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      OtpRegistrationScreen()));*/
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -409,6 +402,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   validateCredentials() async {
     if (formKey.currentState.validate()) {
+      FocusScope.of(context).requestFocus(new FocusNode());
       if (state == 0) {
         await _progressDialog.show();
         _doUserRegistration();
@@ -437,7 +431,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       RegisterUpdateResponseModel registerUpdateResponseModel =
           RegisterUpdateResponseModel.fromJson(json.decode(response.body));
       instance.setString("email", registerUpdateResponseModel.email);
-      //  print(response.body);
       _progressDialog.hide();
       Navigator.push(
           context,
@@ -448,7 +441,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       _progressDialog.hide();
       RegisterErrorResponseModel registerErrorResponseModel =
           RegisterErrorResponseModel.fromJson(json.decode(response.body));
-      //  print(registerErrorResponseModel.error.email[0]);
       if (registerErrorResponseModel.error.email[0] ==
           "The email has already been taken.") {
         Fluttertoast.showToast(
@@ -469,11 +461,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     department = _myActivity;
     departmentName =
         _myActivity == "その他" ? departmentNameController.text : _myActivity;
-
-    /*   var headers = {
-      'accept': 'application/json',
-      'Content-Type': 'application/json',
-    }; */
     registerRequestModel = new RegisterRequestModel(
         fullname: userName,
         email: email,
@@ -489,10 +476,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       var responseData = json.decode(response.body);
       final Map registerResponse = responseData;
       registerResponseModel = RegisterResponseModel.fromJson(registerResponse);
-      /*  print('Register response');
-      print(registerResponseModel.toJson());
-      print('User id : ${registerResponseModel.userid}');
-      print('Token : ${registerResponseModel.success.token}'); */
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("email", emailController.text);
       instance.setString("token", registerResponseModel.success.token);
@@ -513,7 +496,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       final Map responseError = error;
       RegisterErrorResponseModel registerErrorResponseModel =
           RegisterErrorResponseModel.fromJson(responseError);
-      //  print(registerErrorResponseModel.error.email[0]);
       if (registerErrorResponseModel.error.email[0] ==
           "The email has already been taken.") {
         Fluttertoast.showToast(
