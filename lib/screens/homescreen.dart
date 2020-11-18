@@ -112,7 +112,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-       /*  controller
+      /*  controller
           .animateTo(controller.position.maxScrollExtent,
               duration: new Duration(seconds: 5), curve: new ElasticOutCurve())
           .then((value) => ShowCaseWidget.of(context)
@@ -510,7 +510,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         ),
         // side: BorderSide(width: 5, color: Colors.green),
       ),
-      elevation: 10.0,
+      elevation: 5.0,
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 6.0),

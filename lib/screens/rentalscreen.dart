@@ -189,6 +189,7 @@ class _RentalScreenState extends State<RentalScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("賃料 日割計算"),
+         elevation: 0,
         centerTitle: true,
         backgroundColor: ColorConstant.appBar,
         leading: IconButton(

@@ -88,6 +88,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
     });
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("固定資産税 日割計算"),
         backgroundColor: Colors.lightBlueAccent,
         centerTitle: true,
