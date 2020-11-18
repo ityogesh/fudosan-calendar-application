@@ -24,13 +24,7 @@ class Show extends StatelessWidget {
         autoPlay: true,
         autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
-        onStart: (index, key) {
-          log('onStart: $index, $key');
-        },
-        onComplete: (index, key) {
-          log('onComplete: $index, $key');
-        },
-        onFinish: () {
+       onFinish: () {
           controller.animateTo(controller.position.minScrollExtent,
               duration: new Duration(seconds: 10),
               curve: new ElasticOutCurve());

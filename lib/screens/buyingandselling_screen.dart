@@ -16,7 +16,7 @@ class ShowCaseBuyandSell extends StatelessWidget {
     return Scaffold(
       body: ShowCaseWidget(
         autoPlay: true,
-        autoPlayDelay: Duration(seconds: 15),
+        autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
 
         builder: Builder(

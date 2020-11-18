@@ -15,7 +15,7 @@ class ShowCaseViewRental extends StatelessWidget {
     return Scaffold(
       body: ShowCaseWidget(
         autoPlay: true,
-        autoPlayDelay: Duration(seconds: 15),
+        autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
         builder: Builder(
           builder: (context) => RentalScreen(choice, selecteddate),
@@ -703,7 +703,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   .validateAmount(value);
                                               if (msg) {
                                                 return Text("正しい金額値を入力してください。",
-                                                    style: TextStyle(fontSize: 11.0,
+                                                    style: TextStyle(fontSize: 12.0,
                                                         color: Colors.red));
                                               }
                                               return Container();
