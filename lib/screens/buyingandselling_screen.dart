@@ -48,6 +48,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
   final ValueNotifier<double> samount = ValueNotifier<double>(0);
   final ValueNotifier<double> bamount = ValueNotifier<double>(0);
+  final ValueNotifier<String> taxamount = ValueNotifier<String>("0");
   FocusNode taxFocus = FocusNode();
   DateTime sellDate;
   int maxLength = 10;
@@ -87,6 +88,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
     });
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text("固定資産税 日割計算"),
         backgroundColor: Colors.lightBlueAccent,
         centerTitle: true,
@@ -288,89 +290,105 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                         fontSize: 12.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
-                    child: Row(
+                    child: Column(
                       children: [
-                        Expanded(
-                          flex: 2,
-                          child: TextFormField(
-                            focusNode: taxFocus,
-                            controller: textEditingController,
-                            keyboardType: TextInputType.numberWithOptions(
-                                signed: true,
-                                decimal: true), // TextInputType.number,
-                            maxLength: maxLength,
-                            textAlign: TextAlign.right,
-                            decoration: InputDecoration(
-                                counterText: "", border: InputBorder.none),
-                            validator: (String value) {
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                focusNode: taxFocus,
+                                controller: textEditingController,
+                                keyboardType: TextInputType.numberWithOptions(
+                                    signed: true,
+                                    decimal: true), // TextInputType.number,
+                                maxLength: maxLength,
+                                textAlign: TextAlign.right,
+                                decoration: InputDecoration(
+                                    counterText: "", border: InputBorder.none),
+                                onChanged: (String value) {
+                                  if (value == null || value == "") {
+                                    samount.value = 0;
+                                    bamount.value = 0;
+                                    taxamount.value = "0";
+                                  } else {
+                                    taxamount.value =
+                                        textEditingController.text;
+                                    var rev = japaneseCurrency
+                                        .parse(textEditingController.text);
+                                    int price =
+                                        int.parse(rev.toStringAsFixed(0));
+                                    int totaldays =
+                                        date.year % 4 == 0 ? 366 : 365;
+                                    double eachdayprice = price / totaldays;
+                                    samount.value =
+                                        eachdayprice * completedDays;
+                                    bamount.value = eachdayprice * remaingDays;
+                                  }
+                                },
+                                onFieldSubmitted: (String v) {
+                                  taxFocus.unfocus();
+                                },
+                                onEditingComplete: () {
+                                  taxamount.value = textEditingController.text;
+                                  var rev = japaneseCurrency
+                                      .parse(textEditingController.text);
+                                  // print("$rev");
+                                  int price = int.parse(rev.toStringAsFixed(0));
+                                  int totaldays =
+                                      date.year % 4 == 0 ? 366 : 365;
+                                  double eachdayprice = price / totaldays;
+                                  samount.value = eachdayprice * completedDays;
+                                  bamount.value = eachdayprice * remaingDays;
+                                  String val = (japaneseCurrency.format(price))
+                                      .toString();
+                                  // print("$val");
+                                  setState(() {
+                                    maxLength = textEditingController
+                                                .text.length ==
+                                            10
+                                        ? 13
+                                        : textEditingController.text.length >= 7
+                                            ? 12
+                                            : textEditingController
+                                                        .text.length >=
+                                                    4
+                                                ? 11
+                                                : 10;
+                                  });
+                                  textEditingController.value =
+                                      TextEditingValue(
+                                    text: "$val",
+                                    selection: TextSelection.fromPosition(
+                                      TextPosition(offset: val.length),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                readOnly: true,
+                                initialValue: "円",
+                                style: bottomContainerText,
+                                decoration:
+                                    InputDecoration(border: InputBorder.none),
+                              ),
+                              /*  Text("円", style: bottomContainerText) */
+                            ),
+                          ],
+                        ),
+                        ValueListenableBuilder(
+                            valueListenable: taxamount,
+                            builder: (BuildContext context, String value,
+                                Widget child) {
                               bool msg = ValidateHelper().validateAmount(value);
-                              msg == true
-                                  ? Fluttertoast.showToast(
-                                      toastLength: Toast.LENGTH_LONG,
-                                      msg: "正しい通貨値を入力してください。",
-                                    )
-                                  : Container();
-                              return null;
-                            },
-                            autovalidate: true,
-                            onChanged: (String value) {
-                              if (value == null || value == "") {
-                                samount.value = 0;
-                                bamount.value = 0;
-                              } else {
-                                var rev = japaneseCurrency
-                                    .parse(textEditingController.text);
-                                int price = int.parse(rev.toStringAsFixed(0));
-                                int totaldays = date.year % 4 == 0 ? 366 : 365;
-                                double eachdayprice = price / totaldays;
-                                samount.value = eachdayprice * completedDays;
-                                bamount.value = eachdayprice * remaingDays;
+                              if (msg) {
+                                return Text("正しい金額値を入力してください。",
+                                    style: TextStyle(color: Colors.red));
                               }
-                            },
-                            onFieldSubmitted: (String v) {
-                              taxFocus.unfocus();
-                            },
-                            onEditingComplete: () {
-                              var rev = japaneseCurrency
-                                  .parse(textEditingController.text);
-                              // print("$rev");
-                              int price = int.parse(rev.toStringAsFixed(0));
-                              int totaldays = date.year % 4 == 0 ? 366 : 365;
-                              double eachdayprice = price / totaldays;
-                              samount.value = eachdayprice * completedDays;
-                              bamount.value = eachdayprice * remaingDays;
-                              String val =
-                                  (japaneseCurrency.format(price)).toString();
-                              // print("$val");
-                              setState(() {
-                                maxLength = textEditingController.text.length ==
-                                        10
-                                    ? 13
-                                    : textEditingController.text.length >= 7
-                                        ? 12
-                                        : textEditingController.text.length >= 4
-                                            ? 11
-                                            : 10;
-                              });
-                              textEditingController.value = TextEditingValue(
-                                text: "$val",
-                                selection: TextSelection.fromPosition(
-                                  TextPosition(offset: val.length),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            initialValue: "円",
-                            style: bottomContainerText,
-                            decoration:
-                                InputDecoration(border: InputBorder.none),
-                          ),
-                          /*  Text("円", style: bottomContainerText) */
-                        ),
+                              return Container();
+                            }),
                       ],
                     ),
                   ),

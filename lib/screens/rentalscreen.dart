@@ -62,6 +62,8 @@ class _RentalScreenState extends State<RentalScreen> {
   final ValueNotifier<double> mamount = ValueNotifier<double>(0.0);
   final ValueNotifier<int> days = ValueNotifier<int>(0);
   final ValueNotifier<double> tamount = ValueNotifier<double>(0.0);
+  final ValueNotifier<String> valramount = ValueNotifier<String>("0");
+  final ValueNotifier<String> valmamount = ValueNotifier<String>("0");
   var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
   SharedPreferences preferences;
   final GlobalKey _one = GlobalKey();
@@ -187,6 +189,7 @@ class _RentalScreenState extends State<RentalScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("賃料 日割計算"),
+         elevation: 0,
         centerTitle: true,
         backgroundColor: ColorConstant.appBar,
         leading: IconButton(
@@ -334,13 +337,15 @@ class _RentalScreenState extends State<RentalScreen> {
                             color: Colors.white),
                         onTargetClick: () {},
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("賃料/月*", style: bottomContainerText),
                                 Container(
-                                  height: 50.0,
+                                  alignment: Alignment.center,
+                                  // height: 50.0,
                                   width:
                                       MediaQuery.of(context).size.width / 1.75,
                                   child: Card(
@@ -351,135 +356,175 @@ class _RentalScreenState extends State<RentalScreen> {
                                         Radius.circular(15),
                                       ),
                                     ),
-                                    child: Row(
+                                    child: Column(
                                       children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: TextFormField(
-                                            focusNode: rentFocus,
-                                            controller: rentController,
-                                            textAlign: TextAlign.right,
-                                            keyboardType:
-                                                TextInputType.numberWithOptions(
-                                                    signed: true,
-                                                    decimal:
-                                                        true), // TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            maxLength: rMaxLength,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              counterText: "",
-                                            ),
-                                            validator: (String value) {
-                                              bool msg = ValidateHelper()
-                                                  .validateAmount(value);
-                                              msg == true
-                                                  ? Fluttertoast.showToast(
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 2,
+                                              child: TextFormField(
+                                                focusNode: rentFocus,
+                                                controller: rentController,
+                                                textAlign: TextAlign.right,
+                                                keyboardType: TextInputType
+                                                    .numberWithOptions(
+                                                        signed: true,
+                                                        decimal:
+                                                            true), // TextInputType.number,
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                maxLength: rMaxLength,
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  counterText: "",
+                                                ),
+                                                /*  validator: (String value) {
+                                                  bool msg = ValidateHelper()
+                                                      .validateAmount(value);
+                                                  if (msg) {
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            new FocusNode());
+                                                    Fluttertoast.showToast(
                                                       toastLength:
                                                           Toast.LENGTH_LONG,
-                                                      msg: "正しい通貨値を入力してください。",
-                                                    )
-                                                  : Container();
-                                              return null;
-                                            },
-                                            autovalidate: true,
-                                            onChanged: (String value) {
-                                              if (value == null ||
-                                                  value == "") {
-                                                ramount.value = 0;
-                                                tamount.value = japaneseCurrency
-                                                        .parse(japaneseCurrency
-                                                            .format(ramount
-                                                                .value)) +
-                                                    japaneseCurrency.parse(
-                                                        japaneseCurrency.format(
-                                                            mamount.value));
-                                              } else {
-                                                var rev = japaneseCurrency
-                                                    .parse(rentController.text);
-                                                // print("$rev");
-                                                int price = int.parse(
-                                                    rev.toStringAsFixed(0));
-                                                double eachdayprice = price /
-                                                    totalDays(
-                                                        currentSelected.month,
-                                                        currentSelected.year);
-                                                ramount.value =
-                                                    eachdayprice * days.value;
-                                                tamount.value = japaneseCurrency
-                                                        .parse(japaneseCurrency
-                                                            .format(ramount
-                                                                .value)) +
-                                                    japaneseCurrency.parse(
-                                                        japaneseCurrency.format(
-                                                            mamount.value));
-                                              }
-                                            },
-                                            onFieldSubmitted: (String val) {
-                                              _fieldFocusChange(context,
-                                                  rentFocus, maintainanceFocus);
-                                            },
-                                            onEditingComplete: () {
-                                              var rev = japaneseCurrency
-                                                  .parse(rentController.text);
-                                              //  print("$rev");
-                                              int price = int.parse(
-                                                  rev.toStringAsFixed(0));
-                                              double eachdayprice = price /
-                                                  totalDays(
-                                                      currentSelected.month,
-                                                      currentSelected.year);
-                                              ramount.value =
-                                                  eachdayprice * days.value;
-                                              tamount.value = japaneseCurrency
-                                                      .parse(japaneseCurrency
-                                                          .format(
-                                                              ramount.value)) +
-                                                  japaneseCurrency.parse(
-                                                      japaneseCurrency.format(
-                                                          mamount.value));
-                                              String val = (japaneseCurrency
-                                                      .format(price))
-                                                  .toString();
-                                              //  print("$val");
-                                              setState(() {
-                                                rMaxLength = rentController
-                                                            .text.length ==
-                                                        10
-                                                    ? 13
-                                                    : rentController
-                                                                .text.length >=
-                                                            7
-                                                        ? 12
+                                                      msg: "正しい金額値を入力してください。",
+                                                    );
+                                                  }
+                                                  return null;
+                                                },
+                                                autovalidate: true, */
+                                                onChanged: (String value) {
+                                                  if (value == null ||
+                                                      value == "") {
+                                                    ramount.value = 0;
+                                                    valramount.value = "0";
+                                                    tamount
+                                                        .value = japaneseCurrency
+                                                            .parse(japaneseCurrency
+                                                                .format(ramount
+                                                                    .value)) +
+                                                        japaneseCurrency.parse(
+                                                            japaneseCurrency
+                                                                .format(mamount
+                                                                    .value));
+                                                  } else {
+                                                    valramount.value =
+                                                        rentController.text;
+                                                    var rev = japaneseCurrency
+                                                        .parse(rentController
+                                                            .text);
+                                                    // print("$rev");
+                                                    int price = int.parse(
+                                                        rev.toStringAsFixed(0));
+                                                    double eachdayprice =
+                                                        price /
+                                                            totalDays(
+                                                                currentSelected
+                                                                    .month,
+                                                                currentSelected
+                                                                    .year);
+                                                    ramount.value =
+                                                        eachdayprice *
+                                                            days.value;
+                                                    tamount
+                                                        .value = japaneseCurrency
+                                                            .parse(japaneseCurrency
+                                                                .format(ramount
+                                                                    .value)) +
+                                                        japaneseCurrency.parse(
+                                                            japaneseCurrency
+                                                                .format(mamount
+                                                                    .value));
+                                                  }
+                                                },
+                                                onFieldSubmitted: (String val) {
+                                                  _fieldFocusChange(
+                                                      context,
+                                                      rentFocus,
+                                                      maintainanceFocus);
+                                                },
+                                                onEditingComplete: () {
+                                                  valramount.value =
+                                                      rentController.text;
+                                                  var rev =
+                                                      japaneseCurrency.parse(
+                                                          rentController.text);
+                                                  //  print("$rev");
+                                                  int price = int.parse(
+                                                      rev.toStringAsFixed(0));
+                                                  double eachdayprice = price /
+                                                      totalDays(
+                                                          currentSelected.month,
+                                                          currentSelected.year);
+                                                  ramount.value =
+                                                      eachdayprice * days.value;
+                                                  tamount
+                                                      .value = japaneseCurrency
+                                                          .parse(japaneseCurrency
+                                                              .format(ramount
+                                                                  .value)) +
+                                                      japaneseCurrency.parse(
+                                                          japaneseCurrency
+                                                              .format(mamount
+                                                                  .value));
+                                                  String val = (japaneseCurrency
+                                                          .format(price))
+                                                      .toString();
+                                                  //  print("$val");
+                                                  setState(() {
+                                                    rMaxLength = rentController
+                                                                .text.length ==
+                                                            10
+                                                        ? 13
                                                         : rentController.text
                                                                     .length >=
-                                                                4
-                                                            ? 11
-                                                            : 10;
-                                              });
-                                              rentController.value =
-                                                  TextEditingValue(
-                                                text: "$val",
-                                                selection:
-                                                    TextSelection.fromPosition(
-                                                  TextPosition(
-                                                      offset: val.length),
-                                                ),
-                                              );
-                                            },
-                                          ),
+                                                                7
+                                                            ? 12
+                                                            : rentController
+                                                                        .text
+                                                                        .length >=
+                                                                    4
+                                                                ? 11
+                                                                : 10;
+                                                  });
+                                                  rentController.value =
+                                                      TextEditingValue(
+                                                    text: "$val",
+                                                    selection: TextSelection
+                                                        .fromPosition(
+                                                      TextPosition(
+                                                          offset: val.length),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: TextFormField(
+                                                readOnly: true,
+                                                initialValue: "円",
+                                                style: bottomContainerText,
+                                                decoration: InputDecoration(
+                                                    border: InputBorder.none),
+                                              ),
+                                              /*  Text("円", style: bottomContainerText) */
+                                            ),
+                                          ],
                                         ),
-                                        Expanded(
-                                          child: TextFormField(
-                                            readOnly: true,
-                                            initialValue: "円",
-                                            style: bottomContainerText,
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none),
-                                          ),
-                                          /*  Text("円", style: bottomContainerText) */
-                                        ),
+                                        ValueListenableBuilder(
+                                            valueListenable: valramount,
+                                            builder: (BuildContext context,
+                                                String value, Widget child) {
+                                              bool msg = ValidateHelper()
+                                                  .validateAmount(value);
+                                              if (msg) {
+                                                return Text("正しい金額値を入力してください。",
+                                                    style: TextStyle(
+                                                        color: Colors.red));
+                                              }
+                                              return Container();
+                                            }),
                                       ],
                                     ),
                                   ),
@@ -492,7 +537,7 @@ class _RentalScreenState extends State<RentalScreen> {
                               children: [
                                 Text("共益費/月*", style: bottomContainerText),
                                 Container(
-                                  height: 50.0,
+                                  // height: 50.0,
                                   width:
                                       MediaQuery.of(context).size.width / 1.75,
                                   child: Card(
@@ -503,142 +548,183 @@ class _RentalScreenState extends State<RentalScreen> {
                                         Radius.circular(15),
                                       ),
                                     ),
-                                    child: Row(
+                                    child: Column(
                                       children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: TextFormField(
-                                            focusNode: maintainanceFocus,
-                                            controller: maintainceController,
-                                            textAlign: TextAlign.right,
-                                            keyboardType:
-                                                TextInputType.numberWithOptions(
-                                                    signed: true,
-                                                    decimal:
-                                                        true), // TextInputType.number,
-                                            textInputAction:
-                                                TextInputAction.done,
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 2,
+                                              child: TextFormField(
+                                                focusNode: maintainanceFocus,
+                                                controller:
+                                                    maintainceController,
+                                                textAlign: TextAlign.right,
+                                                keyboardType: TextInputType
+                                                    .numberWithOptions(
+                                                        signed: true,
+                                                        decimal:
+                                                            true), // TextInputType.number,
+                                                textInputAction:
+                                                    TextInputAction.done,
 //                                    style: TextStyle(fontSize: 18),
-                                            maxLength: mMaxLength,
-                                            validator: (String value) {
-                                              bool msg = ValidateHelper()
-                                                  .validateAmount(value);
-                                              msg == true
-                                                  ? Fluttertoast.showToast(
+                                                maxLength: mMaxLength,
+                                                /* validator: (String value) {
+                                                  bool msg = ValidateHelper()
+                                                      .validateAmount(value);
+                                                  if (msg) {
+                                                    FocusScope.of(context)
+                                                        .requestFocus(
+                                                            new FocusNode());
+                                                    Fluttertoast.showToast(
                                                       toastLength:
                                                           Toast.LENGTH_LONG,
-                                                      msg: "正しい通貨値を入力してください。",
-                                                    )
-                                                  : Container();
-                                              return null;
-                                            },
-                                            autovalidate: true,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              counterText: "",
-                                            ),
-                                            onChanged: (String value) {
-                                              if (value == null ||
-                                                  value == "") {
-                                                mamount.value = 0;
-                                                tamount.value = japaneseCurrency
-                                                        .parse(japaneseCurrency
-                                                            .format(ramount
-                                                                .value)) +
-                                                    japaneseCurrency.parse(
-                                                        japaneseCurrency.format(
-                                                            mamount.value));
-                                              } else {
-                                                var rev = japaneseCurrency
-                                                    .parse(maintainceController
-                                                        .text);
-                                                //   print("$rev");
-                                                int price = int.parse(
-                                                    rev.toStringAsFixed(0));
-                                                double eachdayprice = price /
-                                                    totalDays(
-                                                        currentSelected.month,
-                                                        currentSelected.year);
-                                                mamount.value =
-                                                    eachdayprice * days.value;
-                                                tamount.value = japaneseCurrency
-                                                        .parse(japaneseCurrency
-                                                            .format(ramount
-                                                                .value)) +
-                                                    japaneseCurrency.parse(
-                                                        japaneseCurrency.format(
-                                                            mamount.value));
-                                                // ramount.value + mamount.value;
-                                              }
-                                            },
-                                            onFieldSubmitted: (String v) {
-                                              maintainanceFocus.unfocus();
-                                              var rev = japaneseCurrency
-                                                  .parse(rentController.text);
-                                              //   print("$rev");
-                                              int price = int.parse(
-                                                  rev.toStringAsFixed(0));
-                                              String rval = (japaneseCurrency
-                                                      .format(price))
-                                                  .toString();
-                                              rentController.text = rval;
-                                            },
-                                            onEditingComplete: () {
-                                              var rev = japaneseCurrency.parse(
-                                                  maintainceController.text);
-                                              //   print("$rev");
-                                              int price = int.parse(
-                                                  rev.toStringAsFixed(0));
-                                              double eachdayprice = price /
-                                                  totalDays(
-                                                      currentSelected.month,
-                                                      currentSelected.year);
-                                              mamount.value =
-                                                  eachdayprice * days.value;
-                                              tamount.value = japaneseCurrency
-                                                      .parse(japaneseCurrency
-                                                          .format(
-                                                              ramount.value)) +
-                                                  japaneseCurrency.parse(
-                                                      japaneseCurrency.format(
-                                                          mamount.value));
-                                              String val = (japaneseCurrency
-                                                      .format(price))
-                                                  .toString();
+                                                      msg: "正しい金額値を入力してください。",
+                                                    );
+                                                  }
 
-                                              //  print("$val");
-                                              setState(() {
-                                                mMaxLength = maintainceController
-                                                            .text.length ==
-                                                        10
-                                                    ? 13
-                                                    : maintainceController
-                                                                .text.length >=
-                                                            7
-                                                        ? 12
+                                                  return null;
+                                                },
+                                                autovalidate: true, */
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  counterText: "",
+                                                ),
+                                                onChanged: (String value) {
+                                                  if (value == null ||
+                                                      value == "") {
+                                                    mamount.value = 0;
+                                                    tamount
+                                                        .value = japaneseCurrency
+                                                            .parse(japaneseCurrency
+                                                                .format(ramount
+                                                                    .value)) +
+                                                        japaneseCurrency.parse(
+                                                            japaneseCurrency
+                                                                .format(mamount
+                                                                    .value));
+                                                  } else {
+                                                    valmamount.value = maintainceController.text;
+                                                    var rev =
+                                                        japaneseCurrency.parse(
+                                                            maintainceController
+                                                                .text);
+                                                    //   print("$rev");
+                                                    int price = int.parse(
+                                                        rev.toStringAsFixed(0));
+                                                    double eachdayprice =
+                                                        price /
+                                                            totalDays(
+                                                                currentSelected
+                                                                    .month,
+                                                                currentSelected
+                                                                    .year);
+                                                    mamount.value =
+                                                        eachdayprice *
+                                                            days.value;
+                                                    tamount
+                                                        .value = japaneseCurrency
+                                                            .parse(japaneseCurrency
+                                                                .format(ramount
+                                                                    .value)) +
+                                                        japaneseCurrency.parse(
+                                                            japaneseCurrency
+                                                                .format(mamount
+                                                                    .value));
+                                                    // ramount.value + mamount.value;
+                                                  }
+                                                },
+                                                onFieldSubmitted: (String v) {
+                                                  maintainanceFocus.unfocus();
+                                                  var rev =
+                                                      japaneseCurrency.parse(
+                                                          rentController.text);
+                                                  //   print("$rev");
+                                                  int price = int.parse(
+                                                      rev.toStringAsFixed(0));
+                                                  String rval =
+                                                      (japaneseCurrency
+                                                              .format(price))
+                                                          .toString();
+                                                  rentController.text = rval;
+                                                },
+                                                onEditingComplete: () {
+                                                  valmamount.value = maintainceController.text;
+                                                  var rev =
+                                                      japaneseCurrency.parse(
+                                                          maintainceController
+                                                              .text);
+                                                  //   print("$rev");
+                                                  int price = int.parse(
+                                                      rev.toStringAsFixed(0));
+                                                  double eachdayprice = price /
+                                                      totalDays(
+                                                          currentSelected.month,
+                                                          currentSelected.year);
+                                                  mamount.value =
+                                                      eachdayprice * days.value;
+                                                  tamount
+                                                      .value = japaneseCurrency
+                                                          .parse(japaneseCurrency
+                                                              .format(ramount
+                                                                  .value)) +
+                                                      japaneseCurrency.parse(
+                                                          japaneseCurrency
+                                                              .format(mamount
+                                                                  .value));
+                                                  String val = (japaneseCurrency
+                                                          .format(price))
+                                                      .toString();
+
+                                                  //  print("$val");
+                                                  setState(() {
+                                                    mMaxLength = maintainceController
+                                                                .text.length ==
+                                                            10
+                                                        ? 13
                                                         : maintainceController
                                                                     .text
                                                                     .length >=
-                                                                4
-                                                            ? 11
-                                                            : 10;
-                                                maintainceController.text = val;
-                                              });
-                                            },
-                                          ),
+                                                                7
+                                                            ? 12
+                                                            : maintainceController
+                                                                        .text
+                                                                        .length >=
+                                                                    4
+                                                                ? 11
+                                                                : 10;
+                                                    maintainceController.text =
+                                                        val;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: TextFormField(
+                                                readOnly: true,
+                                                initialValue: "円",
+                                                style: bottomContainerText,
+                                                decoration: InputDecoration(
+                                                    border: InputBorder.none),
+                                              ), /*  Text(
+                                          "円",
+                                          style: bottomContainerText,
+                                        ) */
+                                            ),
+                                          ],
                                         ),
-                                        Expanded(
-                                          child: TextFormField(
-                                            readOnly: true,
-                                            initialValue: "円",
-                                            style: bottomContainerText,
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none),
-                                          ), /*  Text(
-                                      "円",
-                                      style: bottomContainerText,
-                                    ) */
-                                        ),
+                                        ValueListenableBuilder(
+                                            valueListenable: valmamount,
+                                            builder: (BuildContext context,
+                                                String value, Widget child) {
+                                              bool msg = ValidateHelper()
+                                                  .validateAmount(value);
+                                              if (msg) {
+                                                return Text("正しい金額値を入力してください。",
+                                                    style: TextStyle(
+                                                        color: Colors.red));
+                                              }
+                                              return Container();
+                                            }),
                                       ],
                                     ),
                                   ),

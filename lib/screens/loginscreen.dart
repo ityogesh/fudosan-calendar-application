@@ -1,15 +1,13 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:login_fudosan/models/apiRequestModels/login/loginRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/login/loginResponseModel.dart';
 import 'package:login_fudosan/screens/homescreen.dart';
+import 'package:login_fudosan/screens/otp_registration.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
-import 'package:login_fudosan/utils/fontHelper.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcase_widget.dart';
 import 'registration.dart';
 import 'forget_password.dart';
 import 'package:http/http.dart' as http;
@@ -41,14 +39,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   checkUserStatus() async {
     SharedPreferences instance = await SharedPreferences.getInstance();
-    if ((instance.getString('token') != null) &&
-        (instance.getInt('status') == 1)) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => Show(), //HomeScreeen(),
-        ),
-      );
+    if (instance.getString('token') != null) {
+      if (instance.getInt('status') == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => Show(),
+          ),
+        );
+      }
+      else  if (instance.getInt('status') == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => OtpRegistrationScreen(instance.getString('email')),
+          ),
+        );
+      }
     }
   }
 
@@ -135,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         textInputAction: TextInputAction.next,
                         decoration: new InputDecoration(
                           labelText: 'メールアドレス',
-                          labelStyle: /* FontHelper.hintText, */
+                          labelStyle:
                               TextStyle(color: ColorConstant.lHintTextColor),
                         ),
                         validator: (String value) {
@@ -157,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         textInputAction: TextInputAction.done,
                         decoration: new InputDecoration(
                           labelText: 'パスワード',
-                          labelStyle: /* FontHelper.hintText, */
+                          labelStyle:
                               TextStyle(color: ColorConstant.lHintTextColor),
                           suffixIcon: IconButton(
                               icon: passwordVisibility
@@ -247,9 +254,6 @@ class _LoginScreenState extends State<LoginScreen> {
       final Map loginResponse = responseData;
       LoginResponseModel loginResponseModel =
           LoginResponseModel.fromJson(loginResponse);
-     /*  print('Login response: ${loginResponseModel.toJson()}');
-      print('success: $loginResponseModel.success');
-      print('Token : ${loginResponseModel.success.token}'); */
       SharedPreferences instance = await SharedPreferences.getInstance();
       instance.setString("token", loginResponseModel.success.token);
       instance.setString("email", loginResponseModel.userDetails.email);
@@ -260,22 +264,10 @@ class _LoginScreenState extends State<LoginScreen> {
         toastLength: Toast.LENGTH_LONG,
         msg: "ログインに成功しました。",
       );
-      /* ShowCaseWidget(
-        onStart: (index, key) {
-          log('onStart: $index, $key');
-        },
-        onComplete: (index, key) {
-          log('onComplete: $index, $key');
-        },
-        builder: Builder(builder: (context) => HomeScreeen()),
-        autoPlay: true,
-        autoPlayDelay: Duration(seconds: 3),
-        autoPlayLockEnable: true,
-      );*/
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => Show(), //HomeScreeen(),
+          builder: (BuildContext context) => Show(),
         ),
       );
     } else {

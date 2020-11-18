@@ -114,7 +114,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      /*   controller
+      /*  controller
           .animateTo(controller.position.maxScrollExtent,
               duration: new Duration(seconds: 5), curve: new ElasticOutCurve())
           .then((value) => ShowCaseWidget.of(context)
@@ -134,7 +134,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/Homepage_logo.png',
+                'assets/images/HomeScreenLogo.png',
                 height: 35.0,
                 width: 35.0,
               ),
@@ -174,7 +174,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             minWidth: MediaQuery.of(context).size.width * 0.33,
                             child: Showcase(
                               key: _two,
-                              description: '各賃貸/売買ボタンをタップして計算してください。',
+                              description: '各賃貸/売買ボタンをタップ\nして計算してください。',
                               contentPadding: EdgeInsets.all(8.0),
                               showcaseBackgroundColor: ColorConstant.hHighlight,
                               descTextStyle: TextStyle(
@@ -220,7 +220,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                   child: Showcase(
                                     contentPadding: EdgeInsets.all(8.0),
                                     key: _three,
-                                    description: '計算タイプを選択して（>）を押下してください。',
+                                    description: '計算タイプを選択して\n（>）を押下してください。',
                                     showcaseBackgroundColor:
                                         ColorConstant.hHighlight,
                                     descTextStyle: TextStyle(
@@ -512,7 +512,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         ),
         // side: BorderSide(width: 5, color: Colors.green),
       ),
-      elevation: 10.0,
+      elevation: 5.0,
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 6.0),
