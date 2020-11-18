@@ -520,7 +520,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   .validateAmount(value);
                                               if (msg) {
                                                 return Text("正しい金額値を入力してください。",
-                                                    style: TextStyle(
+                                                    style: TextStyle(fontSize: 12.0,
                                                         color: Colors.red));
                                               }
                                               return Container();
@@ -568,24 +568,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                     TextInputAction.done,
 //                                    style: TextStyle(fontSize: 18),
                                                 maxLength: mMaxLength,
-                                                /* validator: (String value) {
-                                                  bool msg = ValidateHelper()
-                                                      .validateAmount(value);
-                                                  if (msg) {
-                                                    FocusScope.of(context)
-                                                        .requestFocus(
-                                                            new FocusNode());
-                                                    Fluttertoast.showToast(
-                                                      toastLength:
-                                                          Toast.LENGTH_LONG,
-                                                      msg: "正しい金額値を入力してください。",
-                                                    );
-                                                  }
-
-                                                  return null;
-                                                },
-                                                autovalidate: true, */
-                                                decoration: InputDecoration(
+                                                  decoration: InputDecoration(
                                                   border: InputBorder.none,
                                                   counterText: "",
                                                 ),
@@ -720,7 +703,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   .validateAmount(value);
                                               if (msg) {
                                                 return Text("正しい金額値を入力してください。",
-                                                    style: TextStyle(
+                                                    style: TextStyle(fontSize: 12.0,
                                                         color: Colors.red));
                                               }
                                               return Container();
