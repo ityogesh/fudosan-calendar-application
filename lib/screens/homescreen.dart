@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/screens/rentalscreen.dart';
+import 'package:login_fudosan/screens/rentalscreen.dart';
+
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
