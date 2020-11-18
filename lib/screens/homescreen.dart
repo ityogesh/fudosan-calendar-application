@@ -474,7 +474,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizedBox(
-        height: 90.0,
+        height: 95.0,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(

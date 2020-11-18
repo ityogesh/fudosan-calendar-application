@@ -703,7 +703,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   .validateAmount(value);
                                               if (msg) {
                                                 return Text("正しい金額値を入力してください。",
-                                                    style: TextStyle(fontSize: 12.0,
+                                                    style: TextStyle(fontSize: 11.0,
                                                         color: Colors.red));
                                               }
                                               return Container();
