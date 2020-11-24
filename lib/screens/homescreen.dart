@@ -26,13 +26,7 @@ class Show extends StatelessWidget {
         autoPlay: true,
         autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
-        onStart: (index, key) {
-          log('onStart: $index, $key');
-        },
-        onComplete: (index, key) {
-          log('onComplete: $index, $key');
-        },
-        onFinish: () {
+       onFinish: () {
           controller.animateTo(controller.position.minScrollExtent,
               duration: new Duration(seconds: 10),
               curve: new ElasticOutCurve());
@@ -476,7 +470,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizedBox(
-        height: 90.0,
+        height: 95.0,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(

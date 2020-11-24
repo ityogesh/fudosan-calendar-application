@@ -16,7 +16,7 @@ class ShowCaseBuyandSell extends StatelessWidget {
     return Scaffold(
       body: ShowCaseWidget(
         autoPlay: true,
-        autoPlayDelay: Duration(seconds: 15),
+        autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
 
         builder: Builder(
@@ -385,7 +385,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               bool msg = ValidateHelper().validateAmount(value);
                               if (msg) {
                                 return Text("正しい金額値を入力してください。",
-                                    style: TextStyle(color: Colors.red));
+                                    style: TextStyle(fontSize: 12.0,color: Colors.red));
                               }
                               return Container();
                             }),
