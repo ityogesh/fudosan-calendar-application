@@ -15,6 +15,7 @@ class DropDownFormField extends FormField<dynamic> {
   final bool filled;
   final EdgeInsets contentPadding;
   final bool enabled;
+  final dynamic items;
 
   DropDownFormField(
       {FormFieldSetter<dynamic> onSaved,
@@ -25,6 +26,7 @@ class DropDownFormField extends FormField<dynamic> {
       this.required = false,
       this.errorText = 'Please select one option',
       this.value,
+      this.items,
       this.dataSource,
       this.textField,
       this.valueField,
