@@ -26,16 +26,19 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   String _myActivity;
+  String _myState;
+  List statesList;
   RegisterResponseModel registerResponseModel = new RegisterResponseModel();
 
   final formKey = new GlobalKey<FormState>();
   final deptKey = new GlobalKey<FormState>();
+  final statekey = new GlobalKey<FormState>();
 
   final userNameController = new TextEditingController();
   final emailController = new TextEditingController();
   final passwordController = new TextEditingController();
   final confirmPasswordController = new TextEditingController();
-  final organizationController = new TextEditingController();
+  final stateController = new TextEditingController();
   final departmentNameController = new TextEditingController();
 
   final FocusNode nameFocus = FocusNode();
@@ -256,26 +259,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SizedBox(
                       height: 5,
                     ),
-                    TextFormField(
-                      readOnly: readonly,
-                      style: readonly
-                          ? TextStyle(color: Colors.grey)
-                          : TextStyle(color: Colors.black),
-                      focusNode: companynameFocus,
-                      controller: organizationController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      decoration: new InputDecoration(
-                        labelText: '会社名*',
+                    Form(
+                      key: statekey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(0.0),
+                            color: Colors.transparent,
+                            child: ButtonTheme(
+                              child: DropdownButtonFormField(
+                                value: _myState,
+                                iconSize: 30,
+                                icon: (null),
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 16,
+                                ),
+                                hint: Text('Select State'),
+                                /* onChanged: (String newValue) {
+                                  setState(() {
+                                    _myState = newValue;
+//                                  _getCitiesList();
+                                    print(_myState);
+                                  });
+                                },*/
+                                items: statesList?.map((item) {
+                                      return new DropdownMenuItem(
+                                        child: new Text(item['name']),
+                                        value: item['id'].toString(),
+                                      );
+                                    })?.toList() ??
+                                    [],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      validator: (String value) {
-                        return ValidateHelper().validateCompanyName(value);
-                      },
-                      onFieldSubmitted: (String value) {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        /*  _fieldFocusChange(
-                            context, companynameFocus, departmentFocus); */
-                      },
                     ),
                     SizedBox(
                       height: 13,
@@ -457,7 +477,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     email = emailController.text;
     password = passwordController.text;
     confirmPassword = confirmPasswordController.text;
-    companyName = organizationController.text;
+//    companyName = organizationController.text;
     department = _myActivity;
     departmentName =
         _myActivity == "その他" ? departmentNameController.text : _myActivity;
