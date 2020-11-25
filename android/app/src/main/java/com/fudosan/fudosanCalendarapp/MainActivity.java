@@ -1,4 +1,4 @@
-package com.example.login_fudosan;
+package com.fudosan.fudosanCalendarapp;
 
 import io.flutter.embedding.android.FlutterActivity;
 
