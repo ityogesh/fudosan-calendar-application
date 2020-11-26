@@ -8,6 +8,7 @@ import 'package:login_fudosan/models/apiRequestModels/register/registerUpdateReq
 import 'package:login_fudosan/models/apiResponseModels/register/registerErrorResponseModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerResponseModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerUpdateResponseModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/register/state_list.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
@@ -71,6 +72,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _myActivity = '';
     progressInit();
     progressStyle();
+    _getStateList();
   }
 
   progressInit() {
@@ -269,24 +271,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             color: Colors.transparent,
                             child: ButtonTheme(
                               child: DropdownButtonFormField(
-                                value: _myState,
-                                iconSize: 30,
-                                icon: (null),
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 16,
-                                ),
+                                value: _myStates,
                                 hint: Text('Select State'),
-                                /* onChanged: (String newValue) {
+                                onChanged: (newValue) {
                                   setState(() {
-                                    _myState = newValue;
-//                                  _getCitiesList();
-                                    print(_myState);
+                                    _myStates = newValue;
+                                    _getStateList();
+                                    print(_myStates);
                                   });
-                                },*/
-                                items: statesList?.map((item) {
+                                },
+                                items: statesLists?.map((item) {
                                       return new DropdownMenuItem(
-                                        child: new Text(item['name']),
+                                        child: new Text(item['stateName']),
                                         value: item['id'].toString(),
                                       );
                                     })?.toList() ??
@@ -436,6 +432,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         autoValidate = true;
       });
     }
+  }
+
+  StateList states = StateList();
+  List statesLists;
+  String _myStates;
+
+  String stateInfoUrl = 'http://106.51.49.160:9093/api/state_list';
+
+  Future<String> _getStateList() async {
+    await http.post(stateInfoUrl).then((response) {
+      var data = json.decode(response.body);
+//      final Map responseValue = data;
+//      states = StateList.fromJson(responseValue);
+
+      print(data);
+      setState(() {
+        statesLists = data;
+        print(statesLists);
+      });
+    });
   }
 
   _doUserRegisatrationUpdate() async {
