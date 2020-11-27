@@ -434,23 +434,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  StateList states = StateList();
+  StatesList states; // = StateList();
   List statesLists;
   String _myStates;
-
-  String stateInfoUrl = 'http://106.51.49.160:9093/api/state_list';
-
   Future<String> _getStateList() async {
-    await http.post(stateInfoUrl).then((response) {
-      var data = json.decode(response.body);
+    await http.post(Constants.stateInfoUrl).then((response) {
+      states = StatesList.fromJson(json.decode(response.body));
+      //  var data = json.decode(response.body);
 //      final Map responseValue = data;
 //      states = StateList.fromJson(responseValue);
-
-      print(data);
-      setState(() {
-        statesLists = data;
-        print(statesLists);
-      });
+      print(states.toJson());
     });
   }
 
