@@ -41,7 +41,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final confirmPasswordController = new TextEditingController();
   final stateController = new TextEditingController();
   final departmentNameController = new TextEditingController();
-
+  final organizationController = new TextEditingController();
   final FocusNode nameFocus = FocusNode();
   final FocusNode emailaddressFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
@@ -66,6 +66,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       companyName,
       department,
       departmentName;
+
+  List<dynamic> stateDropDownValues = List<dynamic>();
 
   void initState() {
     super.initState();
@@ -261,7 +263,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     SizedBox(
                       height: 5,
                     ),
-                    Form(
+                    TextFormField(
+                      readOnly: readonly,
+                      style: readonly
+                          ? TextStyle(color: Colors.grey)
+                          : TextStyle(color: Colors.black),
+                      focusNode: companynameFocus,
+                      controller: organizationController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      decoration: new InputDecoration(
+                        labelText: '会社名*',
+                      ),
+                      validator: (String value) {
+                        return ValidateHelper().validateCompanyName(value);
+                      },
+                      onFieldSubmitted: (String value) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        /*  _fieldFocusChange(
+                            context, companynameFocus, departmentFocus); */
+                      },
+                    ),
+                    SizedBox(
+                      height: 13,
+                    ),
+                    /* Form(
                       key: statekey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -271,25 +297,60 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             color: Colors.transparent,
                             child: ButtonTheme(
                               child: DropdownButtonFormField(
+                                icon: Icon(Icons.keyboard_arrow_down),
                                 value: _myStates,
                                 hint: Text('Select State'),
                                 onChanged: (newValue) {
                                   setState(() {
                                     _myStates = newValue;
-                                    _getStateList();
+                                  //  _getStateList();
                                     print(_myStates);
                                   });
                                 },
-                                items: statesLists?.map((item) {
+                                items: stateDropDownValues?.map((item) {
                                       return new DropdownMenuItem(
-                                        child: new Text(item['stateName']),
-                                        value: item['id'].toString(),
+                                        child: new Text(item),
+                                        value: item,
                                       );
                                     })?.toList() ??
                                     [],
                               ),
                             ),
                           )
+                        ],
+                      ),
+                    ), */
+                    Form(
+                      key: statekey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(0.0),
+                            color: Colors.transparent,
+                            child: DropDownFormField(
+                              enabled: !readonly,
+                              titleText: null,
+                              hintText: readonly ? _myActivity : '勤務地（都道府県）*',
+                              onSaved: (value) {
+                                setState(() {
+                                  _myStates = value;
+                                  print(_myStates);
+                                });
+                              },
+                              value: _myState,
+                              onChanged: (value) {
+                                setState(() {
+                                  _myState = value;
+                                  print(_myStates);
+                                });
+                              },
+                              dataSource: stateDropDownValues,
+                              islist: true,
+                              textField: 'display',
+                              valueField: 'value',
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -437,13 +498,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   StatesList states; // = StateList();
   List statesLists;
   String _myStates;
-  Future<String> _getStateList() async {
+  _getStateList() async {
     await http.post(Constants.stateInfoUrl).then((response) {
-      states = StatesList.fromJson(json.decode(response.body));
-      //  var data = json.decode(response.body);
-//      final Map responseValue = data;
-//      states = StateList.fromJson(responseValue);
-      print(states.toJson());
+      try {
+        states = StatesList.fromJson(json.decode(response.body));
+        print(states.toJson());
+        for (var stateList in states.stateList) {
+          stateDropDownValues.add(stateList.stateName);
+        }
+        setState(() {});
+      } catch (e) {
+        print(e);
+      }
     });
   }
 
@@ -486,8 +552,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     email = emailController.text;
     password = passwordController.text;
     confirmPassword = confirmPasswordController.text;
-//    companyName = organizationController.text;
-    department = _myActivity;
+    companyName = organizationController.text;
+//    department = _myActivity;
     departmentName =
         _myActivity == "その他" ? departmentNameController.text : _myActivity;
     registerRequestModel = new RegisterRequestModel(

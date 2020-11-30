@@ -16,6 +16,7 @@ class DropDownFormField extends FormField<dynamic> {
   final EdgeInsets contentPadding;
   final bool enabled;
   final dynamic items;
+  final bool islist;
 
   DropDownFormField(
       {FormFieldSetter<dynamic> onSaved,
@@ -33,6 +34,7 @@ class DropDownFormField extends FormField<dynamic> {
       this.onChanged,
       this.filled = true,
       this.enabled = true,
+      this.islist = false,
       this.contentPadding = const EdgeInsets.fromLTRB(0, 0, 0, 0)})
       : super(
           onSaved: onSaved,
@@ -72,12 +74,19 @@ class DropDownFormField extends FormField<dynamic> {
                                     state.didChange(newValue);
                                     onChanged(newValue);
                                   },
-                                  items: dataSource.map((item) {
-                                    return DropdownMenuItem<dynamic>(
-                                      value: item[valueField],
-                                      child: Text(item[textField]),
-                                    );
-                                  }).toList(),
+                                  items: islist
+                                      ? dataSource.map((item) {
+                                          return DropdownMenuItem<dynamic>(
+                                            value: item,
+                                            child: Text(item),
+                                          );
+                                        }).toList()
+                                      : dataSource.map((item) {
+                                          return DropdownMenuItem<dynamic>(
+                                            value: item[valueField],
+                                            child: Text(item[textField]),
+                                          );
+                                        }).toList(),
                                 )
                               : DropdownButton<dynamic>(
                                   icon: Icon(

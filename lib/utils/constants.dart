@@ -11,7 +11,7 @@ class Constants {
   static const String forgot_password_Otp_URL = base_URL + '/email_forgot_otp';
   static const String forgot_password_Change_URL =
       base_URL + '/forgot_password';
-  static const String stateInfoUrl = 'http://106.51.49.160:9093/api/state_list';
+  static const String stateInfoUrl = base_URL + '/state_list';
   static const String progress_msg = 'お待ちください';
   
 }
