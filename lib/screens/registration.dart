@@ -26,9 +26,6 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  String _myActivity;
-  String _myState;
-  List statesList;
   RegisterResponseModel registerResponseModel = new RegisterResponseModel();
 
   final formKey = new GlobalKey<FormState>();
@@ -65,15 +62,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       confirmPassword,
       companyName,
       department,
+      sateLocation,
+      _myActivity,
+      _myState,
       departmentName;
 
   List<dynamic> stateDropDownValues = List<dynamic>();
+  StatesList states;
+  int status = 0;
 
   void initState() {
     super.initState();
     _myActivity = '';
+    _myState = '';
     progressInit();
     progressStyle();
+    _progressDialog.show();
     _getStateList();
   }
 
@@ -99,6 +103,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (status == 0) {
+        await _progressDialog.show();
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -331,18 +340,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: DropDownFormField(
                               enabled: !readonly,
                               titleText: null,
-                              hintText: readonly ? _myActivity : '勤務地（都道府県）*',
+                              hintText: readonly ? _myState : '勤務地（都道府県）*',
                               onSaved: (value) {
                                 setState(() {
-                                  _myStates = value;
-                                  print(_myStates);
+                                  _myState = value;
+                                  print(_myState);
                                 });
                               },
                               value: _myState,
                               onChanged: (value) {
                                 setState(() {
                                   _myState = value;
-                                  print(_myStates);
+                                  print(_myState);
                                 });
                               },
                               dataSource: stateDropDownValues,
@@ -495,9 +504,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  StatesList states; // = StateList();
-  List statesLists;
-  String _myStates;
   _getStateList() async {
     await http.post(Constants.stateInfoUrl).then((response) {
       try {
@@ -506,7 +512,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         for (var stateList in states.stateList) {
           stateDropDownValues.add(stateList.stateName);
         }
-        setState(() {});
+        setState(() {
+          _progressDialog.hide();
+          status = 1;
+        });
       } catch (e) {
         print(e);
       }
@@ -553,15 +562,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     password = passwordController.text;
     confirmPassword = confirmPasswordController.text;
     companyName = organizationController.text;
-//    department = _myActivity;
+    sateLocation = _myState;
+    department = _myActivity;
     departmentName =
         _myActivity == "その他" ? departmentNameController.text : _myActivity;
+
     registerRequestModel = new RegisterRequestModel(
         fullname: userName,
         email: email,
         password: password,
         cPassword: confirmPassword,
         companyName: companyName,
+        stateList: sateLocation,
         department: departmentName);
 
     var response = await http.post(Constants.register_URL,

@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
 class RegisterRequestModel {
   String fullname;
   String email;
   String password;
   String cPassword;
   String companyName;
+  String stateList;
   String department;
 
   RegisterRequestModel(
@@ -14,6 +13,7 @@ class RegisterRequestModel {
       this.password,
       this.cPassword,
       this.companyName,
+      this.stateList,
       this.department});
 
   RegisterRequestModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +22,7 @@ class RegisterRequestModel {
     password = json['password'];
     cPassword = json['c_password'];
     companyName = json['company_name'];
+    stateList = json['state_list'];
     department = json['department'];
   }
 
@@ -32,6 +33,7 @@ class RegisterRequestModel {
     data['password'] = this.password;
     data['c_password'] = this.cPassword;
     data['company_name'] = this.companyName;
+    data['state_list'] = this.stateList;
     data['department'] = this.department;
     return data;
   }

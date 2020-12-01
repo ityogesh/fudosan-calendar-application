@@ -24,6 +24,7 @@ class Success {
   String token;
   String fullname;
   String companyName;
+  String stateList;
   int status;
   String department;
 
@@ -31,6 +32,7 @@ class Success {
       {this.token,
       this.fullname,
       this.companyName,
+      this.stateList,
       this.status,
       this.department});
 
@@ -38,6 +40,7 @@ class Success {
     token = json['token'];
     fullname = json['fullname'];
     companyName = json['company_name'];
+    stateList = json['state_list'];
     status = json['status'];
     department = json['department'];
   }
@@ -47,6 +50,7 @@ class Success {
     data['token'] = this.token;
     data['fullname'] = this.fullname;
     data['company_name'] = this.companyName;
+    data['state_list'] = this.stateList;
     data['status'] = this.status;
     data['department'] = this.department;
     return data;
