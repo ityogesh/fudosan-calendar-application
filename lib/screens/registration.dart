@@ -39,6 +39,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final emailController = new TextEditingController();
   final passwordController = new TextEditingController();
   final confirmPasswordController = new TextEditingController();
+  final organizationController = new TextEditingController();
   final stateController = new TextEditingController();
   final departmentNameController = new TextEditingController();
 
@@ -440,10 +441,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Future<String> _getStateList() async {
     await http.post(Constants.stateInfoUrl).then((response) {
       states = StatesList.fromJson(json.decode(response.body));
+      print(states.toJson());
       //  var data = json.decode(response.body);
 //      final Map responseValue = data;
 //      states = StateList.fromJson(responseValue);
-      print(states.toJson());
+      setState(() {
+//        statesLists = states;
+      });
     });
   }
 
@@ -486,7 +490,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     email = emailController.text;
     password = passwordController.text;
     confirmPassword = confirmPasswordController.text;
-//    companyName = organizationController.text;
+    companyName = organizationController.text;
     department = _myActivity;
     departmentName =
         _myActivity == "その他" ? departmentNameController.text : _myActivity;

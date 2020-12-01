@@ -36,6 +36,7 @@ class BuyingSellingScreen extends StatefulWidget {
 
 class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   TextEditingController textEditingController = TextEditingController();
+  TextEditingController fieldEditingController = TextEditingController();
   TextStyle cardSmallText = TextStyle(color: Colors.white, fontSize: 18.0);
   TextStyle cardBigText = TextStyle(
       color: Colors.white, fontSize: 21.0, fontWeight: FontWeight.bold);
@@ -50,6 +51,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   final ValueNotifier<double> bamount = ValueNotifier<double>(0);
   final ValueNotifier<String> taxamount = ValueNotifier<String>("0");
   FocusNode taxFocus = FocusNode();
+  FocusNode taxesFocus = FocusNode();
   DateTime sellDate;
   int maxLength = 10;
   final GlobalKey _one = GlobalKey();
@@ -385,7 +387,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               bool msg = ValidateHelper().validateAmount(value);
                               if (msg) {
                                 return Text("正しい金額値を入力してください。",
-                                    style: TextStyle(fontSize: 12.0,color: Colors.red));
+                                    style: TextStyle(
+                                        fontSize: 12.0, color: Colors.red));
                               }
                               return Container();
                             }),
@@ -394,6 +397,93 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 10.0),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      focusNode: taxesFocus,
+                      controller: fieldEditingController,
+                      keyboardType: TextInputType.numberWithOptions(
+                          signed: true, decimal: true), // TextInputType.number,
+                      maxLength: maxLength,
+                      textAlign: TextAlign.right,
+                      decoration: InputDecoration(
+                          counterText: "", border: InputBorder.none),
+                      onChanged: (String value) {
+                        if (value == null || value == "") {
+                          samount.value = 0;
+                          bamount.value = 0;
+                          taxamount.value = "0";
+                        }
+                        /*else {
+                          taxamount.value = textEditingController.text;
+                          var rev = japaneseCurrency
+                              .parse(textEditingController.text);
+                          int price = int.parse(rev.toStringAsFixed(0));
+                          int totaldays = date.year % 4 == 0 ? 366 : 365;
+                          double eachdayprice = price / totaldays;
+                          samount.value = eachdayprice * completedDays;
+                          bamount.value = eachdayprice * remaingDays;
+                        }*/
+                      },
+                      onFieldSubmitted: (String v) {
+                        taxesFocus.unfocus();
+                      },
+                      onEditingComplete: () {
+                        /*
+                        taxamount.value = textEditingController.text;
+                        var rev =
+                            japaneseCurrency.parse(textEditingController.text);
+                        // print("$rev");
+                        int price = int.parse(rev.toStringAsFixed(0));
+                        int totaldays = date.year % 4 == 0 ? 366 : 365;
+                        double eachdayprice = price / totaldays;
+                        samount.value = eachdayprice * completedDays;
+                        bamount.value = eachdayprice * remaingDays;
+                        String val =
+                            (japaneseCurrency.format(price)).toString();
+                        // print("$val");
+                        setState(() {
+                          maxLength = textEditingController.text.length == 10
+                              ? 13
+                              : textEditingController.text.length >= 7
+                                  ? 12
+                                  : textEditingController.text.length >= 4
+                                      ? 11
+                                      : 10;
+                        });
+                        textEditingController.value = TextEditingValue(
+                          text: "$val",
+                          selection: TextSelection.fromPosition(
+                            TextPosition(offset: val.length),
+                          ),
+                        );*/
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      readOnly: true,
+                      initialValue: "円",
+                      style: bottomContainerText,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    ),
+                    /*  Text("円", style: bottomContainerText) */
+                  ),
+                ],
+              ),
+              ValueListenableBuilder(
+                  valueListenable: taxamount,
+                  builder: (BuildContext context, String value, Widget child) {
+                    bool msg = ValidateHelper().validateAmount(value);
+                    if (msg) {
+                      return Text("正しい金額値を入力してください。",
+                          style: TextStyle(fontSize: 12.0, color: Colors.red));
+                    }
+                    return Container();
+                  }),
               SizedBox(height: 10.0),
               Container(
                 color: ColorConstant.priceBackground,

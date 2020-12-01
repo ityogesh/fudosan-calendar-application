@@ -28,7 +28,7 @@ class ValidateHelper {
     } else if (value.length < 8) {
       return "パスワードは８文字以上で入力してください。";
     } else if (!passwordRegex.hasMatch(value)) {
-      return "パスワードには、大文字、小文字、数字、特殊文字を1つ含める必要があります。";
+      return "パスワードには、大文字、小文字、数字、特殊文字を\n1つ含める必要があります";
     } else
       return null;
   }
@@ -37,7 +37,7 @@ class ValidateHelper {
     if (value.length == 0) {
       return "パスワード(確認)を入力してください。";
     } else if (value != cpassword) {
-      return "パスワードが一致がしませんので正しいパスワードを入力してください。";
+      return "パスワードが一致がしませんので正しいパスワードを\n入力してください。";
     } else {
       return null;
     }
