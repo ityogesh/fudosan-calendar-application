@@ -39,9 +39,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final emailController = new TextEditingController();
   final passwordController = new TextEditingController();
   final confirmPasswordController = new TextEditingController();
+  final organizationController = new TextEditingController();
   final stateController = new TextEditingController();
   final departmentNameController = new TextEditingController();
-  final organizationController = new TextEditingController();
   final FocusNode nameFocus = FocusNode();
   final FocusNode emailaddressFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
