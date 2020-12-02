@@ -106,7 +106,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            SpinKitFadingFour(color: ColorConstant.rButton),
+            SpinKitThreeBounce(
+              color: ColorConstant.rButton,
+              size: 30.0,
+            ),
             //buildLoadingIndicator()
           ],
         ),
