@@ -342,7 +342,7 @@ class _RentalScreenState extends State<RentalScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("賃料/月*", style: bottomContainerText),
+                                Text("賃料/月", style: bottomContainerText),
                                 Container(
                                   alignment: Alignment.center,
                                   // height: 50.0,
@@ -535,7 +535,7 @@ class _RentalScreenState extends State<RentalScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("共益費/月*", style: bottomContainerText),
+                                Text("共益費/月", style: bottomContainerText),
                                 Container(
                                   // height: 50.0,
                                   width:

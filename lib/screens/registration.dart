@@ -13,7 +13,7 @@ import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/dropdown.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,7 +77,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _myState = '';
     progressInit();
     progressStyle();
-    _progressDialog.show();
     _getStateList();
   }
 
@@ -101,13 +100,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
+  Widget buildLoading() {
+    return Center(
+      child: SingleChildScrollView(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SpinKitFadingFour(color: ColorConstant.rButton),
+            //buildLoadingIndicator()
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    /*  WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (status == 0) {
         await _progressDialog.show();
       }
-    });
+    }); */
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -134,169 +147,173 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           )
         ],
       ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
-        child: Form(
-          key: formKey,
-          autovalidate: autoValidate,
-          child: Center(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '新規ユーザー登録',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      readOnly: readonly,
-                      style: readonly
-                          ? TextStyle(color: Colors.grey)
-                          : TextStyle(color: Colors.black),
-                      focusNode: nameFocus,
-                      controller: userNameController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      decoration: new InputDecoration(
-                        labelText: '氏名*',
-                      ),
-                      validator: (String value) {
-                        return ValidateHelper().validateName(value);
-                      },
-                      onFieldSubmitted: (String value) {
-                        _fieldFocusChange(
-                            context, nameFocus, emailaddressFocus);
-                      },
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      focusNode: emailaddressFocus,
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: readonly
-                          ? TextInputAction.done
-                          : TextInputAction.next,
-                      decoration: new InputDecoration(
-                        labelText: 'メールアドレス*',
-                      ),
-                      validator: (String value) {
-                        return ValidateHelper().validateEmail(value);
-                      },
-                      onFieldSubmitted: (String value) {
-                        _fieldFocusChange(
-                            context, emailaddressFocus, passwordFocus);
-                      },
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      readOnly: readonly,
-                      style: readonly
-                          ? TextStyle(color: Colors.grey)
-                          : TextStyle(color: Colors.black),
-                      focusNode: passwordFocus,
-                      controller: passwordController,
-                      obscureText: passwordVisibility,
-                      textInputAction: TextInputAction.next,
-                      maxLength: 14,
-                      decoration: new InputDecoration(
-                        counterText: "",
-                        labelText: 'パスワード*',
-                        suffixIcon: IconButton(
-                            icon: passwordVisibility
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                            onPressed: () {
-                              setState(() {
-                                passwordVisibility = !passwordVisibility;
-                              });
-                            }),
-                      ),
-                      validator: (String value) {
-                        return ValidateHelper().validatePassword(value);
-                      },
-                      onFieldSubmitted: (String value) {
-                        _fieldFocusChange(
-                            context, passwordFocus, confirmpasswordFocus);
-                      },
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      readOnly: readonly,
-                      style: readonly
-                          ? TextStyle(color: Colors.grey)
-                          : TextStyle(color: Colors.black),
-                      focusNode: confirmpasswordFocus,
-                      controller: confirmPasswordController,
-                      obscureText: confirmPasswordVisibility,
-                      textInputAction: TextInputAction.next,
-                      decoration: new InputDecoration(
-                        labelText: 'パスワードの再確認*',
-                        suffixIcon: IconButton(
-                            icon: confirmPasswordVisibility
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                            onPressed: () {
-                              setState(() {
-                                confirmPasswordVisibility =
-                                    !confirmPasswordVisibility;
-                              });
-                            }),
-                      ),
-                      validator: (
-                        String value,
-                      ) {
-                        return ValidateHelper().validateConfirmPassword(
-                            value, passwordController.text);
-                      },
-                      onFieldSubmitted: (String value) {
-                        _fieldFocusChange(
-                            context, confirmpasswordFocus, companynameFocus);
-                      },
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      readOnly: readonly,
-                      style: readonly
-                          ? TextStyle(color: Colors.grey)
-                          : TextStyle(color: Colors.black),
-                      focusNode: companynameFocus,
-                      controller: organizationController,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      decoration: new InputDecoration(
-                        labelText: '会社名*',
-                      ),
-                      validator: (String value) {
-                        return ValidateHelper().validateCompanyName(value);
-                      },
-                      onFieldSubmitted: (String value) {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        /*  _fieldFocusChange(
+      body: status == 0
+          ? buildLoading()
+          : GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: Form(
+                key: formKey,
+                autovalidate: autoValidate,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '新規ユーザー登録',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 25),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            readOnly: readonly,
+                            style: readonly
+                                ? TextStyle(color: Colors.grey)
+                                : TextStyle(color: Colors.black),
+                            focusNode: nameFocus,
+                            controller: userNameController,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.next,
+                            decoration: new InputDecoration(
+                              labelText: '氏名*',
+                            ),
+                            validator: (String value) {
+                              return ValidateHelper().validateName(value);
+                            },
+                            onFieldSubmitted: (String value) {
+                              _fieldFocusChange(
+                                  context, nameFocus, emailaddressFocus);
+                            },
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            focusNode: emailaddressFocus,
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: readonly
+                                ? TextInputAction.done
+                                : TextInputAction.next,
+                            decoration: new InputDecoration(
+                              labelText: 'メールアドレス*',
+                            ),
+                            validator: (String value) {
+                              return ValidateHelper().validateEmail(value);
+                            },
+                            onFieldSubmitted: (String value) {
+                              _fieldFocusChange(
+                                  context, emailaddressFocus, passwordFocus);
+                            },
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            readOnly: readonly,
+                            style: readonly
+                                ? TextStyle(color: Colors.grey)
+                                : TextStyle(color: Colors.black),
+                            focusNode: passwordFocus,
+                            controller: passwordController,
+                            obscureText: passwordVisibility,
+                            textInputAction: TextInputAction.next,
+                            maxLength: 14,
+                            decoration: new InputDecoration(
+                              counterText: "",
+                              labelText: 'パスワード*',
+                              suffixIcon: IconButton(
+                                  icon: passwordVisibility
+                                      ? Icon(Icons.visibility_off)
+                                      : Icon(Icons.visibility),
+                                  onPressed: () {
+                                    setState(() {
+                                      passwordVisibility = !passwordVisibility;
+                                    });
+                                  }),
+                            ),
+                            validator: (String value) {
+                              return ValidateHelper().validatePassword(value);
+                            },
+                            onFieldSubmitted: (String value) {
+                              _fieldFocusChange(
+                                  context, passwordFocus, confirmpasswordFocus);
+                            },
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            readOnly: readonly,
+                            style: readonly
+                                ? TextStyle(color: Colors.grey)
+                                : TextStyle(color: Colors.black),
+                            focusNode: confirmpasswordFocus,
+                            controller: confirmPasswordController,
+                            obscureText: confirmPasswordVisibility,
+                            textInputAction: TextInputAction.next,
+                            decoration: new InputDecoration(
+                              labelText: 'パスワードの再確認*',
+                              suffixIcon: IconButton(
+                                  icon: confirmPasswordVisibility
+                                      ? Icon(Icons.visibility_off)
+                                      : Icon(Icons.visibility),
+                                  onPressed: () {
+                                    setState(() {
+                                      confirmPasswordVisibility =
+                                          !confirmPasswordVisibility;
+                                    });
+                                  }),
+                            ),
+                            validator: (
+                              String value,
+                            ) {
+                              return ValidateHelper().validateConfirmPassword(
+                                  value, passwordController.text);
+                            },
+                            onFieldSubmitted: (String value) {
+                              _fieldFocusChange(context, confirmpasswordFocus,
+                                  companynameFocus);
+                            },
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            readOnly: readonly,
+                            style: readonly
+                                ? TextStyle(color: Colors.grey)
+                                : TextStyle(color: Colors.black),
+                            focusNode: companynameFocus,
+                            controller: organizationController,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            decoration: new InputDecoration(
+                              labelText: '会社名*',
+                            ),
+                            validator: (String value) {
+                              return ValidateHelper()
+                                  .validateCompanyName(value);
+                            },
+                            onFieldSubmitted: (String value) {
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                              /*  _fieldFocusChange(
                             context, companynameFocus, departmentFocus); */
-                      },
-                    ),
-                    SizedBox(
-                      height: 13,
-                    ),
-                    /* Form(
+                            },
+                          ),
+                          SizedBox(
+                            height: 13,
+                          ),
+                          /* Form(
                       key: statekey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -329,160 +346,163 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                       ),
                     ), */
-                    Form(
-                      key: statekey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(0.0),
-                            color: Colors.transparent,
-                            child: DropDownFormField(
-                              enabled: !readonly,
-                              titleText: null,
-                              hintText: readonly ? _myState : '勤務地（都道府県）*',
-                              onSaved: (value) {
-                                setState(() {
-                                  _myState = value;
-                                  print(_myState);
-                                });
-                              },
-                              value: _myState,
-                              onChanged: (value) {
-                                setState(() {
-                                  _myState = value;
-                                  print(_myState);
-                                });
-                              },
-                              dataSource: stateDropDownValues,
-                              islist: true,
-                              textField: 'display',
-                              valueField: 'value',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 13,
-                    ),
-                    Form(
-                      key: deptKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(0.0),
-                            color: Colors.transparent,
-                            child: DropDownFormField(
-                              enabled: !readonly,
-                              titleText: null,
-                              hintText: readonly ? _myActivity : '部署名（任意) ',
-                              onSaved: (value) {
-                                setState(() {
-                                  _myActivity = value;
-                                });
-                              },
-                              value: _myActivity,
-                              onChanged: (value) {
-                                if (value == "その他") {
-                                  setState(() {
-                                    _myActivity = value;
-                                    visible = true; // !visible;
-                                  });
-                                } else {
-                                  setState(() {
-                                    _myActivity = value;
-                                    visible = false;
-                                  });
-                                }
-                              },
-                              dataSource: [
-                                {
-                                  "display": "賃貸",
-                                  "value": "賃貸",
-                                },
-                                {
-                                  "display": "販売（売買）",
-                                  "value": "販売（売買）",
-                                },
-                                {
-                                  "display": "企画開発",
-                                  "value": "企画開発",
-                                },
-                                {
-                                  "display": "資産運用",
-                                  "value": "資産運用",
-                                },
-                                {
-                                  "display": "賃貸管理",
-                                  "value": "賃貸管理",
-                                },
-                                {
-                                  "display": "物流",
-                                  "value": "物流",
-                                },
-                                {
-                                  "display": "総務・経理",
-                                  "value": "総務・経理",
-                                },
-                                {
-                                  "display": "その他",
-                                  "value": "その他",
-                                },
+                          Form(
+                            key: statekey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(0.0),
+                                  color: Colors.transparent,
+                                  child: DropDownFormField(
+                                    enabled: !readonly,
+                                    titleText: null,
+                                    hintText:
+                                        readonly ? _myState : '勤務地（都道府県）*',
+                                    onSaved: (value) {
+                                      setState(() {
+                                        _myState = value;
+                                        print(_myState);
+                                      });
+                                    },
+                                    value: _myState,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _myState = value;
+                                        print(_myState);
+                                      });
+                                    },
+                                    dataSource: stateDropDownValues,
+                                    islist: true,
+                                    textField: 'display',
+                                    valueField: 'value',
+                                  ),
+                                ),
                               ],
-                              textField: 'display',
-                              valueField: 'value',
                             ),
                           ),
+                          SizedBox(
+                            height: 13,
+                          ),
+                          Form(
+                            key: deptKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(0.0),
+                                  color: Colors.transparent,
+                                  child: DropDownFormField(
+                                    enabled: !readonly,
+                                    titleText: null,
+                                    hintText:
+                                        readonly ? _myActivity : '部署名（任意) ',
+                                    onSaved: (value) {
+                                      setState(() {
+                                        _myActivity = value;
+                                      });
+                                    },
+                                    value: _myActivity,
+                                    onChanged: (value) {
+                                      if (value == "その他") {
+                                        setState(() {
+                                          _myActivity = value;
+                                          visible = true; // !visible;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          _myActivity = value;
+                                          visible = false;
+                                        });
+                                      }
+                                    },
+                                    dataSource: [
+                                      {
+                                        "display": "賃貸",
+                                        "value": "賃貸",
+                                      },
+                                      {
+                                        "display": "販売（売買）",
+                                        "value": "販売（売買）",
+                                      },
+                                      {
+                                        "display": "企画開発",
+                                        "value": "企画開発",
+                                      },
+                                      {
+                                        "display": "資産運用",
+                                        "value": "資産運用",
+                                      },
+                                      {
+                                        "display": "賃貸管理",
+                                        "value": "賃貸管理",
+                                      },
+                                      {
+                                        "display": "物流",
+                                        "value": "物流",
+                                      },
+                                      {
+                                        "display": "総務・経理",
+                                        "value": "総務・経理",
+                                      },
+                                      {
+                                        "display": "その他",
+                                        "value": "その他",
+                                      },
+                                    ],
+                                    textField: 'display',
+                                    valueField: 'value',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Visibility(
+                            visible: visible,
+                            child: TextFormField(
+                                readOnly: readonly,
+                                style: readonly
+                                    ? TextStyle(color: Colors.grey)
+                                    : TextStyle(color: Colors.black),
+                                controller: departmentNameController,
+                                decoration: new InputDecoration(
+                                  labelText: '部署名（任意）',
+                                ),
+                                onFieldSubmitted: (String value) {
+                                  validateCredentials();
+                                }),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            height: 50,
+                            child: RaisedButton(
+                              child: Text(
+                                '登録完了',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              color: ColorConstant.rButton,
+                              onPressed: () {
+                                validateCredentials();
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Visibility(
-                      visible: visible,
-                      child: TextFormField(
-                          readOnly: readonly,
-                          style: readonly
-                              ? TextStyle(color: Colors.grey)
-                              : TextStyle(color: Colors.black),
-                          controller: departmentNameController,
-                          decoration: new InputDecoration(
-                            labelText: '部署名（任意）',
-                          ),
-                          onFieldSubmitted: (String value) {
-                            validateCredentials();
-                          }),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      child: RaisedButton(
-                        child: Text(
-                          '登録完了',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        color: ColorConstant.rButton,
-                        onPressed: () {
-                          validateCredentials();
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -513,7 +533,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           stateDropDownValues.add(stateList.stateName);
         }
         setState(() {
-          _progressDialog.hide();
           status = 1;
         });
       } catch (e) {

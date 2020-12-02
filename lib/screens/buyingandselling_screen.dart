@@ -35,8 +35,8 @@ class BuyingSellingScreen extends StatefulWidget {
 }
 
 class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
-  TextEditingController textEditingController = TextEditingController();
-  TextEditingController fieldEditingController = TextEditingController();
+  TextEditingController landtextEditingController = TextEditingController();
+  TextEditingController buildingTextController = TextEditingController();
   TextStyle cardSmallText = TextStyle(color: Colors.white, fontSize: 18.0);
   TextStyle cardBigText = TextStyle(
       color: Colors.white, fontSize: 21.0, fontWeight: FontWeight.bold);
@@ -46,12 +46,14 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   int completedDays;
   int remaingDays;
   DateTime date;
+  double landTaxEachDayPrice, buildingTaxEachDayPrice;
   var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
   final ValueNotifier<double> samount = ValueNotifier<double>(0);
   final ValueNotifier<double> bamount = ValueNotifier<double>(0);
-  final ValueNotifier<String> taxamount = ValueNotifier<String>("0");
-  FocusNode taxFocus = FocusNode();
-  FocusNode taxesFocus = FocusNode();
+  final ValueNotifier<String> landTaxAmount = ValueNotifier<String>("0");
+  final ValueNotifier<String> buildingTaxAmount = ValueNotifier<String>("0");
+  FocusNode landTaxFocus = FocusNode();
+  FocusNode buildingTaxFocus = FocusNode();
   DateTime sellDate;
   int maxLength = 10;
   final GlobalKey _one = GlobalKey();
@@ -60,6 +62,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   @override
   void initState() {
     super.initState();
+    landTaxEachDayPrice = 0;
+    buildingTaxEachDayPrice = 0;
     date = widget.selectedDate;
     completedDays = date.difference(DateTime(date.year, 1, 1)).inDays;
     remaingDays =
@@ -267,11 +271,11 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                 ),
               ),
               Text(
-                "固定資産税（年額）*",
+                "固定資産税（年額）",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
               ),
               SizedBox(height: 10.0),
-              Container(
+              /*  Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 child: Card(
                   shadowColor: ColorConstant.shadowColor,
@@ -396,94 +400,347 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10.0),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: TextFormField(
-                      focusNode: taxesFocus,
-                      controller: fieldEditingController,
-                      keyboardType: TextInputType.numberWithOptions(
-                          signed: true, decimal: true), // TextInputType.number,
-                      maxLength: maxLength,
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                          counterText: "", border: InputBorder.none),
-                      onChanged: (String value) {
-                        if (value == null || value == "") {
-                          samount.value = 0;
-                          bamount.value = 0;
-                          taxamount.value = "0";
-                        }
-                        /*else {
-                          taxamount.value = textEditingController.text;
-                          var rev = japaneseCurrency
-                              .parse(textEditingController.text);
-                          int price = int.parse(rev.toStringAsFixed(0));
-                          int totaldays = date.year % 4 == 0 ? 366 : 365;
-                          double eachdayprice = price / totaldays;
-                          samount.value = eachdayprice * completedDays;
-                          bamount.value = eachdayprice * remaingDays;
-                        }*/
-                      },
-                      onFieldSubmitted: (String v) {
-                        taxesFocus.unfocus();
-                      },
-                      onEditingComplete: () {
-                        /*
-                        taxamount.value = textEditingController.text;
-                        var rev =
-                            japaneseCurrency.parse(textEditingController.text);
-                        // print("$rev");
-                        int price = int.parse(rev.toStringAsFixed(0));
-                        int totaldays = date.year % 4 == 0 ? 366 : 365;
-                        double eachdayprice = price / totaldays;
-                        samount.value = eachdayprice * completedDays;
-                        bamount.value = eachdayprice * remaingDays;
-                        String val =
-                            (japaneseCurrency.format(price)).toString();
-                        // print("$val");
-                        setState(() {
-                          maxLength = textEditingController.text.length == 10
-                              ? 13
-                              : textEditingController.text.length >= 7
-                                  ? 12
-                                  : textEditingController.text.length >= 4
-                                      ? 11
-                                      : 10;
-                        });
-                        textEditingController.value = TextEditingValue(
-                          text: "$val",
-                          selection: TextSelection.fromPosition(
-                            TextPosition(offset: val.length),
+              ), */
+              Showcase(
+                key: _one,
+                description: '金額を入力すると売買の料金が計算されて表示される。',
+                disposeOnTap: true,
+                contentPadding: EdgeInsets.all(8.0),
+                showcaseBackgroundColor: ColorConstant.hHighlight,
+                descTextStyle: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                onTargetClick: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("土地", style: bottomContainerText),
+                          Container(
+                            alignment: Alignment.center,
+                            // height: 50.0,
+                            width: MediaQuery.of(context).size.width / 1.75,
+                            child: Card(
+                              elevation: 15.0,
+                              shadowColor: ColorConstant.shadowColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: TextFormField(
+                                          focusNode: landTaxFocus,
+                                          controller: landtextEditingController,
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(
+                                                  signed: true, decimal: true),
+                                          maxLength: maxLength,
+                                          textAlign: TextAlign.right,
+                                          decoration: InputDecoration(
+                                              counterText: "",
+                                              border: InputBorder.none),
+                                          onChanged: (String value) {
+                                            if (value == null || value == "") {
+                                              /*  samount.value = 0;
+                                              bamount.value = 0;
+                                              */
+                                              landTaxAmount.value = "0";
+                                              samount.value =
+                                                  (buildingTaxEachDayPrice *
+                                                      completedDays);
+                                              bamount.value =
+                                                  (buildingTaxEachDayPrice *
+                                                      remaingDays);
+                                            } else {
+                                              landTaxAmount.value =
+                                                  landtextEditingController
+                                                      .text;
+                                              var rev = japaneseCurrency.parse(
+                                                  landtextEditingController
+                                                      .text);
+                                              int price = int.parse(
+                                                  rev.toStringAsFixed(0));
+                                              int totaldays = date.year % 4 == 0
+                                                  ? 366
+                                                  : 365;
+
+                                              landTaxEachDayPrice =
+                                                  price / totaldays;
+                                              samount.value =
+                                                  (buildingTaxEachDayPrice *
+                                                          completedDays) +
+                                                      (landTaxEachDayPrice *
+                                                          completedDays);
+                                              bamount.value =
+                                                  (buildingTaxEachDayPrice *
+                                                          remaingDays) +
+                                                      (landTaxEachDayPrice *
+                                                          remaingDays);
+                                            }
+                                          },
+                                          onFieldSubmitted: (String v) {
+                                            _fieldFocusChange(context,
+                                                landTaxFocus, buildingTaxFocus);
+                                          },
+                                          onEditingComplete: () {
+                                            landTaxAmount.value =
+                                                landtextEditingController.text;
+                                            var rev = japaneseCurrency.parse(
+                                                landtextEditingController.text);
+                                            // print("$rev");
+                                            int price = int.parse(
+                                                rev.toStringAsFixed(0));
+                                            int totaldays =
+                                                date.year % 4 == 0 ? 366 : 365;
+                                            landTaxEachDayPrice =
+                                                price / totaldays;
+                                            samount.value =
+                                                (buildingTaxEachDayPrice *
+                                                        completedDays) +
+                                                    (landTaxEachDayPrice *
+                                                        completedDays);
+                                            bamount.value =
+                                                (buildingTaxEachDayPrice *
+                                                        remaingDays) +
+                                                    (landTaxEachDayPrice *
+                                                        remaingDays);
+                                            String val =
+                                                (japaneseCurrency.format(price))
+                                                    .toString();
+                                            // print("$val");
+                                            setState(() {
+                                              maxLength = landtextEditingController
+                                                          .text.length ==
+                                                      10
+                                                  ? 13
+                                                  : landtextEditingController
+                                                              .text.length >=
+                                                          7
+                                                      ? 12
+                                                      : landtextEditingController
+                                                                  .text
+                                                                  .length >=
+                                                              4
+                                                          ? 11
+                                                          : 10;
+                                            });
+                                            landtextEditingController.value =
+                                                TextEditingValue(
+                                              text: "$val",
+                                              selection:
+                                                  TextSelection.fromPosition(
+                                                TextPosition(
+                                                    offset: val.length),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: TextFormField(
+                                          readOnly: true,
+                                          initialValue: "円",
+                                          style: bottomContainerText,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none),
+                                        ),
+                                        /*  Text("円", style: bottomContainerText) */
+                                      ),
+                                    ],
+                                  ),
+                                  ValueListenableBuilder(
+                                      valueListenable: landTaxAmount,
+                                      builder: (BuildContext context,
+                                          String value, Widget child) {
+                                        bool msg = ValidateHelper()
+                                            .validateAmount(value);
+                                        if (msg) {
+                                          return Text("正しい金額値を入力してください。",
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  color: Colors.red));
+                                        }
+                                        return Container();
+                                      }),
+                                ],
+                              ),
+                            ),
                           ),
-                        );*/
-                      },
-                    ),
+                        ],
+                      ),
+                      SizedBox(height: 10.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("建物", style: bottomContainerText),
+                          Container(
+                            // height: 50.0,
+                            width: MediaQuery.of(context).size.width / 1.75,
+                            child: Card(
+                              shadowColor: ColorConstant.shadowColor,
+                              elevation: 15.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(15),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: TextFormField(
+                                          focusNode: buildingTaxFocus,
+                                          controller: buildingTextController,
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(
+                                                  signed: true,
+                                                  decimal:
+                                                      true), // TextInputType.number,
+                                          maxLength: maxLength,
+                                          textAlign: TextAlign.right,
+                                          decoration: InputDecoration(
+                                              counterText: "",
+                                              border: InputBorder.none),
+                                          onChanged: (String value) {
+                                            if (value == null || value == "") {
+                                              buildingTaxAmount.value = "0";
+                                              samount.value =
+                                                  (landTaxEachDayPrice *
+                                                      completedDays);
+                                              bamount.value =
+                                                  (landTaxEachDayPrice *
+                                                      remaingDays);
+                                            } else {
+                                              buildingTaxAmount.value =
+                                                  buildingTextController.text;
+                                              var rev = japaneseCurrency.parse(
+                                                  buildingTextController.text);
+                                              int price = int.parse(
+                                                  rev.toStringAsFixed(0));
+                                              int totaldays = date.year % 4 == 0
+                                                  ? 366
+                                                  : 365;
+                                              buildingTaxEachDayPrice =
+                                                  price / totaldays;
+                                              samount.value =
+                                                  (buildingTaxEachDayPrice *
+                                                          completedDays) +
+                                                      (landTaxEachDayPrice *
+                                                          completedDays);
+                                              bamount.value =
+                                                  (buildingTaxEachDayPrice *
+                                                          remaingDays) +
+                                                      (landTaxEachDayPrice *
+                                                          remaingDays);
+                                            }
+                                          },
+                                          onFieldSubmitted: (String v) {
+                                            buildingTaxFocus.unfocus();
+                                          },
+                                          onEditingComplete: () {
+                                            buildingTaxAmount.value =
+                                                buildingTextController.text;
+                                            var rev = japaneseCurrency.parse(
+                                                buildingTextController.text);
+                                            // print("$rev");
+                                            int price = int.parse(
+                                                rev.toStringAsFixed(0));
+                                            int totaldays =
+                                                date.year % 4 == 0 ? 366 : 365;
+                                            buildingTaxEachDayPrice =
+                                                price / totaldays;
+                                            samount.value =
+                                                (buildingTaxEachDayPrice *
+                                                        completedDays) +
+                                                    (landTaxEachDayPrice *
+                                                        completedDays);
+                                            bamount.value =
+                                                (buildingTaxEachDayPrice *
+                                                        remaingDays) +
+                                                    (landTaxEachDayPrice *
+                                                        remaingDays);
+                                            String val =
+                                                (japaneseCurrency.format(price))
+                                                    .toString();
+                                            // print("$val");
+                                            setState(() {
+                                              maxLength = buildingTextController
+                                                          .text.length ==
+                                                      10
+                                                  ? 13
+                                                  : buildingTextController
+                                                              .text.length >=
+                                                          7
+                                                      ? 12
+                                                      : buildingTextController
+                                                                  .text
+                                                                  .length >=
+                                                              4
+                                                          ? 11
+                                                          : 10;
+                                            });
+                                            buildingTextController.value =
+                                                TextEditingValue(
+                                              text: "$val",
+                                              selection:
+                                                  TextSelection.fromPosition(
+                                                TextPosition(
+                                                    offset: val.length),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: TextFormField(
+                                          readOnly: true,
+                                          initialValue: "円",
+                                          style: bottomContainerText,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none),
+                                        ),
+                                        /*  Text("円", style: bottomContainerText) */
+                                      ),
+                                    ],
+                                  ),
+                                  ValueListenableBuilder(
+                                      valueListenable: buildingTaxAmount,
+                                      builder: (BuildContext context,
+                                          String value, Widget child) {
+                                        bool msg = ValidateHelper()
+                                            .validateAmount(value);
+                                        if (msg) {
+                                          return Text("正しい金額値を入力してください。",
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  color: Colors.red));
+                                        }
+                                        return Container();
+                                      }),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: TextFormField(
-                      readOnly: true,
-                      initialValue: "円",
-                      style: bottomContainerText,
-                      decoration: InputDecoration(border: InputBorder.none),
-                    ),
-                    /*  Text("円", style: bottomContainerText) */
-                  ),
-                ],
+                ),
               ),
-              ValueListenableBuilder(
-                  valueListenable: taxamount,
-                  builder: (BuildContext context, String value, Widget child) {
-                    bool msg = ValidateHelper().validateAmount(value);
-                    if (msg) {
-                      return Text("正しい金額値を入力してください。",
-                          style: TextStyle(fontSize: 12.0, color: Colors.red));
-                    }
-                    return Container();
-                  }),
               SizedBox(height: 10.0),
               Container(
                 color: ColorConstant.priceBackground,
@@ -538,5 +795,11 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
         ),
       ),
     );
+  }
+
+  _fieldFocusChange(
+      BuildContext context, FocusNode _currentFocus, FocusNode _nextFocus) {
+    _currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(_nextFocus);
   }
 }

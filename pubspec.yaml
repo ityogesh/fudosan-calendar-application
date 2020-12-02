@@ -39,6 +39,7 @@ dependencies:
   showcaseview: ^0.1.6
   flutter_statusbarcolor: ^0.2.3
   firebase_analytics: ^5.0.2
+  flutter_spinkit: "^4.1.2"
 
 
   # The following adds the Cupertino Icons font to your application.
