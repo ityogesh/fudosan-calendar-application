@@ -274,19 +274,19 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
               ),
               SizedBox(height: 10.0),
-              Showcase(
-                key: _one,
-                description: '金額を入力すると売買の料金が計算されて表示される。',
-                disposeOnTap: true,
-                contentPadding: EdgeInsets.all(8.0),
-                showcaseBackgroundColor: ColorConstant.hHighlight,
-                descTextStyle: TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-                onTargetClick: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 8.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 8.0),
+                child: Showcase(
+                  key: _one,
+                  description: '金額を入力すると売買の料金が計算されて表示される。',
+                  disposeOnTap: true,
+                  contentPadding: EdgeInsets.all(8.0),
+                  showcaseBackgroundColor: ColorConstant.hHighlight,
+                  descTextStyle: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                  onTargetClick: () {},
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -523,6 +523,15 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                           },
                                           onFieldSubmitted: (String v) {
                                             buildingTaxFocus.unfocus();
+                                            var rev = japaneseCurrency.parse(
+                                                landtextEditingController.text);
+                                            int price = int.parse(
+                                                rev.toStringAsFixed(0));
+                                            String rval =
+                                                (japaneseCurrency.format(price))
+                                                    .toString();
+                                            landtextEditingController.text =
+                                                rval;
                                           },
                                           onEditingComplete: () {
                                             buildingTaxAmount.value =
