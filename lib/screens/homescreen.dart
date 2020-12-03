@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
@@ -24,7 +22,7 @@ class Show extends StatelessWidget {
         autoPlay: true,
         autoPlayDelay: Duration(seconds: 3),
         //autoPlayLockEnable: true,
-       onFinish: () {
+        onFinish: () {
           controller.animateTo(controller.position.minScrollExtent,
               duration: new Duration(seconds: 10),
               curve: new ElasticOutCurve());
@@ -106,15 +104,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      /*  controller
-          .animateTo(controller.position.maxScrollExtent,
-              duration: new Duration(seconds: 5), curve: new ElasticOutCurve())
-          .then((value) => ShowCaseWidget.of(context)
-              .startShowCase([_one, _two, _three, _four])); */
       showShowCase();
-      /* controller.jumpTo(controller.position.maxScrollExtent); */
-
-      //showShowCase();
     });
     return WillPopScope(
       onWillPop: () => Future.value(false),
@@ -429,19 +419,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               yearPicker,
-              /*   NumberPicker.horizontal(
-                currentDate: DateTime.now(),
-                selectedYear: _cyear,
-                ismonth: false,
-                numberToDisplay: 7,
-                zeroPad: false,
-                initialValue: _cyear,
-                minValue: 2000,
-                maxValue: 2050,
-                onChanged: (newValue) => setState(() {
-                  changeYear(newValue);
-                }),
-              ) */
             ],
           ),
         ),
@@ -475,19 +452,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               monthPicker,
-              /* NumberPicker.horizontal(
-                currentDate: DateTime.now(),
-                selectedYear: _cyear,
-                ismonth: true,
-                numberToDisplay: 7,
-                zeroPad: false,
-                initialValue: _currentmonth,
-                minValue: 1,
-                maxValue: 12,
-                onChanged: (newValue) => setState(() {
-                  changeMonth(newValue);
-                }),
-              ) */
             ],
           ),
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:login_fudosan/models/apiRequestModels/forget%20password/foregetPasswordOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/forgetPasswordOtpVerifyRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/resendOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/forget%20password/forgetPasswordOtpResponseModel.dart';
@@ -15,7 +14,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'popup.dart';
-import 'homescreen.dart';
 import 'dart:convert';
 
 class OtpScreen extends StatefulWidget {

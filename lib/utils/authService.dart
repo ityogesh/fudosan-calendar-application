@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:login_fudosan/screens/homescreen.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';

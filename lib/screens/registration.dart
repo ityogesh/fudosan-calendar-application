@@ -316,39 +316,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           SizedBox(
                             height: 13,
                           ),
-                          /* Form(
-                      key: statekey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(0.0),
-                            color: Colors.transparent,
-                            child: ButtonTheme(
-                              child: DropdownButtonFormField(
-                                icon: Icon(Icons.keyboard_arrow_down),
-                                value: _myStates,
-                                hint: Text('Select State'),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _myStates = newValue;
-                                  //  _getStateList();
-                                    print(_myStates);
-                                  });
-                                },
-                                items: stateDropDownValues?.map((item) {
-                                      return new DropdownMenuItem(
-                                        child: new Text(item),
-                                        value: item,
-                                      );
-                                    })?.toList() ??
-                                    [],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ), */
                           Form(
                             key: statekey,
                             child: Column(
@@ -365,14 +332,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     onSaved: (value) {
                                       setState(() {
                                         _myState = value;
-                                        print(_myState);
+                                        //   print(_myState);
                                       });
                                     },
                                     value: _myState,
                                     onChanged: (value) {
                                       setState(() {
                                         _myState = value;
-                                        print(_myState);
+                                        //print(_myState);
                                       });
                                     },
                                     dataSource: stateDropDownValues,
@@ -531,7 +498,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     await http.post(Constants.stateInfoUrl).then((response) {
       try {
         states = StatesList.fromJson(json.decode(response.body));
-        print(states.toJson());
+        // print(states.toJson());
         for (var stateList in states.stateList) {
           stateDropDownValues.add(stateList.stateName);
         }
@@ -539,7 +506,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           status = 1;
         });
       } catch (e) {
-        print(e);
+        //   print(e);
       }
     });
   }
