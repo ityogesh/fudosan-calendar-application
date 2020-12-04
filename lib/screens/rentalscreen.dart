@@ -14,7 +14,7 @@ class ShowCaseViewRental extends StatelessWidget {
     return Scaffold(
       body: ShowCaseWidget(
         autoPlay: true,
-        autoPlayDelay: Duration(seconds: 3),
+        autoPlayDelay: Duration(seconds: 5),
         //autoPlayLockEnable: true,
         builder: Builder(
           builder: (context) => RentalScreen(choice, selecteddate),
