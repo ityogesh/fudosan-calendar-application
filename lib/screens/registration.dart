@@ -479,13 +479,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   validateCredentials() async {
     if (formKey.currentState.validate()) {
       FocusScope.of(context).requestFocus(new FocusNode());
-      if (state == 0) {
-        await _progressDialog.show();
-        _doUserRegistration();
+      if (_myState != "") {
+        if (state == 0) {
+          await _progressDialog.show();
+          _doUserRegistration();
+        } else {
+          ProgressDialog pd = ProgressDialog(context);
+          await _progressDialog.show();
+          _doUserRegisatrationUpdate();
+        }
       } else {
-        ProgressDialog pd = ProgressDialog(context);
-        await _progressDialog.show();
-        _doUserRegisatrationUpdate();
+        Fluttertoast.showToast(
+          toastLength: Toast.LENGTH_LONG,
+          msg: "勤務地は必須項目なので場所を選択して\nください",
+        );
       }
     } else {
       setState(() {

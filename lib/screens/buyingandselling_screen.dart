@@ -15,7 +15,7 @@ class ShowCaseBuyandSell extends StatelessWidget {
     return Scaffold(
       body: ShowCaseWidget(
         autoPlay: true,
-        autoPlayDelay: Duration(seconds: 3),
+        autoPlayDelay: Duration(seconds: 5),
         //autoPlayLockEnable: true,
 
         builder: Builder(
@@ -279,7 +279,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                 child: Showcase(
                   key: _one,
                   description: '金額を入力すると売買の料金が計算されて表示される。',
-                  disposeOnTap: true,
+                  disposeOnTap: false,
                   contentPadding: EdgeInsets.all(8.0),
                   showcaseBackgroundColor: ColorConstant.hHighlight,
                   descTextStyle: TextStyle(
@@ -408,8 +408,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                                               4
                                                           ? 11
                                                           : 10;
+                                              landtextEditingController.text =
+                                                  val;
                                             });
-                                            landtextEditingController.value =
+                                            /*  landtextEditingController.value =
                                                 TextEditingValue(
                                               text: "$val",
                                               selection:
@@ -417,7 +419,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                                 TextPosition(
                                                     offset: val.length),
                                               ),
-                                            );
+                                            ); */
                                           },
                                         ),
                                       ),
@@ -574,8 +576,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                                               4
                                                           ? 11
                                                           : 10;
+                                              buildingTextController.text = val;
                                             });
-                                            buildingTextController.value =
+                                            /* buildingTextController.value =
                                                 TextEditingValue(
                                               text: "$val",
                                               selection:
@@ -583,7 +586,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                                 TextPosition(
                                                     offset: val.length),
                                               ),
-                                            );
+                                            ); */
                                           },
                                         ),
                                       ),

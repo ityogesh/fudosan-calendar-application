@@ -327,7 +327,7 @@ class _RentalScreenState extends State<RentalScreen> {
                       Showcase(
                         key: _one,
                         description: '金額を入力すると日割分が計算されて表示される。',
-                        disposeOnTap: true,
+                        disposeOnTap: false,
                         contentPadding: EdgeInsets.all(8.0),
                         showcaseBackgroundColor: ColorConstant.hHighlight,
                         descTextStyle: TextStyle(
@@ -575,6 +575,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   if (value == null ||
                                                       value == "") {
                                                     mamount.value = 0;
+                                                    valmamount.value ="0";
                                                     tamount
                                                         .value = japaneseCurrency
                                                             .parse(japaneseCurrency
