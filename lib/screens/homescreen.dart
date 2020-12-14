@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
@@ -6,11 +10,13 @@ import 'package:login_fudosan/screens/rentalscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ScrollController controller = new ScrollController();
 
@@ -66,6 +72,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
   GlobalKey _three = GlobalKey();
   GlobalKey _four = GlobalKey();
   Map<DateTime, List<dynamic>> holiday;
+  double minimumVersion;
+  double currentVersion;
+  double newVersion;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String appStoreUrl;
+  String playStoreUrl;
 
   @override
   void initState() {
@@ -74,6 +86,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
     _calendarController = CalendarController();
     _cyear = DateTime.now().year;
     _currentmonth = DateTime.now().month;
+    try {
+      versionCheck(context);
+    } catch (e) {
+      print("Exception " + e);
+    }
   }
 
   @override
@@ -984,5 +1001,106 @@ class _HomeScreeenState extends State<HomeScreeen> {
             ),
           )),
     );
+  }
+
+  versionCheck(context) async {
+    //Get Current installed version of app
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    currentVersion = double.parse(info.version.trim().replaceAll(".", ""));
+    print("Current Version :" + info.version);
+
+    //Get Latest version info from firebase config
+    final RemoteConfig remoteConfig = await RemoteConfig.instance;
+
+    try {
+      // Using default duration to force fetching from remote server.
+      await remoteConfig.fetch(expiration: const Duration(seconds: 0));
+      await remoteConfig.activateFetched();
+      remoteConfig.getString('force_update_current_version');
+      newVersion = double.parse(remoteConfig
+          .getString('android_app_latest_version')
+          .trim()
+          .replaceAll(".", ""));
+      minimumVersion = double.parse(remoteConfig
+          .getString('android_app_minimum_version')
+          .trim()
+          .replaceAll(".", ""));
+
+      appStoreUrl = remoteConfig.getString('app_store_url');
+
+      playStoreUrl = remoteConfig.getString('play_store_url');
+
+      print("Update Version :" +
+          remoteConfig.getString('force_update_current_version'));
+      print("Minimum Version :" +
+          remoteConfig.getString('force_update_minimum_version'));
+
+      print("App Store Url : " + appStoreUrl);
+      print("Play Store Url : " + playStoreUrl);
+
+      if (newVersion > currentVersion) {
+        _showVersionDialog(context);
+      }
+    } on FetchThrottledException catch (exception) {
+      // Fetch throttled.
+      print(exception);
+    } catch (exception) {
+      print('Unable to fetch remote config. Cached or default values will be '
+          'used');
+    }
+  }
+
+  _showVersionDialog(context) async {
+    await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        String title = "アップデートのお知らせ";
+        String message = "不動産カレンダーの新しいバージョンが利用可能です。最新版にアップデートしてご利用ください。";
+        String btnLabel = "今すぐアップデート";
+        String btnLabelCancel = "後で";
+        return Platform.isIOS
+            ? new CupertinoAlertDialog(
+                title: Text(title),
+                content: Text(message),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text(btnLabel),
+                    onPressed: () => _launchURL(appStoreUrl),
+                  ),
+                  minimumVersion <= currentVersion
+                      ? FlatButton(
+                          child: Text(btnLabelCancel),
+                          onPressed: () => Navigator.pop(context),
+                        )
+                      : Container(),
+                ],
+              )
+            : new AlertDialog(
+                title: Text(title),
+                content: Text(message),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text(btnLabel),
+                    onPressed: () => _launchURL(playStoreUrl),
+                  ),
+                  minimumVersion <= currentVersion
+                      ? FlatButton(
+                          child: Text(btnLabelCancel),
+                          onPressed: () => Navigator.pop(context),
+                        )
+                      : Container(),
+                ],
+              );
+      },
+    );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
