@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:login_fudosan/screens/homescreen.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
@@ -18,11 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '不動産カレンダー',
       theme: ThemeData(
-        fontFamily : "NotoSansJP",
+        fontFamily: "NotoSansJP",
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginScreen(),
+      home: Show(),
       supportedLocales: [
         const Locale('en'),
         const Locale('ja'),
