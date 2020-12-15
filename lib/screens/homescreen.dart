@@ -1017,23 +1017,32 @@ class _HomeScreeenState extends State<HomeScreeen> {
       await remoteConfig.fetch(expiration: const Duration(seconds: 0));
       await remoteConfig.activateFetched();
       remoteConfig.getString('force_update_current_version');
-      newVersion = double.parse(remoteConfig
-          .getString('android_app_latest_version')
-          .trim()
-          .replaceAll(".", ""));
-      minimumVersion = double.parse(remoteConfig
-          .getString('android_app_minimum_version')
-          .trim()
-          .replaceAll(".", ""));
+
+      newVersion = Platform.isIOS
+          ? double.parse(remoteConfig
+              .getString('ios_latest_version')
+              .trim()
+              .replaceAll(".", ""))
+          : double.parse(remoteConfig
+              .getString('android_app_latest_version')
+              .trim()
+              .replaceAll(".", ""));
+      minimumVersion = Platform.isIOS
+          ? double.parse(remoteConfig
+              .getString('ios_minimum_version')
+              .trim()
+              .replaceAll(".", ""))
+          : double.parse(remoteConfig
+              .getString('android_app_minimum_version')
+              .trim()
+              .replaceAll(".", ""));
 
       appStoreUrl = remoteConfig.getString('app_store_url');
 
       playStoreUrl = remoteConfig.getString('play_store_url');
 
-      print("Update Version :" +
-          remoteConfig.getString('force_update_current_version'));
-      print("Minimum Version :" +
-          remoteConfig.getString('force_update_minimum_version'));
+      print("Update Version :" + newVersion.toString());
+      print("Minimum Version :" + minimumVersion.toString());
 
       print("App Store Url : " + appStoreUrl);
       print("Play Store Url : " + playStoreUrl);
@@ -1056,42 +1065,71 @@ class _HomeScreeenState extends State<HomeScreeen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         String title = "アップデートのお知らせ";
-        String message = "不動産カレンダーの新しいバージョンが利用可能です。最新版にアップデートしてご利用ください。";
+        String message = "不動産カレンダーの新しいバージョンが利用可能\nです。最新版にアップデートしてご利用ください。";
         String btnLabel = "今すぐアップデート";
         String btnLabelCancel = "後で";
-        return Platform.isIOS
-            ? new CupertinoAlertDialog(
-                title: Text(title),
-                content: Text(message),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text(btnLabel),
-                    onPressed: () => _launchURL(appStoreUrl),
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: Platform.isIOS
+              ? new CupertinoAlertDialog(
+                  title: Text(title),
+                  content: Text(
+                    message,
+                    style: TextStyle(fontSize: 12.0),
                   ),
-                  minimumVersion <= currentVersion
-                      ? FlatButton(
-                          child: Text(btnLabelCancel),
-                          onPressed: () => Navigator.pop(context),
-                        )
-                      : Container(),
-                ],
-              )
-            : new AlertDialog(
-                title: Text(title),
-                content: Text(message),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text(btnLabel),
-                    onPressed: () => _launchURL(playStoreUrl),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        btnLabel,
+                        style: TextStyle(
+                            fontSize: 12.0, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () => _launchURL(appStoreUrl),
+                    ),
+                    minimumVersion <= currentVersion
+                        ? FlatButton(
+                            child: Text(
+                              btnLabelCancel,
+                              style: TextStyle(
+                                  fontSize: 12.0, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        : Container(),
+                  ],
+                )
+              : new AlertDialog(
+                /*   titlePadding: const EdgeInsets.only(
+                      left: 14.0, right: 14.0, top: 20.0, bottom: 14.0),
+                  contentPadding: const EdgeInsets.only(
+                      left: 18.0, right: 18.0, top: 14.0, bottom: 14.0),
+                 */  title: Text(title),
+                  content: Text(
+                    message,
+                    style: TextStyle(fontSize: 12.0),
                   ),
-                  minimumVersion <= currentVersion
-                      ? FlatButton(
-                          child: Text(btnLabelCancel),
-                          onPressed: () => Navigator.pop(context),
-                        )
-                      : Container(),
-                ],
-              );
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        btnLabel,
+                        style: TextStyle(
+                            fontSize: 12.0, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () => _launchURL(playStoreUrl),
+                    ),
+                    minimumVersion <= currentVersion
+                        ? FlatButton(
+                            child: Text(
+                              btnLabelCancel,
+                              style: TextStyle(
+                                  fontSize: 12.0, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        : Container(),
+                  ],
+                ),
+        );
       },
     );
   }
