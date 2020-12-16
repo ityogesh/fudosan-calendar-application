@@ -4,10 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_fudosan/models/apiRequestModels/homescreen/UserListRequestModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/homescreen/UserListResponseModel.dart';
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/screens/rentalscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
 import 'package:package_info/package_info.dart';
@@ -56,12 +60,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
   int _cyear;
   int _radioValue1 = 0;
   int _currentmonth;
-  List<HolidayModel> _holidayModel = List<HolidayModel>();
-  int _state = 1;
+  int _state = 0;
   int _initialProcess = 0;
+  List<HolidayModel> _holidayModel = List<HolidayModel>();
   List<Map<DateTime, List<dynamic>>> sample =
       List<Map<DateTime, List<dynamic>>>();
-  String val = "R";
+  Map<DateTime, List<dynamic>> holiday;
   NumberPicker yearPicker;
   NumberPicker monthPicker;
   DateTime selectedDate;
@@ -71,17 +75,19 @@ class _HomeScreeenState extends State<HomeScreeen> {
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
   GlobalKey _four = GlobalKey();
-  Map<DateTime, List<dynamic>> holiday;
   double minimumVersion;
   double currentVersion;
   double newVersion;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String val = "R";
   String appStoreUrl;
   String playStoreUrl;
+  String fcmToken;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     super.initState();
+    getFcmToken();
     getHolidays();
     _calendarController = CalendarController();
     _cyear = DateTime.now().year;
@@ -118,10 +124,29 @@ class _HomeScreeenState extends State<HomeScreeen> {
     }
   }
 
+  Widget buildLoading() {
+    return Center(
+      child: SingleChildScrollView(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SpinKitThreeBounce(
+              color: ColorConstant.rButton,
+              size: 30.0,
+            ),
+            //buildLoadingIndicator()
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      showShowCase();
+      if (_state != 0) {
+        showShowCase();
+      }
     });
     return WillPopScope(
       onWillPop: () => Future.value(false),
@@ -148,7 +173,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           automaticallyImplyLeading: false,
         ),
         body: _state == 0
-            ? Center(child: CircularProgressIndicator())
+            ? buildLoading()
             : Stack(
                 children: [
                   Container(color: ColorConstant.hBackground),
@@ -357,7 +382,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         //  print(data['start']['date']);
         _holidayModel.add(HolidayModel(DateTime.parse(data['start']['date'])));
         setState(() {
-          _state = 1;
+          //      _state = 1;
         });
       }
     } catch (e) {
@@ -1070,65 +1095,56 @@ class _HomeScreeenState extends State<HomeScreeen> {
         String btnLabelCancel = "後で";
         return WillPopScope(
           onWillPop: () => Future.value(false),
-          child: Platform.isIOS
-              ? new CupertinoAlertDialog(
-                  title: Text(title),
-                  content: Text(
-                    message,
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text(
-                        btnLabel,
-                        style: TextStyle(
-                            fontSize: 12.0, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () => _launchURL(appStoreUrl),
-                    ),
-                    minimumVersion <= currentVersion
-                        ? FlatButton(
-                            child: Text(
-                              btnLabelCancel,
-                              style: TextStyle(
-                                  fontSize: 12.0, fontWeight: FontWeight.bold),
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                          )
-                        : Container(),
-                  ],
-                )
-              : new AlertDialog(
-                /*   titlePadding: const EdgeInsets.only(
+          child: AlertDialog(
+            /*   titlePadding: const EdgeInsets.only(
                       left: 14.0, right: 14.0, top: 20.0, bottom: 14.0),
                   contentPadding: const EdgeInsets.only(
                       left: 18.0, right: 18.0, top: 14.0, bottom: 14.0),
-                 */  title: Text(title),
-                  content: Text(
-                    message,
+                 */
+            title: Text(title),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FittedBox(
+                  child: Text(
+                    "不動産カレンダーの新しいバージョンが利用可能",
                     style: TextStyle(fontSize: 12.0),
                   ),
-                  actions: <Widget>[
-                    FlatButton(
+                ),
+                FittedBox(
+                  child: Text(
+                    "です。最新版にアップデートしてご利用ください。",
+                    style: TextStyle(fontSize: 12.0),
+                  ),
+                )
+              ],
+            ),
+            /*  Text(
+                    message,
+                    style: TextStyle(fontSize: 12.0),
+                  ), */
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  btnLabel,
+                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
+                ),
+                onPressed: () => Platform.isIOS
+                    ? _launchURL(appStoreUrl)
+                    : _launchURL(playStoreUrl),
+              ),
+              minimumVersion <= currentVersion
+                  ? FlatButton(
                       child: Text(
-                        btnLabel,
+                        btnLabelCancel,
                         style: TextStyle(
                             fontSize: 12.0, fontWeight: FontWeight.bold),
                       ),
-                      onPressed: () => _launchURL(playStoreUrl),
-                    ),
-                    minimumVersion <= currentVersion
-                        ? FlatButton(
-                            child: Text(
-                              btnLabelCancel,
-                              style: TextStyle(
-                                  fontSize: 12.0, fontWeight: FontWeight.bold),
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                          )
-                        : Container(),
-                  ],
-                ),
+                      onPressed: () => Navigator.pop(context),
+                    )
+                  : Container(),
+            ],
+          ),
         );
       },
     );
@@ -1139,6 +1155,48 @@ class _HomeScreeenState extends State<HomeScreeen> {
       await launch(url);
     } else {
       throw 'Could not launch $url';
+    }
+  }
+
+  getFcmToken() async {
+    preferences = await SharedPreferences.getInstance();
+    String fcmToken = preferences.getString("devicetoken");
+    if (fcmToken == null) {
+      try {
+        _firebaseMessaging.getToken().then((token) {
+          fcmToken = token;
+          print('Generated Token:' + token);
+          saveFcmToke(fcmToken, preferences);
+        });
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print("User id:" + preferences.getInt("uid").toString());
+      print("Fcm Token already Generated:" + fcmToken);
+      setState(() {
+        _state = 1;
+      });
+    }
+  }
+
+  saveFcmToke(String fcmToken, SharedPreferences preferences) async {
+    UserListRequestModel userListRequestModel =
+        UserListRequestModel(deviceToken: fcmToken);
+    print(Constants.device_list);
+    var response = await http.post(Constants.device_list,
+        body: userListRequestModel.toJson());
+    if (response.statusCode == 200) {
+      var responseData = json.decode(response.body);
+      final Map userListResponse = responseData;
+      UserListResponseModel userListResponseModel =
+          UserListResponseModel.fromJson(userListResponse);
+      preferences.setString("devicetoken", fcmToken);
+      preferences.setInt("uid", userListResponseModel.userid);
+      print("User id: ${userListResponseModel.userid}");
+      setState(() {
+        _state = 1;
+      });
     }
   }
 }
