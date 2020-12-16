@@ -86,7 +86,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   void initState() {
-    super.initState();
     getFcmToken();
     getHolidays();
     _calendarController = CalendarController();
@@ -97,6 +96,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     } catch (e) {
       print("Exception " + e);
     }
+    super.initState();
   }
 
   @override
@@ -143,11 +143,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (_state != 0) {
+    if (_state != 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         showShowCase();
-      }
-    });
+      });
+    }
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
@@ -1104,6 +1104,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
             title: Text(title),
             content: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FittedBox(
                   child: Text(
