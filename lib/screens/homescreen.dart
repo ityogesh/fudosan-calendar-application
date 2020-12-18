@@ -94,7 +94,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     try {
       versionCheck(context);
     } catch (e) {
-      print("Exception " + e);
+  //    print("Exception " + e);
     }
     super.initState();
   }
@@ -1032,7 +1032,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     //Get Current installed version of app
     final PackageInfo info = await PackageInfo.fromPlatform();
     currentVersion = double.parse(info.version.trim().replaceAll(".", ""));
-    print("Current Version :" + info.version);
+   // print("Current Version :" + info.version);
 
     //Get Latest version info from firebase config
     final RemoteConfig remoteConfig = await RemoteConfig.instance;
@@ -1066,21 +1066,21 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
       playStoreUrl = remoteConfig.getString('play_store_url');
 
-      print("Update Version :" + newVersion.toString());
+     /*  print("Update Version :" + newVersion.toString());
       print("Minimum Version :" + minimumVersion.toString());
 
       print("App Store Url : " + appStoreUrl);
-      print("Play Store Url : " + playStoreUrl);
+      print("Play Store Url : " + playStoreUrl); */
 
       if (newVersion > currentVersion) {
         _showVersionDialog(context);
       }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
-      print(exception);
+   //   print(exception);
     } catch (exception) {
-      print('Unable to fetch remote config. Cached or default values will be '
-          'used');
+     /*  print('Unable to fetch remote config. Cached or default values will be '
+          'used'); */
     }
   }
 
@@ -1166,15 +1166,15 @@ class _HomeScreeenState extends State<HomeScreeen> {
       try {
         _firebaseMessaging.getToken().then((token) {
           fcmToken = token;
-          print('Generated Token:' + token);
+          //   print('Generated Token:' + token);
           saveFcmToke(fcmToken, preferences);
         });
       } catch (e) {
-        print(e);
+        //    print(e);
       }
     } else {
-      print("User id:" + preferences.getInt("uid").toString());
-      print("Fcm Token already Generated:" + fcmToken);
+      //   print("User id:" + preferences.getInt("uid").toString());
+      //  print("Fcm Token already Generated:" + fcmToken);
       setState(() {
         _state = 1;
       });
@@ -1184,7 +1184,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   saveFcmToke(String fcmToken, SharedPreferences preferences) async {
     UserListRequestModel userListRequestModel =
         UserListRequestModel(deviceToken: fcmToken);
-    print(Constants.device_list);
+//print(Constants.device_list);
     var response = await http.post(Constants.device_list,
         body: userListRequestModel.toJson());
     if (response.statusCode == 200) {
@@ -1194,7 +1194,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           UserListResponseModel.fromJson(userListResponse);
       preferences.setString("devicetoken", fcmToken);
       preferences.setInt("uid", userListResponseModel.userid);
-      print("User id: ${userListResponseModel.userid}");
+  //    print("User id: ${userListResponseModel.userid}");
       setState(() {
         _state = 1;
       });
