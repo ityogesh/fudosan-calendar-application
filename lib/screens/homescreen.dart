@@ -21,6 +21,7 @@ import 'package:showcaseview/showcase_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_facebook_appevents/flutter_facebook_appevents.dart';
 
 ScrollController controller = new ScrollController();
 
@@ -91,6 +92,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
     _calendarController = CalendarController();
     _cyear = DateTime.now().year;
     _currentmonth = DateTime.now().month;
+
+    FacebookAppEvents.setUserId("user");
+    FacebookAppEvents.logEvent("test_", {"k": "v"});
+
     try {
       versionCheck(context);
     } catch (e) {
