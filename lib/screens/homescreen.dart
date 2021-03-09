@@ -180,39 +180,41 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   ),
                 ],
               ),
-              Positioned(
-                right: 5,
-                child: Card(
-                  elevation: 6.0,
-                  margin: EdgeInsets.all(0.0),
-                  shape: CircleBorder(),
-                  child: InkWell(
-                    onTap: () {
-                      showOptions();
-                    },
-                    child: CircleAvatar(
-                      radius: 17.0,
-                      backgroundColor: ColorConstant.hHighlight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: ValueListenableBuilder(
-                            valueListenable: Constants.startMonth,
-                            builder: (BuildContext context, String value,
-                                Widget child) {
-                              return Text(
-                                value == "0" ? "1/1" : "4/1",
-                                key: key,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold),
-                              );
-                            }),
+              val == 'S'
+                  ? Positioned(
+                      right: 5,
+                      child: Card(
+                        elevation: 6.0,
+                        margin: EdgeInsets.all(0.0),
+                        shape: CircleBorder(),
+                        child: InkWell(
+                          onTap: () {
+                            showOptions();
+                          },
+                          child: CircleAvatar(
+                            radius: 17.0,
+                            backgroundColor: ColorConstant.hHighlight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: ValueListenableBuilder(
+                                  valueListenable: Constants.startMonth,
+                                  builder: (BuildContext context, String value,
+                                      Widget child) {
+                                    return Text(
+                                      value == "0" ? "1/1" : "4/1",
+                                      key: key,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
+                    )
+                  : Container()
             ],
           ),
           centerTitle: true,
