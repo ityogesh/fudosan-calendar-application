@@ -99,7 +99,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     try {
       versionCheck(context);
     } catch (e) {
-  //    print("Exception " + e);
+      //    print("Exception " + e);
     }
     super.initState();
   }
@@ -397,13 +397,14 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   changeMonth(int selectedmonth) {
     var _cfocus = _calendarController.focusedDay;
-    setState(() {
-      _currentmonth = selectedmonth;
-      _calendarController
-          .setFocusedDay(DateTime(_cfocus.year, _currentmonth, _cfocus.day));
-      // monthPicker.animateInt(_currentmonth);
-    });
-    // print("Changed month: $_currentmonth");
+    if (_currentmonth == 12 && selectedmonth == 1) {
+      changeYearPickerVal(_cyear + 1);
+    } else if (_currentmonth == 1 && selectedmonth == 12) {
+      changeYearPickerVal(_cyear - 1);
+    }
+    _currentmonth = selectedmonth;
+    _calendarController
+        .setFocusedDay(DateTime(_cyear, _currentmonth, _cfocus.day));
   }
 
   changeYear(int selectedmonth) {
@@ -476,6 +477,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   buildMonthPicker() {
     monthPicker = NumberPicker.horizontal(
       currentDate: DateTime.now(),
+      infiniteLoop: true,
       selectedYear: _cyear,
       ismonth: true,
       numberToDisplay: 7,
@@ -824,7 +826,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
         : DateTime(date.year, date.month, 1);
     final completed = date.difference(firstday).inDays;
     final remaing = val == "S"
-        ? date.year % 4 == 0 ? 366 - completed : 365 - completed
+        ? date.year % 4 == 0
+            ? 366 - completed
+            : 365 - completed
         : daysRemaining(date.month, date.year) - date.day;
     return Container(
       margin: const EdgeInsets.all(1.5),
@@ -1037,7 +1041,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     //Get Current installed version of app
     final PackageInfo info = await PackageInfo.fromPlatform();
     currentVersion = double.parse(info.version.trim().replaceAll(".", ""));
-   // print("Current Version :" + info.version);
+    // print("Current Version :" + info.version);
 
     //Get Latest version info from firebase config
     final RemoteConfig remoteConfig = await RemoteConfig.instance;
@@ -1071,7 +1075,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
       playStoreUrl = remoteConfig.getString('play_store_url');
 
-     /*  print("Update Version :" + newVersion.toString());
+      /*  print("Update Version :" + newVersion.toString());
       print("Minimum Version :" + minimumVersion.toString());
 
       print("App Store Url : " + appStoreUrl);
@@ -1082,9 +1086,9 @@ class _HomeScreeenState extends State<HomeScreeen> {
       }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
-   //   print(exception);
+      //   print(exception);
     } catch (exception) {
-     /*  print('Unable to fetch remote config. Cached or default values will be '
+      /*  print('Unable to fetch remote config. Cached or default values will be '
           'used'); */
     }
   }
@@ -1199,7 +1203,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
           UserListResponseModel.fromJson(userListResponse);
       preferences.setString("devicetoken", fcmToken);
       preferences.setInt("uid", userListResponseModel.userid);
-  //    print("User id: ${userListResponseModel.userid}");
+      //    print("User id: ${userListResponseModel.userid}");
       setState(() {
         _state = 1;
       });

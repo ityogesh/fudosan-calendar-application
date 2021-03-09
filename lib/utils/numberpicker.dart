@@ -34,6 +34,7 @@ class NumberPicker extends StatelessWidget {
     this.numberToDisplay = 3,
     this.step = 1,
     this.zeroPad = false,
+    this.infiniteLoop = false,
     this.highlightSelectedValue = true,
     this.decoration,
     this.ismonth = false,
@@ -46,15 +47,18 @@ class NumberPicker extends StatelessWidget {
         selectedIntValue = initialValue,
         selectedDecimalValue = -1,
         decimalPlaces = 0,
-        intScrollController = new ScrollController(
-          initialScrollOffset: (initialValue - minValue) ~/
-              step *
-              itemExtent, //eg 1-10, start 5: (5-1)/1*50=4*50=200
-        ),
+        intScrollController = infiniteLoop
+            ? new InfiniteScrollController(
+                initialScrollOffset:
+                    (initialValue - minValue) ~/ step * itemExtent,
+              )
+            : new ScrollController(
+                initialScrollOffset:
+                    (initialValue - minValue) ~/ step * itemExtent,
+              ),
         scrollDirection = Axis.horizontal,
         decimalScrollController = null,
         listViewWidth = numberToDisplay * itemExtent,
-        infiniteLoop = false,
         integerItemCount = (maxValue - minValue) ~/ step + 1,
         super(key: key);
 
@@ -233,7 +237,7 @@ class NumberPicker extends StatelessWidget {
 
   /// Used to animate integer number picker to new selected index
   void animateIntToIndex(int index) {
- //   print("$index");
+    //   print("$index");
     _animate(intScrollController, index * itemExtent);
   }
 
@@ -259,7 +263,7 @@ class NumberPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     if (ismonth == true) {
-      return _monthListView(themeData);
+      return _integerInfiniteListView(themeData); // _monthListView(themeData);
     } else {
       return _integerListView(themeData);
     }
@@ -603,9 +607,11 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerInfiniteListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+    TextStyle defaultStyle =
+        TextStyle(color: Colors.white70); //themeData.textTheme.bodyText2;
+    TextStyle selectedStyle = TextStyle(
+        color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold);
+    //themeData.textTheme.headline5.copyWith(color: themeData.accentColor);
 
     return Listener(
       onPointerUp: (ev) {
@@ -621,10 +627,14 @@ class NumberPicker extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               InfiniteListView.builder(
+                scrollDirection: scrollDirection,
                 controller: intScrollController,
                 itemExtent: itemExtent,
                 itemBuilder: (BuildContext context, int index) {
                   final int value = _intValueFromIndex(index);
+                  /*   int selValIndex = _getIndexOfValue(selectedIntValue);
+                //  int valIndex = 0;
+                  int valIndex = _getIndexOfValue(value); */
 
                   //define special style for selected (middle) element
                   final TextStyle itemStyle =
@@ -632,12 +642,97 @@ class NumberPicker extends StatelessWidget {
                           ? selectedStyle
                           : defaultStyle;
 
-                  return new Center(
-                    child: new Text(
-                      getDisplayedValue(value),
-                      style: itemStyle,
-                    ),
-                  );
+                  return value == selectedIntValue && highlightSelectedValue
+                      ? Container(
+                          padding: EdgeInsets.only(top: 6.0, bottom: 6.0),
+                          child: Card(
+                            margin: EdgeInsets.all(2.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: CircleAvatar(
+                                    radius: 20.0,
+                                    backgroundColor: Colors.orangeAccent,
+                                    child: new Text(
+                                      getDisplayedValue(value),
+                                      style: itemStyle,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Center(
+                                    child: Text("月",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      : (value == currentDate.month &&
+                              currentDate.year == selectedYear &&
+                              selectedIntValue != 12)
+                          ? Center(
+                              child: InkWell(
+                                onTap: () {
+                                  //  selectedIntValue = value;
+                                },
+                                child: new Text(
+                                  getDisplayedValue(value),
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )
+                          : ((value == (selectedIntValue - 1) ||
+                                  value ==
+                                      (selectedIntValue +
+                                          1))) //for 12 from left of 1
+                              ? Center(
+                                  child: InkWell(
+                                    onTap: () {
+                                      //  selectedIntValue = value;
+                                    },
+                                    child: new Text(
+                                      getDisplayedValue(value),
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.white60,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                )
+                              : ((value == (selectedIntValue - 2) ||
+                                      value ==
+                                          (selectedIntValue +
+                                              2))) //for 11 from 2  left of 1)
+                                  ? Center(
+                                      child: new Text(
+                                        getDisplayedValue(value),
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white38,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  : Center(
+                                      child: new Text(
+                                        getDisplayedValue(value),
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.white24,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    );
                 },
               ),
               _NumberPickerSelectedItemDecoration(
@@ -682,10 +777,10 @@ class NumberPicker extends StatelessWidget {
       }
       int intValueInTheMiddle = _intValueFromIndex(intIndexOfMiddleElement +
           numberToDisplay ~/ 2); //3=> +1, 5=> +2, 7=> +3
-     /*  print("index: $intIndexOfMiddleElement");
+      /*  print("index: $intIndexOfMiddleElement");
       print("middle value: $intValueInTheMiddle"); */
       intValueInTheMiddle = _normalizeIntegerMiddleValue(intValueInTheMiddle);
-    //  print("normalized middle value: $intValueInTheMiddle");
+      //  print("normalized middle value: $intValueInTheMiddle");
 
       if (_userStoppedScrolling(notification, intScrollController)) {
         //center selected value
@@ -800,6 +895,24 @@ class NumberPicker extends StatelessWidget {
     animateIntToIndex(currentlySelectedElementIndex);
   }
 
+  int _getIndexOfValue(int valueToSelect) {
+    // estimated index of currently selected element based on offset and item extent
+    int currentlySelectedElementIndex =
+        intScrollController.offset ~/ itemExtent;
+
+    // when more(less) than half of the top(bottom) element is hidden
+    // then we should increment(decrement) index in case of positive(negative) offset
+    if (intScrollController.offset > 0 &&
+        intScrollController.offset % itemExtent > itemExtent / 2) {
+      currentlySelectedElementIndex++;
+    } else if (intScrollController.offset < 0 &&
+        intScrollController.offset % itemExtent < itemExtent / 2) {
+      currentlySelectedElementIndex--;
+    }
+
+    return currentlySelectedElementIndex;
+  }
+
   ///converts integer indicator of decimal value to double
   ///e.g. decimalPlaces = 1, value = 4  >>> result = 0.4
   ///     decimalPlaces = 2, value = 12 >>> result = 0.12
@@ -815,6 +928,12 @@ class NumberPicker extends StatelessWidget {
     scrollController.animateTo(value,
         duration: new Duration(seconds: 1), curve: new ElasticOutCurve());
  */
+  }
+
+  checkIntValue(int sval, int val) {
+    switch (sval) {
+      case 1:
+    }
   }
 }
 
