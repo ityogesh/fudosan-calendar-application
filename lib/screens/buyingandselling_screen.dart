@@ -73,8 +73,13 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
             ? date.difference(DateTime(date.year - 1, 4, 1)).inDays.abs()
             : date.difference(DateTime(date.year, 4, 1)).inDays.abs()
         : date.difference(firstday).inDays.abs();
-    remaingDays =
-        date.year % 4 == 0 ? 366 - completedDays : 365 - completedDays;
+    remaingDays = Constants.startMonth.value == "1" && date.month >= 4
+        ? (date.year + 1) % 4 == 0
+            ? 366 - completedDays
+            : 365 - completedDays
+        : date.year % 4 == 0
+            ? 366 - completedDays
+            : 365 - completedDays;
     sellDate = DateTime(date.year, date.month, date.day - 1);
     sellDate = sellDate.year != date.year
         ? DateTime(date.year, date.month, date.day)
@@ -142,7 +147,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  "1月1日",
+                                  Constants.startMonth.value == "0"
+                                      ? "1月1日"
+                                      : "4月1日",
                                   style: cardSmallText,
                                   textAlign: TextAlign.right,
                                 ),
@@ -237,7 +244,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  "12月31日",
+                                  Constants.startMonth.value == "0"
+                                      ? "12月31日"
+                                      : "3月31日",
                                   style: cardSmallText,
                                   textAlign: TextAlign.left,
                                 ),

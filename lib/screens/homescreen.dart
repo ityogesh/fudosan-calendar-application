@@ -871,9 +871,13 @@ class _HomeScreeenState extends State<HomeScreeen> {
             : date.difference(DateTime(date.year, 4, 1)).inDays.abs()
         : date.difference(firstday).inDays.abs();
     final remaing = val == "S"
-        ? date.year % 4 == 0
-            ? 366 - completed
-            : 365 - completed
+        ? Constants.startMonth.value == "1" && date.month >= 4
+            ? (date.year + 1) % 4 == 0
+                ? 366 - completed
+                : 365 - completed
+            : date.year % 4 == 0
+                ? 366 - completed
+                : 365 - completed
         : daysRemaining(date.month, date.year) - date.day;
     return Container(
       margin: const EdgeInsets.all(1.5),
