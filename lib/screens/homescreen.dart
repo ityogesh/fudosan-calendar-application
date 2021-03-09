@@ -665,11 +665,13 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 initialCalendarFormat: CalendarFormat.month,
                 calendarController: _calendarController,
                 onVisibleDaysChanged: (date1, date2, cformat) {
+                  //When calendar is swiped this logic is used to change the month and year picker Value
                   if (_initialProcess == 1 && vdate != date1) {
                     vdate = date1;
                     //  print("1 :$date1");
                     //print("2  :$date2");
-                    if (date1.year == date2.year) {
+                    if (date1.year == date2.year) //same year
+                    {
                       if (date1.year != _cyear) {
                         changeYearPickerVal(date1.year);
                       }
@@ -854,6 +856,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     }
   }
 
+  //Method used to build remaining and completed days in Calendar
   dayBuilder({
     @required DateTime date,
     Color otherdays,
@@ -862,19 +865,22 @@ class _HomeScreeenState extends State<HomeScreeen> {
     Color backgroundcolor,
     bool isToday,
   }) {
-    DateTime firstday = val == "S"
-        ? Constants.startMonth.value == "0"
+    DateTime firstday = val == "S" // S -> Seller and Buyer option is Selected
+        ? Constants.startMonth.value ==
+                "0" // 0 -> Start from Jan ,1-> Start from April
             ? DateTime(date.year, 1, 1)
             : DateTime(date.year, 4, 1)
         : DateTime(date.year, date.month, 1);
     final completed = val == "S" && Constants.startMonth.value == "1"
-        ? date.month < 4
+        ? date.month <
+                4 // for start from April should consider last March, so when jan comes in it is less than 4, minus 1 year to get completed days
             ? date.difference(DateTime(date.year - 1, 4, 1)).inDays.abs()
             : date.difference(DateTime(date.year, 4, 1)).inDays.abs()
         : date.difference(firstday).inDays.abs();
     final remaing = val == "S"
         ? Constants.startMonth.value == "1" && date.month >= 4
-            ? (date.year + 1) % 4 == 0
+            ? (date.year + 1) % 4 ==
+                    0 // for start from April should check for leap year the next year(for Mar - Dec) since Feb comes in next year
                 ? 366 - completed
                 : 365 - completed
             : date.year % 4 == 0
@@ -954,6 +960,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     );
   }
 
+  //Method used to build day number in Calendar
   dateBuilder(
       bool isToday, DateTime date, Color backgroundcolor, Color textcolor) {
     return isToday == true
@@ -1246,6 +1253,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     }
   }
 
+  //Method called from ShowtoolTip to refresh the page after StartMonth is Selected
   refreshPage() {
     setState(() {});
   }
