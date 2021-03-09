@@ -678,7 +678,7 @@ class NumberPicker extends StatelessWidget {
                         )
                       : (value == currentDate.month &&
                               currentDate.year == selectedYear &&
-                              selectedIntValue != 12)
+                              checkCurrentMonthVal(value, selectedIntValue))
                           ? Center(
                               child: InkWell(
                                 onTap: () {
@@ -778,7 +778,7 @@ class NumberPicker extends StatelessWidget {
       int intValueInTheMiddle = _intValueFromIndex(intIndexOfMiddleElement +
           numberToDisplay ~/ 2); //3=> +1, 5=> +2, 7=> +3
       /*  print("index: $intIndexOfMiddleElement");
-      print("middle value: $intValueInTheMiddle"); */
+                                    print("middle value: $intValueInTheMiddle"); */
       intValueInTheMiddle = _normalizeIntegerMiddleValue(intValueInTheMiddle);
       //  print("normalized middle value: $intValueInTheMiddle");
 
@@ -924,15 +924,29 @@ class NumberPicker extends StatelessWidget {
   ///scroll to selected value
   _animate(ScrollController scrollController, double value) {
     scrollController.jumpTo(value);
-/* 
-    scrollController.animateTo(value,
-        duration: new Duration(seconds: 1), curve: new ElasticOutCurve());
- */
+    /* 
+                                  scrollController.animateTo(value,
+                                      duration: new Duration(seconds: 1), curve: new ElasticOutCurve());
+                               */
   }
 
   checkIntValue(int sval, int val) {
     switch (sval) {
       case 1:
+    }
+  }
+
+  bool checkCurrentMonthVal(int value, int selectedIntValue) {
+    if ((value == (selectedIntValue - 1) || value == (selectedIntValue + 1))) {
+      return true;
+    } else if ((value == (selectedIntValue - 2) ||
+        value == (selectedIntValue + 2))) {
+      return true;
+    } else if ((value == (selectedIntValue - 3) ||
+        value == (selectedIntValue + 3))) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

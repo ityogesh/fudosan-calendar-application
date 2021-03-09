@@ -14,6 +14,7 @@ import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
+import 'package:login_fudosan/utils/showToolTip.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
@@ -22,6 +23,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_facebook_appevents/flutter_facebook_appevents.dart';
+import 'dart:math';
 
 ScrollController controller = new ScrollController();
 
@@ -57,6 +59,7 @@ class HomeScreeen extends StatefulWidget {
 }
 
 class _HomeScreeenState extends State<HomeScreeen> {
+  GlobalKey key = GlobalKey();
   CalendarController _calendarController;
   int _cyear;
   int _radioValue1 = 0;
@@ -84,6 +87,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   String playStoreUrl;
   String fcmToken;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String monthVal = "0";
 
   @override
   void initState() {
@@ -159,23 +163,61 @@ class _HomeScreeenState extends State<HomeScreeen> {
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: ColorConstant.appBar,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          title: Stack(
             children: [
-              Image.asset(
-                'assets/images/HomeScreenLogo.png',
-                height: 35.0,
-                width: 35.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/HomeScreenLogo.png',
+                    height: 35.0,
+                    width: 35.0,
+                  ),
+                  SizedBox(width: 15.0),
+                  Text(
+                    "不動産カレンダー",
+                    style: TextStyle(fontSize: 17.0),
+                  ),
+                ],
               ),
-              SizedBox(width: 15.0),
-              Text(
-                "不動産カレンダー",
-                style: TextStyle(fontSize: 17.0),
+              Positioned(
+                right: 5,
+                child: Card(
+                  elevation: 6.0,
+                  margin: EdgeInsets.all(0.0),
+                  shape: CircleBorder(),
+                  child: InkWell(
+                    onTap: () {
+                      showOptions();
+                    },
+                    child: CircleAvatar(
+                      radius: 17.0,
+                      backgroundColor: ColorConstant.hHighlight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: ValueListenableBuilder(
+                            valueListenable: Constants.startMonth,
+                            builder: (BuildContext context, String value,
+                                Widget child) {
+                              return Text(
+                                value == "0" ? "1/1" : "4/1",
+                                key: key,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            }),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
           centerTitle: true,
           automaticallyImplyLeading: false,
+          //  actions: <Widget>[popupMenuButton()],
         ),
         body: _state == 0
             ? buildLoading()
@@ -187,7 +229,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                     child: Container(
                       color: ColorConstant.hBackground,
                       /*   height: MediaQuery.of(context).size.height * 2,
-                     */
+                                           */
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         mainAxisSize: MainAxisSize.max,
@@ -624,7 +666,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                   if (_initialProcess == 1 && vdate != date1) {
                     vdate = date1;
                     //  print("1 :$date1");
-//print("2  :$date2");
+                    //print("2  :$date2");
                     if (date1.year == date2.year) {
                       if (date1.year != _cyear) {
                         changeYearPickerVal(date1.year);
@@ -684,10 +726,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 startingDayOfWeek: StartingDayOfWeek.sunday,
                 onUnavailableDaySelected: () {},
                 onDaySelected: (date, events) {
-                  //  print(date.microsecondsSinceEpoch);
-                  //  print(date.toIso8601String());
                   selectedDate = date;
-                  // _calendarController.setFocusedDay(DateTime.now());
                 },
                 onCalendarCreated: (date, date2, cformat) {
                   _calendarController.setFocusedDay(DateTime.now());
@@ -822,9 +861,15 @@ class _HomeScreeenState extends State<HomeScreeen> {
     bool isToday,
   }) {
     DateTime firstday = val == "S"
-        ? DateTime(date.year, 1, 1)
+        ? Constants.startMonth.value == "0"
+            ? DateTime(date.year, 1, 1)
+            : DateTime(date.year, 4, 1)
         : DateTime(date.year, date.month, 1);
-    final completed = date.difference(firstday).inDays;
+    final completed = val == "S" && Constants.startMonth.value == "1"
+        ? date.month < 4
+            ? date.difference(DateTime(date.year - 1, 4, 1)).inDays.abs()
+            : date.difference(DateTime(date.year, 4, 1)).inDays.abs()
+        : date.difference(firstday).inDays.abs();
     final remaing = val == "S"
         ? date.year % 4 == 0
             ? 366 - completed
@@ -1075,12 +1120,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
       playStoreUrl = remoteConfig.getString('play_store_url');
 
-      /*  print("Update Version :" + newVersion.toString());
-      print("Minimum Version :" + minimumVersion.toString());
-
-      print("App Store Url : " + appStoreUrl);
-      print("Play Store Url : " + playStoreUrl); */
-
       if (newVersion > currentVersion) {
         _showVersionDialog(context);
       }
@@ -1089,7 +1128,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
       //   print(exception);
     } catch (exception) {
       /*  print('Unable to fetch remote config. Cached or default values will be '
-          'used'); */
+                                'used'); */
     }
   }
 
@@ -1105,11 +1144,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
         return WillPopScope(
           onWillPop: () => Future.value(false),
           child: AlertDialog(
-            /*   titlePadding: const EdgeInsets.only(
-                      left: 14.0, right: 14.0, top: 20.0, bottom: 14.0),
-                  contentPadding: const EdgeInsets.only(
-                      left: 18.0, right: 18.0, top: 14.0, bottom: 14.0),
-                 */
             title: Text(title),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1129,10 +1163,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 )
               ],
             ),
-            /*  Text(
-                    message,
-                    style: TextStyle(fontSize: 12.0),
-                  ), */
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -1193,7 +1223,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   saveFcmToke(String fcmToken, SharedPreferences preferences) async {
     UserListRequestModel userListRequestModel =
         UserListRequestModel(deviceToken: fcmToken);
-//print(Constants.device_list);
+    //print(Constants.device_list);
     var response = await http.post(Constants.device_list,
         body: userListRequestModel.toJson());
     if (response.statusCode == 200) {
@@ -1208,5 +1238,28 @@ class _HomeScreeenState extends State<HomeScreeen> {
         _state = 1;
       });
     }
+  }
+
+  refreshPage() {
+    setState(() {});
+  }
+
+  void showOptions() {
+    ShowToolTip popup = ShowToolTip(context, refreshPage,
+        text: monthVal,
+        textStyle: TextStyle(color: Colors.black),
+        height: 80,
+        width: 100,
+        backgroundColor: Colors.white,
+        padding: EdgeInsets.all(8.0),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            bottomLeft: Radius.circular(15.0),
+            bottomRight: Radius.circular(15.0)));
+
+    /// show the popup for specific widget
+    popup.show(
+      widgetKey: key,
+    );
   }
 }
