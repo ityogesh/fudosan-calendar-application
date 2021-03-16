@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>185325054911-irr7ijv2r2l18hps8g6ja19pnuo1uh3s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.185325054911-irr7ijv2r2l18hps8g6ja19pnuo1uh3s</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB1EhTOkfULrPV2Lg8ST3P6YR1LdfCfnik</string>
+	<key>GCM_SENDER_ID</key>
+	<string>185325054911</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.fudosan.fudosanCalendarapp</string>
+	<key>PROJECT_ID</key>
+	<string>fudosan-calendar</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fudosan-calendar.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:185325054911:ios:69ce323eae7ce8ad62cf0a</string>
+	<key>DATABASE_URL</key>
+	<string>https://fudosan-calendar.firebaseio.com</string>
+</dict>
+</plist>

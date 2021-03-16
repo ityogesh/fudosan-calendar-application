@@ -4,12 +4,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_fudosan/models/apiRequestModels/homescreen/UserListRequestModel.dart';
+import 'package:login_fudosan/models/apiResponseModels/homescreen/UserListResponseModel.dart';
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/screens/rentalscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
 import 'package:login_fudosan/utils/numberpicker.dart';
+import 'package:login_fudosan/utils/showToolTip.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
@@ -17,6 +22,8 @@ import 'package:showcaseview/showcase_widget.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_facebook_appevents/flutter_facebook_appevents.dart';
+import 'dart:math';
 
 ScrollController controller = new ScrollController();
 
@@ -52,16 +59,17 @@ class HomeScreeen extends StatefulWidget {
 }
 
 class _HomeScreeenState extends State<HomeScreeen> {
+  GlobalKey key = GlobalKey();
   CalendarController _calendarController;
   int _cyear;
   int _radioValue1 = 0;
   int _currentmonth;
-  List<HolidayModel> _holidayModel = List<HolidayModel>();
-  int _state = 1;
+  int _state = 0;
   int _initialProcess = 0;
+  List<HolidayModel> _holidayModel = List<HolidayModel>();
   List<Map<DateTime, List<dynamic>>> sample =
   List<Map<DateTime, List<dynamic>>>();
-  String val = "R";
+  Map<DateTime, List<dynamic>> holiday;
   NumberPicker yearPicker;
   NumberPicker monthPicker;
   DateTime selectedDate;
@@ -71,26 +79,33 @@ class _HomeScreeenState extends State<HomeScreeen> {
   GlobalKey _two = GlobalKey();
   GlobalKey _three = GlobalKey();
   GlobalKey _four = GlobalKey();
-  Map<DateTime, List<dynamic>> holiday;
   double minimumVersion;
   double currentVersion;
   double newVersion;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String val = "R";
   String appStoreUrl;
   String playStoreUrl;
+  String fcmToken;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String monthVal = "0";
 
   @override
   void initState() {
-    super.initState();
+    getFcmToken();
     getHolidays();
     _calendarController = CalendarController();
     _cyear = DateTime.now().year;
     _currentmonth = DateTime.now().month;
+
+    FacebookAppEvents.setUserId("user");
+    FacebookAppEvents.logEvent("test_", {"k": "v"});
+
     try {
       versionCheck(context);
     } catch (e) {
-      print("Exception " + e);
+      //    print("Exception " + e);
     }
+    super.initState();
   }
 
   @override
@@ -118,37 +133,96 @@ class _HomeScreeenState extends State<HomeScreeen> {
     }
   }
 
+  Widget buildLoading() {
+    return Center(
+      child: SingleChildScrollView(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SpinKitThreeBounce(
+              color: ColorConstant.rButton,
+              size: 30.0,
+            ),
+            //buildLoadingIndicator()
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      showShowCase();
-    });
+    if (_state != 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        showShowCase();
+      });
+    }
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: ColorConstant.appBar,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          title: Stack(
             children: [
-              Image.asset(
-                'assets/images/HomeScreenLogo.png',
-                height: 35.0,
-                width: 35.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/HomeScreenLogo.png',
+                    height: 35.0,
+                    width: 35.0,
+                  ),
+                  SizedBox(width: 15.0),
+                  Text(
+                    "不動産カレンダー",
+                    style: TextStyle(fontSize: 17.0),
+                  ),
+                ],
               ),
-              SizedBox(width: 15.0),
-              Text(
-                "不動産カレンダー",
-                style: TextStyle(fontSize: 17.0),
-              ),
+              val == 'S'
+                  ? Positioned(
+                right: 5,
+                child: Card(
+                  elevation: 6.0,
+                  margin: EdgeInsets.all(0.0),
+                  shape: CircleBorder(),
+                  child: InkWell(
+                    onTap: () {
+                      showOptions();
+                    },
+                    child: CircleAvatar(
+                      radius: 17.0,
+                      backgroundColor: ColorConstant.hHighlight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: ValueListenableBuilder(
+                            valueListenable: Constants.startMonth,
+                            builder: (BuildContext context, String value,
+                                Widget child) {
+                              return Text(
+                                value == "0" ? "1/1" : "4/1",
+                                key: key,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            }),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+                  : Container()
             ],
           ),
           centerTitle: true,
           automaticallyImplyLeading: false,
+          //  actions: <Widget>[popupMenuButton()],
         ),
         body: _state == 0
-            ? Center(child: CircularProgressIndicator())
+            ? buildLoading()
             : Stack(
           children: [
             Container(color: ColorConstant.hBackground),
@@ -157,7 +231,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
               child: Container(
                 color: ColorConstant.hBackground,
                 /*   height: MediaQuery.of(context).size.height * 2,
-                     */
+                                           */
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   mainAxisSize: MainAxisSize.max,
@@ -357,7 +431,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         //  print(data['start']['date']);
         _holidayModel.add(HolidayModel(DateTime.parse(data['start']['date'])));
         setState(() {
-          _state = 1;
+          //      _state = 1;
         });
       }
     } catch (e) {
@@ -367,13 +441,14 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
   changeMonth(int selectedmonth) {
     var _cfocus = _calendarController.focusedDay;
-    setState(() {
-      _currentmonth = selectedmonth;
-      _calendarController
-          .setFocusedDay(DateTime(_cfocus.year, _currentmonth, _cfocus.day));
-      // monthPicker.animateInt(_currentmonth);
-    });
-    // print("Changed month: $_currentmonth");
+    if (_currentmonth == 12 && selectedmonth == 1) {
+      changeYearPickerVal(_cyear + 1);
+    } else if (_currentmonth == 1 && selectedmonth == 12) {
+      changeYearPickerVal(_cyear - 1);
+    }
+    _currentmonth = selectedmonth;
+    _calendarController
+        .setFocusedDay(DateTime(_cyear, _currentmonth, _cfocus.day));
   }
 
   changeYear(int selectedmonth) {
@@ -446,6 +521,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
   buildMonthPicker() {
     monthPicker = NumberPicker.horizontal(
       currentDate: DateTime.now(),
+      infiniteLoop: true,
       selectedYear: _cyear,
       ismonth: true,
       numberToDisplay: 7,
@@ -589,11 +665,13 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 initialCalendarFormat: CalendarFormat.month,
                 calendarController: _calendarController,
                 onVisibleDaysChanged: (date1, date2, cformat) {
+                  //When calendar is swiped this logic is used to change the month and year picker Value
                   if (_initialProcess == 1 && vdate != date1) {
                     vdate = date1;
                     //  print("1 :$date1");
-//print("2  :$date2");
-                    if (date1.year == date2.year) {
+                    //print("2  :$date2");
+                    if (date1.year == date2.year) //same year
+                        {
                       if (date1.year != _cyear) {
                         changeYearPickerVal(date1.year);
                       }
@@ -652,10 +730,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 startingDayOfWeek: StartingDayOfWeek.sunday,
                 onUnavailableDaySelected: () {},
                 onDaySelected: (date, events) {
-                  //  print(date.microsecondsSinceEpoch);
-                  //  print(date.toIso8601String());
                   selectedDate = date;
-                  // _calendarController.setFocusedDay(DateTime.now());
                 },
                 onCalendarCreated: (date, date2, cformat) {
                   _calendarController.setFocusedDay(DateTime.now());
@@ -777,10 +852,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
     } else if (month == 4 || month == 6 || month == 9 || month == 11) {
       return 31;
     } else if (month == 2) {
-      return year % 4 == 0 ? 30 : 28;
+      return year % 4 == 0 ? 30 : 29;
     }
   }
 
+  //Method used to build remaining and completed days in Calendar
   dayBuilder({
     @required DateTime date,
     Color otherdays,
@@ -789,12 +865,27 @@ class _HomeScreeenState extends State<HomeScreeen> {
     Color backgroundcolor,
     bool isToday,
   }) {
-    DateTime firstday = val == "S"
+    DateTime firstday = val == "S" // S -> Seller and Buyer option is Selected
+        ? Constants.startMonth.value ==
+        "0" // 0 -> Start from Jan ,1-> Start from April
         ? DateTime(date.year, 1, 1)
+        : DateTime(date.year, 4, 1)
         : DateTime(date.year, date.month, 1);
-    final completed = date.difference(firstday).inDays;
+    final completed = val == "S" && Constants.startMonth.value == "1"
+        ? date.month <
+        4 // for start from April should consider last March, so when jan comes in it is less than 4, minus 1 year to get completed days
+        ? date.difference(DateTime(date.year - 1, 4, 1)).inDays.abs()
+        : date.difference(DateTime(date.year, 4, 1)).inDays.abs()
+        : date.difference(firstday).inDays.abs();
     final remaing = val == "S"
-        ? date.year % 4 == 0 ? 366 - completed : 365 - completed
+        ? Constants.startMonth.value == "1" && date.month >= 4
+        ? (date.year + 1) % 4 ==
+        0 // for start from April should check for leap year the next year(for Mar - Dec) since Feb comes in next year
+        ? 366 - completed
+        : 365 - completed
+        : date.year % 4 == 0
+        ? 366 - completed
+        : 365 - completed
         : daysRemaining(date.month, date.year) - date.day;
     return Container(
       margin: const EdgeInsets.all(1.5),
@@ -869,6 +960,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     );
   }
 
+  //Method used to build day number in Calendar
   dateBuilder(
       bool isToday, DateTime date, Color backgroundcolor, Color textcolor) {
     return isToday == true
@@ -1007,7 +1099,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     //Get Current installed version of app
     final PackageInfo info = await PackageInfo.fromPlatform();
     currentVersion = double.parse(info.version.trim().replaceAll(".", ""));
-    print("Current Version :" + info.version);
+    // print("Current Version :" + info.version);
 
     //Get Latest version info from firebase config
     final RemoteConfig remoteConfig = await RemoteConfig.instance;
@@ -1017,11 +1109,22 @@ class _HomeScreeenState extends State<HomeScreeen> {
       await remoteConfig.fetch(expiration: const Duration(seconds: 0));
       await remoteConfig.activateFetched();
       remoteConfig.getString('force_update_current_version');
-      newVersion = double.parse(remoteConfig
+
+      newVersion = Platform.isIOS
+          ? double.parse(remoteConfig
+          .getString('ios_latest_version')
+          .trim()
+          .replaceAll(".", ""))
+          : double.parse(remoteConfig
           .getString('android_app_latest_version')
           .trim()
           .replaceAll(".", ""));
-      minimumVersion = double.parse(remoteConfig
+      minimumVersion = Platform.isIOS
+          ? double.parse(remoteConfig
+          .getString('ios_minimum_version')
+          .trim()
+          .replaceAll(".", ""))
+          : double.parse(remoteConfig
           .getString('android_app_minimum_version')
           .trim()
           .replaceAll(".", ""));
@@ -1030,23 +1133,15 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
       playStoreUrl = remoteConfig.getString('play_store_url');
 
-      print("Update Version :" +
-          remoteConfig.getString('force_update_current_version'));
-      print("Minimum Version :" +
-          remoteConfig.getString('force_update_minimum_version'));
-
-      print("App Store Url : " + appStoreUrl);
-      print("Play Store Url : " + playStoreUrl);
-
       if (newVersion > currentVersion) {
         _showVersionDialog(context);
       }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
-      print(exception);
+      //   print(exception);
     } catch (exception) {
-      print('Unable to fetch remote config. Cached or default values will be '
-          'used');
+      /*  print('Unable to fetch remote config. Cached or default values will be '
+                                'used'); */
     }
   }
 
@@ -1056,41 +1151,53 @@ class _HomeScreeenState extends State<HomeScreeen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         String title = "アップデートのお知らせ";
-        String message = "不動産カレンダーの新しいバージョンが利用可能です。最新版にアップデートしてご利用ください。";
+        String message = "不動産カレンダーの新しいバージョンが利用可能\nです。最新版にアップデートしてご利用ください。";
         String btnLabel = "今すぐアップデート";
         String btnLabelCancel = "後で";
-        return Platform.isIOS
-            ? new CupertinoAlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(btnLabel),
-              onPressed: () => _launchURL(appStoreUrl),
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: AlertDialog(
+            title: Text(title),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  child: Text(
+                    "不動産カレンダーの新しいバージョンが利用可能",
+                    style: TextStyle(fontSize: 12.0),
+                  ),
+                ),
+                FittedBox(
+                  child: Text(
+                    "です。最新版にアップデートしてご利用ください。",
+                    style: TextStyle(fontSize: 12.0),
+                  ),
+                )
+              ],
             ),
-            minimumVersion <= currentVersion
-                ? FlatButton(
-              child: Text(btnLabelCancel),
-              onPressed: () => Navigator.pop(context),
-            )
-                : Container(),
-          ],
-        )
-            : new AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(btnLabel),
-              onPressed: () => _launchURL(playStoreUrl),
-            ),
-            minimumVersion <= currentVersion
-                ? FlatButton(
-              child: Text(btnLabelCancel),
-              onPressed: () => Navigator.pop(context),
-            )
-                : Container(),
-          ],
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  btnLabel,
+                  style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
+                ),
+                onPressed: () => Platform.isIOS
+                    ? _launchURL(appStoreUrl)
+                    : _launchURL(playStoreUrl),
+              ),
+              minimumVersion <= currentVersion
+                  ? FlatButton(
+                child: Text(
+                  btnLabelCancel,
+                  style: TextStyle(
+                      fontSize: 12.0, fontWeight: FontWeight.bold),
+                ),
+                onPressed: () => Navigator.pop(context),
+              )
+                  : Container(),
+            ],
+          ),
         );
       },
     );
@@ -1102,5 +1209,71 @@ class _HomeScreeenState extends State<HomeScreeen> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  getFcmToken() async {
+    preferences = await SharedPreferences.getInstance();
+    String fcmToken = preferences.getString("devicetoken");
+    if (fcmToken == null) {
+      try {
+        _firebaseMessaging.getToken().then((token) {
+          fcmToken = token;
+          //   print('Generated Token:' + token);
+          saveFcmToke(fcmToken, preferences);
+        });
+      } catch (e) {
+        //    print(e);
+      }
+    } else {
+      //   print("User id:" + preferences.getInt("uid").toString());
+      //  print("Fcm Token already Generated:" + fcmToken);
+      setState(() {
+        _state = 1;
+      });
+    }
+  }
+
+  saveFcmToke(String fcmToken, SharedPreferences preferences) async {
+    UserListRequestModel userListRequestModel =
+    UserListRequestModel(deviceToken: fcmToken);
+    //print(Constants.device_list);
+    var response = await http.post(Constants.device_list,
+        body: userListRequestModel.toJson());
+    if (response.statusCode == 200) {
+      var responseData = json.decode(response.body);
+      final Map userListResponse = responseData;
+      UserListResponseModel userListResponseModel =
+      UserListResponseModel.fromJson(userListResponse);
+      preferences.setString("devicetoken", fcmToken);
+      preferences.setInt("uid", userListResponseModel.userid);
+      //    print("User id: ${userListResponseModel.userid}");
+      setState(() {
+        _state = 1;
+      });
+    }
+  }
+
+  //Method called from ShowtoolTip to refresh the page after StartMonth is Selected
+  refreshPage() {
+    setState(() {});
+  }
+
+  void showOptions() {
+    ShowToolTip popup = ShowToolTip(context, refreshPage,
+        text: monthVal,
+        textStyle: TextStyle(color: Colors.black),
+        height: 80,
+        width: 100,
+        backgroundColor: Colors.white,
+        padding: EdgeInsets.all(8.0),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            bottomLeft: Radius.circular(15.0),
+            bottomRight: Radius.circular(15.0)));
+
+    /// show the popup for specific widget
+    popup.show(
+      widgetKey: key,
+    );
   }
 }

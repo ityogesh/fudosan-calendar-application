@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
+import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase_widget.dart';
@@ -64,9 +65,21 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
     landTaxEachDayPrice = 0;
     buildingTaxEachDayPrice = 0;
     date = widget.selectedDate;
-    completedDays = date.difference(DateTime(date.year, 1, 1)).inDays;
-    remaingDays =
-        date.year % 4 == 0 ? 366 - completedDays : 365 - completedDays;
+    DateTime firstday = Constants.startMonth.value == "0"
+        ? DateTime(date.year, 1, 1)
+        : DateTime(date.year, 4, 1);
+    completedDays = Constants.startMonth.value == "1"
+        ? date.month < 4
+            ? date.difference(DateTime(date.year - 1, 4, 1)).inDays.abs()
+            : date.difference(DateTime(date.year, 4, 1)).inDays.abs()
+        : date.difference(firstday).inDays.abs();
+    remaingDays = Constants.startMonth.value == "1" && date.month >= 4
+        ? (date.year + 1) % 4 == 0
+            ? 366 - completedDays
+            : 365 - completedDays
+        : date.year % 4 == 0
+            ? 366 - completedDays
+            : 365 - completedDays;
     sellDate = DateTime(date.year, date.month, date.day - 1);
     sellDate = sellDate.year != date.year
         ? DateTime(date.year, date.month, date.day)
@@ -134,7 +147,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  "1月1日",
+                                  Constants.startMonth.value == "0"
+                                      ? "1月1日"
+                                      : "4月1日",
                                   style: cardSmallText,
                                   textAlign: TextAlign.right,
                                 ),
@@ -229,7 +244,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  "12月31日",
+                                  Constants.startMonth.value == "0"
+                                      ? "12月31日"
+                                      : "3月31日",
                                   style: cardSmallText,
                                   textAlign: TextAlign.left,
                                 ),

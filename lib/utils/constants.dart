@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Constants {
   //API URL
 
@@ -12,6 +14,8 @@ class Constants {
   static const String forgot_password_Change_URL =
       base_URL + '/forgot_password';
   static const String stateInfoUrl = base_URL + '/state_list';
+  static const String device_list = base_URL + '/userList';
   static const String progress_msg = 'お待ちください';
-  
+
+  static ValueNotifier<String> startMonth = ValueNotifier<String>("0");
 }

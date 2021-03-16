@@ -146,6 +146,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_facebook_appevents:
+    dependency: "direct main"
+    description:
+      name: flutter_facebook_appevents
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
