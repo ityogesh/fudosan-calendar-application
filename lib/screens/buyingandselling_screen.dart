@@ -56,6 +56,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   FocusNode buildingTaxFocus = FocusNode();
   DateTime sellDate;
   int maxLength = 10;
+  int maxLengthBuilding = 10;
   final GlobalKey _one = GlobalKey();
   SharedPreferences preferences;
 
@@ -502,7 +503,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                                   signed: true,
                                                   decimal:
                                                       true), // TextInputType.number,
-                                          maxLength: maxLength,
+                                          maxLength: maxLengthBuilding,
                                           textAlign: TextAlign.right,
                                           decoration: InputDecoration(
                                               counterText: "",
@@ -553,6 +554,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                                 rval;
                                           },
                                           onEditingComplete: () {
+                                            buildingTaxFocus.unfocus();
                                             buildingTaxAmount.value =
                                                 buildingTextController.text;
                                             var rev = japaneseCurrency.parse(
@@ -579,20 +581,22 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                                     .toString();
                                             // print("$val");
                                             setState(() {
-                                              maxLength = buildingTextController
-                                                          .text.length ==
-                                                      10
-                                                  ? 13
-                                                  : buildingTextController
-                                                              .text.length >=
-                                                          7
-                                                      ? 12
+                                              maxLengthBuilding =
+                                                  buildingTextController
+                                                              .text.length ==
+                                                          10
+                                                      ? 13
                                                       : buildingTextController
                                                                   .text
                                                                   .length >=
-                                                              4
-                                                          ? 11
-                                                          : 10;
+                                                              7
+                                                          ? 12
+                                                          : buildingTextController
+                                                                      .text
+                                                                      .length >=
+                                                                  4
+                                                              ? 11
+                                                              : 10;
                                               buildingTextController.text = val;
                                             });
                                             /* buildingTextController.value =

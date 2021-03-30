@@ -188,7 +188,7 @@ class _RentalScreenState extends State<RentalScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("賃料 日割計算"),
-         elevation: 0,
+        elevation: 0,
         centerTitle: true,
         backgroundColor: ColorConstant.appBar,
         leading: IconButton(
@@ -519,7 +519,8 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   .validateAmount(value);
                                               if (msg) {
                                                 return Text("正しい金額値を入力してください。",
-                                                    style: TextStyle(fontSize: 12.0,
+                                                    style: TextStyle(
+                                                        fontSize: 12.0,
                                                         color: Colors.red));
                                               }
                                               return Container();
@@ -567,7 +568,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                     TextInputAction.done,
 //                                    style: TextStyle(fontSize: 18),
                                                 maxLength: mMaxLength,
-                                                  decoration: InputDecoration(
+                                                decoration: InputDecoration(
                                                   border: InputBorder.none,
                                                   counterText: "",
                                                 ),
@@ -575,7 +576,7 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   if (value == null ||
                                                       value == "") {
                                                     mamount.value = 0;
-                                                    valmamount.value ="0";
+                                                    valmamount.value = "0";
                                                     tamount
                                                         .value = japaneseCurrency
                                                             .parse(japaneseCurrency
@@ -586,7 +587,9 @@ class _RentalScreenState extends State<RentalScreen> {
                                                                 .format(mamount
                                                                     .value));
                                                   } else {
-                                                    valmamount.value = maintainceController.text;
+                                                    valmamount.value =
+                                                        maintainceController
+                                                            .text;
                                                     var rev =
                                                         japaneseCurrency.parse(
                                                             maintainceController
@@ -631,7 +634,9 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   rentController.text = rval;
                                                 },
                                                 onEditingComplete: () {
-                                                  valmamount.value = maintainceController.text;
+                                                  maintainanceFocus.unfocus();
+                                                  valmamount.value =
+                                                      maintainceController.text;
                                                   var rev =
                                                       japaneseCurrency.parse(
                                                           maintainceController
@@ -703,7 +708,8 @@ class _RentalScreenState extends State<RentalScreen> {
                                                   .validateAmount(value);
                                               if (msg) {
                                                 return Text("正しい金額値を入力してください。",
-                                                    style: TextStyle(fontSize: 12.0,
+                                                    style: TextStyle(
+                                                        fontSize: 12.0,
                                                         color: Colors.red));
                                               }
                                               return Container();
