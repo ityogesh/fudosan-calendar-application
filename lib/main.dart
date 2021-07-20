@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:login_fudosan/screens/homescreen.dart';
-import 'package:login_fudosan/screens/loginscreen.dart';
-import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:login_fudosan/screens/homescreen.dart';
+import 'package:login_fudosan/utils/colorconstant.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Show(),
+      home: Show(), //AdMobTest(),
       supportedLocales: [
         const Locale('en'),
         const Locale('ja'),

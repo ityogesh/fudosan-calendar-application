@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:login_fudosan/utils/ADMobHelper/NativeADMOBFull.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -790,7 +791,12 @@ class _RentalScreenState extends State<RentalScreen> {
                           ),
                         ],
                       ),
-                    ))
+                    )),
+                Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  child: NativeAdMobWidgetFull(),
+                ),
               ],
             ),
           ),
