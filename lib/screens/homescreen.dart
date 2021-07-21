@@ -244,6 +244,11 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             padding: EdgeInsets.all(8.0),
                             child: buildCalendar(),
                           ),
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            child: NativeAdMobBannerWidget(),
+                          ),
                           ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width * 0.33,
                             child: Showcase(
@@ -407,11 +412,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            child: NativeAdMobBannerWidget(),
                           ),
                         ],
                       ),
