@@ -20,7 +20,7 @@ class NativeAdMobWidgetFull extends StatelessWidget {
           size: 30.0,
         ),
       ),
-      error: Center(child: Text("Failed to load the full ad")),
+      error: SizedBox.shrink(),
       controller: _controller,
       type: NativeAdmobType.full,
       options: NativeAdmobOptions(

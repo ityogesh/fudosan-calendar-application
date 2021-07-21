@@ -693,10 +693,13 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                   ),
                 ),
               ),
-              Container(
-                height: 100,
-                width: MediaQuery.of(context).size.width,
-                child: NativeAdMobBannerWidget(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  child: NativeAdMobBannerWidget(),
+                ),
               ),
             ],
           ),

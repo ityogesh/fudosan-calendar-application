@@ -792,10 +792,13 @@ class _RentalScreenState extends State<RentalScreen> {
                         ],
                       ),
                     )),
-                Container(
-                  height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  child: NativeAdMobWidgetFull(),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: 100,
+                    width: MediaQuery.of(context).size.width,
+                    child: NativeAdMobWidgetFull(),
+                  ),
                 ),
               ],
             ),

@@ -16,11 +16,11 @@ class NativeAdMobBannerWidget extends StatelessWidget {
       adUnitID: ADUnitIDHelper.adMobUnit,
       loading: Center(
         child: SpinKitThreeBounce(
-          color: ColorConstant.rButton,
+          color: ColorConstant.hHighlight,
           size: 30.0,
         ),
       ),
-      error: Center(child: Text("Failed to load the banner ad")),
+      error: SizedBox.shrink(),
       controller: _controller,
       type: NativeAdmobType.banner,
       options: NativeAdmobOptions(

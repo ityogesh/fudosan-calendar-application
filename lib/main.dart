@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Show(), //AdMobTest(),
+      home: Show(), //MyMaterialApp(),
       supportedLocales: [
         const Locale('en'),
         const Locale('ja'),
