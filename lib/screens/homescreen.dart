@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,7 @@ import 'package:login_fudosan/models/apiResponseModels/homescreen/UserListRespon
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/screens/rentalscreen.dart';
-import 'package:login_fudosan/utils/ADMobHelper/NativeADMOBBanner.dart';
+import 'package:login_fudosan/utils/ADMobHelper/ADUnitIDHelper.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
@@ -89,6 +90,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
   String fcmToken;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   String monthVal = "0";
+  AdmobInterstitial interstitialAd;
+  AdmobBannerSize bannerSize;
 
   @override
   void initState() {
@@ -107,12 +110,42 @@ class _HomeScreeenState extends State<HomeScreeen> {
       //    print("Exception " + e);
     }
     super.initState();
+    Admob.requestTrackingAuthorization();
+    bannerSize = AdmobBannerSize.BANNER;
+    interstitialAd = AdmobInterstitial(
+      adUnitId: ADUnitIDHelper.getInterstitialAdUnitId,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+        handleEvent(event, args, 'Interstitial');
+      },
+    );
+    interstitialAd.load();
   }
 
   @override
   void dispose() {
+    interstitialAd.dispose();
     super.dispose();
     _calendarController.dispose();
+  }
+
+  void handleEvent(
+      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
+    switch (event) {
+      case AdmobAdEvent.loaded:
+        print('New Admob $adType Ad loaded!');
+        break;
+      case AdmobAdEvent.opened:
+        print('Admob $adType Ad opened!');
+        break;
+      case AdmobAdEvent.closed:
+        print('Admob $adType Ad closed!');
+        break;
+      case AdmobAdEvent.failedToLoad:
+        print('Admob $adType failed to load. :(');
+        break;
+      default:
+    }
   }
 
   showShowCase() async {
@@ -245,9 +278,21 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             child: buildCalendar(),
                           ),
                           Container(
-                            height: 100,
-                            width: MediaQuery.of(context).size.width,
-                            child: NativeAdMobBannerWidget(),
+                            child: AdmobBanner(
+                              adUnitId: ADUnitIDHelper.adMobBannerID,
+                              adSize: bannerSize,
+                              listener: (AdmobAdEvent event,
+                                  Map<String, dynamic> args) {
+                                handleEvent(event, args, 'Banner');
+                              },
+                              onBannerCreated:
+                                  (AdmobBannerController controller) {
+                                // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
+                                // Normally you don't need to worry about disposing this yourself, it's handled.
+                                // If you need direct access to dispose, this is your guy!
+                                // controller.dispose();
+                              },
+                            ),
                           ),
                           ButtonTheme(
                             minWidth: MediaQuery.of(context).size.width * 0.33,
@@ -382,7 +427,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                             disposeOnTap: false,
                             onTargetClick: () {},
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 selectedDate == null
                                     ? showDateSelectAlert(context)
                                     : val == "S"
@@ -401,6 +446,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                                         ShowCaseViewRental(
                                                             _radioValue1,
                                                             selectedDate)));
+
+                                if (await interstitialAd.isLoaded) {
+                                  interstitialAd.show();
+                                } else {
+                                  print('Interstitial ad is still loading...');
+                                }
                               },
                               child: CircleAvatar(
                                 radius: 23.0,

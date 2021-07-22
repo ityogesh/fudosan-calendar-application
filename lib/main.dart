@@ -1,3 +1,4 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
@@ -5,6 +6,8 @@ import 'package:login_fudosan/screens/homescreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Admob.initialize();
   runApp(MyApp());
 }
 
@@ -22,7 +25,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Show(), //MyMaterialApp(),
+      home: Show(),
+      //MyMaterialApp(),
       supportedLocales: [
         const Locale('en'),
         const Locale('ja'),
