@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'ADHelper.dart';
 
-class nativeAdWidgetBanner extends StatelessWidget {
+class NativeADBanner extends StatelessWidget {
   final _controller = NativeAdmobController();
 
   @override

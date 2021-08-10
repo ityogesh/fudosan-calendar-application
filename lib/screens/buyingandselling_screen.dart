@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:login_fudosan/utils/NativeADMobBanner.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
-import 'package:login_fudosan/utils/nativeAdmobBanner.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase_widget.dart';
@@ -126,7 +126,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                   margin: EdgeInsets.only(bottom: 20.0),
                   height: 100,
                   width: MediaQuery.of(context).size.width,
-                  child: nativeAdWidgetBanner(),
+                  child: NativeADBanner(),
                 ),
               ),
               Padding(

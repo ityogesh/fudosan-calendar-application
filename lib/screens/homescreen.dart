@@ -13,10 +13,10 @@ import 'package:login_fudosan/models/apiResponseModels/homescreen/UserListRespon
 import 'package:login_fudosan/models/holidayAPIModel/holidayModel.dart';
 import 'package:login_fudosan/screens/buyingandselling_screen.dart';
 import 'package:login_fudosan/screens/rentalscreen.dart';
+import 'package:login_fudosan/utils/NativeADMobBanner.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/customradiobutton.dart' as own;
-import 'package:login_fudosan/utils/nativeAdmobBanner.dart';
 import 'package:login_fudosan/utils/numberpicker.dart';
 import 'package:login_fudosan/utils/showToolTip.dart';
 import 'package:package_info/package_info.dart';
@@ -371,7 +371,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                               margin: EdgeInsets.only(bottom: 20.0),
                               height: 100,
                               width: MediaQuery.of(context).size.width,
-                              child: nativeAdWidgetBanner(),
+                              child: NativeADBanner(),
                             ),
                           ),
                           Showcase(

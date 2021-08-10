@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:login_fudosan/utils/NativeADMobBanner.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
-import 'package:login_fudosan/utils/nativeAdmobBanner.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -212,7 +212,7 @@ class _RentalScreenState extends State<RentalScreen> {
                     margin: EdgeInsets.only(bottom: 20.0),
                     height: 100,
                     width: MediaQuery.of(context).size.width,
-                    child: nativeAdWidgetBanner(),
+                    child: NativeADBanner(),
                   ),
                 ),
                 Center(
