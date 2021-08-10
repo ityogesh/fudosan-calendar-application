@@ -238,15 +238,6 @@ class _HomeScreeenState extends State<HomeScreeen> {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 20.0),
-                              height: 100,
-                              width: MediaQuery.of(context).size.width,
-                              child: nativeAdWidgetBanner(),
-                            ),
-                          ),
                           buildYearPicker(),
                           buildMonthPicker(),
                           Padding(
@@ -374,6 +365,15 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                   ),
                                 )
                               : Container(),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 20.0),
+                              height: 100,
+                              width: MediaQuery.of(context).size.width,
+                              child: nativeAdWidgetBanner(),
+                            ),
+                          ),
                           Showcase(
                             key: _four,
                             description: '計算画面に移動するため、（>）を押下してください。',
@@ -739,7 +739,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
                 ),
                 startingDayOfWeek: StartingDayOfWeek.sunday,
                 onUnavailableDaySelected: () {},
-                onDaySelected: (date, events) {
+                onDaySelected: (date, events, onDaySelected) {
                   selectedDate = date;
                 },
                 onCalendarCreated: (date, date2, cformat) {
@@ -1147,10 +1147,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
       }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
-      print(exception);
+      //print(exception);
     } catch (exception) {
-      print('Unable to fetch remote config. Cached or default values will be '
-          'used');
+      /*print('Unable to fetch remote config. Cached or default values will be '
+          'used');*/
     }
   }
 

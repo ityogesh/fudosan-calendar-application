@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:flutter_native_admob/native_admob_options.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'ADHelper.dart';
 
@@ -12,7 +13,7 @@ class nativeAdWidgetBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return NativeAdmob(
       adUnitID: AdHelper.adMobUnit,
-      loading: Center(child: CircularProgressIndicator()),
+      loading: Center(child: SpinKitChasingDots(color: Colors.blueAccent)),
       error: Text("Failed to load the ad"),
       controller: _controller,
       type: NativeAdmobType.banner,
