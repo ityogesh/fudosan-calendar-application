@@ -10,9 +10,9 @@ class NativeADWidgetFull extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NativeAdmob(
-      adUnitID: "ca-app-pub-7032283861969832/9899528134",
+      adUnitID: 'ca-app-pub-7032283861969832/9899528134',
       loading: Center(child: SpinKitChasingDots(color: Colors.blueAccent)),
-      error: Text("Failed to load the ad"),
+      error: Center(child: Text("広告の読み込みに失敗しました。")),
       controller: _controller,
       type: NativeAdmobType.full,
       options: NativeAdmobOptions(
