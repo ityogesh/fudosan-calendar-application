@@ -1114,6 +1114,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
 
     try {
       // Using default duration to force fetching from remote server.
+
       await remoteConfig.fetch(expiration: const Duration(seconds: 0));
       await remoteConfig.activateFetched();
       remoteConfig.getString('force_update_current_version');
@@ -1146,10 +1147,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
       }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
-      //   print(exception);
+      print(exception);
     } catch (exception) {
-      /*  print('Unable to fetch remote config. Cached or default values will be '
-                                'used'); */
+      print('Unable to fetch remote config. Cached or default values will be '
+          'used');
     }
   }
 
