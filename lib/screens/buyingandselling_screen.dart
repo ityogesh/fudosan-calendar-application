@@ -1,8 +1,7 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:login_fudosan/utils/ADMobHelper/ADUnitIDHelper.dart';
+import 'package:login_fudosan/utils/NativeADMobBanner.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
@@ -12,9 +11,7 @@ import 'package:showcaseview/showcaseview.dart';
 
 class ShowCaseBuyandSell extends StatelessWidget {
   final DateTime selectedDate;
-
   ShowCaseBuyandSell(this.selectedDate);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +30,7 @@ class ShowCaseBuyandSell extends StatelessWidget {
 
 class BuyingSellingScreen extends StatefulWidget {
   final DateTime selectedDate;
-
   BuyingSellingScreen(this.selectedDate);
-
   @override
   _BuyingSellingScreenState createState() => _BuyingSellingScreenState();
 }
@@ -65,7 +60,6 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
   int maxLengthBuilding = 10;
   final GlobalKey _one = GlobalKey();
   SharedPreferences preferences;
-  AdmobBannerSize bannerSize;
 
   @override
   void initState() {
@@ -88,8 +82,6 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
     sellDate = sellDate.year != date.year
         ? DateTime(date.year, date.month, date.day)
         : sellDate;
-
-    bannerSize = AdmobBannerSize.BANNER;
   }
 
   showShowCaseBuyandSeller() async {
@@ -132,19 +124,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   margin: EdgeInsets.only(bottom: 20.0),
-                  child: AdmobBanner(
-                    adUnitId: ADUnitIDHelper.adMobBannerID,
-                    adSize: bannerSize,
-                    listener: (AdmobAdEvent event, Map<String, dynamic> args) {
-                      handleEvent(event, args, 'Banner');
-                    },
-                    onBannerCreated: (AdmobBannerController controller) {
-                      // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                      // Normally you don't need to worry about disposing this yourself, it's handled.
-                      // If you need direct access to dispose, this is your guy!
-                      // controller.dispose();
-                    },
-                  ),
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  child: NativeADBanner(),
                 ),
               ),
               Padding(
@@ -524,8 +506,9 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                           controller: buildingTextController,
                                           keyboardType:
                                               TextInputType.numberWithOptions(
-                                                  signed: true, decimal: true),
-                                          // TextInputType.number,
+                                                  signed: true,
+                                                  decimal:
+                                                      true), // TextInputType.number,
                                           maxLength: maxLengthBuilding,
                                           textAlign: TextAlign.right,
                                           decoration: InputDecoration(
@@ -718,7 +701,7 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                     ],
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -730,24 +713,5 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
       BuildContext context, FocusNode _currentFocus, FocusNode _nextFocus) {
     _currentFocus.unfocus();
     FocusScope.of(context).requestFocus(_nextFocus);
-  }
-
-  void handleEvent(
-      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
-    switch (event) {
-      case AdmobAdEvent.loaded:
-        print('New Admob $adType Ad loaded!');
-        break;
-      case AdmobAdEvent.opened:
-        print('Admob $adType Ad opened!');
-        break;
-      case AdmobAdEvent.closed:
-        print('Admob $adType Ad closed!');
-        break;
-      case AdmobAdEvent.failedToLoad:
-        print('Admob $adType failed to load. :(');
-        break;
-      default:
-    }
   }
 }

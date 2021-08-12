@@ -1,7 +1,6 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:login_fudosan/utils/ADMobHelper/ADUnitIDHelper.dart';
+import 'package:login_fudosan/utils/NativeADMobBanner.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,7 +67,6 @@ class _RentalScreenState extends State<RentalScreen> {
   var japaneseCurrency = new NumberFormat.currency(locale: "ja_JP", symbol: "");
   SharedPreferences preferences;
   final GlobalKey _one = GlobalKey();
-  AdmobBannerSize bannerSize;
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -137,8 +135,6 @@ class _RentalScreenState extends State<RentalScreen> {
                 )).difference(widget.selecteddate).inDays +
             1
         : widget.selecteddate.day;
-
-    bannerSize = AdmobBannerSize.BANNER;
   }
 
   int daysRemaining(int month, int year) {
@@ -214,20 +210,9 @@ class _RentalScreenState extends State<RentalScreen> {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     margin: EdgeInsets.only(bottom: 20.0),
-                    child: AdmobBanner(
-                      adUnitId: ADUnitIDHelper.adMobBannerID,
-                      adSize: bannerSize,
-                      listener:
-                          (AdmobAdEvent event, Map<String, dynamic> args) {
-                        handleEvent(event, args, 'Banner');
-                      },
-                      onBannerCreated: (AdmobBannerController controller) {
-                        // Dispose is called automatically for you when Flutter removes the banner from the widget tree.
-                        // Normally you don't need to worry about disposing this yourself, it's handled.
-                        // If you need direct access to dispose, this is your guy!
-                        // controller.dispose();
-                      },
-                    ),
+                    height: 100,
+                    width: MediaQuery.of(context).size.width,
+                    child: NativeADBanner(),
                   ),
                 ),
                 Center(
@@ -815,32 +800,13 @@ class _RentalScreenState extends State<RentalScreen> {
                           ),
                         ],
                       ),
-                    )),
+                    ))
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  void handleEvent(
-      AdmobAdEvent event, Map<String, dynamic> args, String adType) {
-    switch (event) {
-      case AdmobAdEvent.loaded:
-        print('New Admob $adType Ad loaded!');
-        break;
-      case AdmobAdEvent.opened:
-        print('Admob $adType Ad opened!');
-        break;
-      case AdmobAdEvent.closed:
-        print('Admob $adType Ad closed!');
-        break;
-      case AdmobAdEvent.failedToLoad:
-        print('Admob $adType failed to load. :(');
-        break;
-      default:
-    }
   }
 
   _fieldFocusChange(
