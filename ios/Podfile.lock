@@ -91,11 +91,18 @@ PODS:
     - FacebookSDK/CoreKit (~> 5.8.0)
     - FacebookSDK/MarketingKit
     - Flutter
+  - flutter_native_admob (0.0.1):
+    - Flutter
+    - Google-Mobile-Ads-SDK
+    - PureLayout
   - flutter_statusbarcolor (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - Google-Mobile-Ads-SDK (7.67.0):
+    - GoogleAppMeasurement (~> 6.0)
+    - GoogleUserMessagingPlatform (~> 1.1)
   - GoogleAppMeasurement (6.8.3):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.7)
     - GoogleUtilities/MethodSwizzler (~> 6.7)
@@ -104,6 +111,7 @@ PODS:
     - nanopb (~> 1.30906.0)
   - GoogleDataTransport (7.5.1):
     - nanopb (~> 1.30906.0)
+  - GoogleUserMessagingPlatform (1.4.0)
   - GoogleUtilities/AppDelegateSwizzler (6.7.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -132,6 +140,7 @@ PODS:
     - Flutter
   - PromisesObjC (1.2.11)
   - Protobuf (3.14.0)
+  - PureLayout (3.1.8)
   - shared_preferences (0.0.1):
     - Flutter
   - Toast (4.0.0)
@@ -145,6 +154,7 @@ DEPENDENCIES:
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - Flutter (from `Flutter`)
   - flutter_facebook_appevents (from `.symlinks/plugins/flutter_facebook_appevents/ios`)
+  - flutter_native_admob (from `.symlinks/plugins/flutter_native_admob/ios`)
   - flutter_statusbarcolor (from `.symlinks/plugins/flutter_statusbarcolor/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -165,12 +175,15 @@ SPEC REPOS:
     - FirebaseInstanceID
     - FirebaseMessaging
     - FirebaseRemoteConfig
+    - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleDataTransport
+    - GoogleUserMessagingPlatform
     - GoogleUtilities
     - nanopb
     - PromisesObjC
     - Protobuf
+    - PureLayout
     - Toast
 
 EXTERNAL SOURCES:
@@ -186,6 +199,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_facebook_appevents:
     :path: ".symlinks/plugins/flutter_facebook_appevents/ios"
+  flutter_native_admob:
+    :path: ".symlinks/plugins/flutter_native_admob/ios"
   flutter_statusbarcolor:
     :path: ".symlinks/plugins/flutter_statusbarcolor/ios"
   fluttertoast:
@@ -216,15 +231,19 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: 35a729305f254fb15a2e541d4b36f3a379da7fdc
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_facebook_appevents: 6539c1f74fb03100a7c95b0656e2333c53fa90c9
+  flutter_native_admob: 384f39f8b8dc0a96624c7cfa4cd255205e7c3da5
   flutter_statusbarcolor: 8afb1071ed8c58be929f1e32b36c629771fd2259
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  Google-Mobile-Ads-SDK: 8b58584890539de4527c47ef01e4da941a10bc8a
   GoogleAppMeasurement: 966e88df9d19c15715137bb2ddaf52373f111436
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
+  GoogleUserMessagingPlatform: b168e8c46cd8f92aa3e34b584c4ca78a411ce367
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
+  PureLayout: a4afb3d79dd958564ce33d22c89f407280d8e6a8
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef

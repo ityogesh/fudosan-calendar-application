@@ -66,5 +66,7 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-7032283861969832~6953831445</string>
 </dict>
 </plist>
