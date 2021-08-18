@@ -102,7 +102,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     FacebookAppEvents.logEvent("test_", {"k": "v"});
 
     try {
-      //versionCheck(context);
+      versionCheck(context);
     } catch (e) {
       print("Version Exception " + e);
     }
