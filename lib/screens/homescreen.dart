@@ -104,7 +104,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     try {
       versionCheck(context);
     } catch (e) {
-      //    print("Exception " + e);
+      print("Version Exception " + e);
     }
     super.initState();
   }
@@ -1149,10 +1149,10 @@ class _HomeScreeenState extends State<HomeScreeen> {
       }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
-      //print(exception);
+      print(exception);
     } catch (exception) {
-      /*print('Unable to fetch remote config. Cached or default values will be '
-          'used');*/
+      print(
+          'Unable to fetch remote config. Cached or default values will be used');
     }
   }
 
