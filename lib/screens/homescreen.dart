@@ -396,7 +396,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                                 builder:
                                                     (BuildContext context) =>
                                                         ShowCaseBuyandSell(
-                                                            selectedDate)))
+                                                            selectedDate,
+                                                            refreshPage)))
                                         : Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -404,7 +405,8 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                                     (BuildContext context) =>
                                                         ShowCaseViewRental(
                                                             _radioValue1,
-                                                            selectedDate)));
+                                                            selectedDate,
+                                                            refreshPage)));
                               },
                               child: CircleAvatar(
                                 radius: 23.0,

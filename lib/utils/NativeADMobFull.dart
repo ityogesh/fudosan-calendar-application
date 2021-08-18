@@ -12,7 +12,8 @@ class NativeADWidgetFull extends StatelessWidget {
     return NativeAdmob(
       adUnitID: 'ca-app-pub-7032283861969832/9899528134',
       loading: Center(child: SpinKitChasingDots(color: Colors.blueAccent)),
-      error: Center(child: Text("広告の読み込みに失敗しました。")),
+      error: Container(
+          height: 20, child: Center(child: Text("Failed to display the ad.."))),
       controller: _controller,
       type: NativeAdmobType.full,
       options: NativeAdmobOptions(
