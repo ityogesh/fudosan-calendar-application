@@ -102,7 +102,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     FacebookAppEvents.logEvent("test_", {"k": "v"});
 
     try {
-      versionCheck(context);
+      //versionCheck(context);
     } catch (e) {
       print("Version Exception " + e);
     }
@@ -443,7 +443,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         //  print(data['start']['date']);
         _holidayModel.add(HolidayModel(DateTime.parse(data['start']['date'])));
         setState(() {
-          //      _state = 1;
+          _state = 1;
         });
       }
     } catch (e) {
