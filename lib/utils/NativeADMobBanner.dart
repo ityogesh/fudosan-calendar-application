@@ -14,8 +14,7 @@ class NativeADBanner extends StatelessWidget {
     return NativeAdmob(
       adUnitID: AdHelper.adMobUnit,
       loading: Center(child: SpinKitChasingDots(color: Colors.blueAccent)),
-      error:
-          Container(child: Center(child: Text("Failed to display the ad.."))),
+      error: Container(child: Center(child: Text("広告の表示に失敗しました。"))),
       controller: _controller,
       type: NativeAdmobType.banner,
       options: NativeAdmobOptions(
