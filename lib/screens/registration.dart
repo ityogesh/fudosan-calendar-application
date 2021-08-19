@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/register/registerRequestModel.dart';
@@ -13,7 +14,6 @@ import 'package:login_fudosan/screens/loginscreen.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/dropdown.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';

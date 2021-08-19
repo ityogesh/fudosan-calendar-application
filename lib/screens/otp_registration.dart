@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/register/registerOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/resendOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/register/registerOtpErrorResponseModel.dart';
@@ -11,7 +12,6 @@ import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +19,9 @@ import 'homescreen.dart';
 
 class OtpRegistrationScreen extends StatefulWidget {
   final String email;
+
   OtpRegistrationScreen(this.email);
+
   @override
   _OtpRegistrationScreenState createState() => _OtpRegistrationScreenState();
 }
@@ -227,6 +229,7 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
   ResendOtpResponseModel resendOtpRegisterResponseModel =
       ResendOtpResponseModel();
   String id;
+
   _reSendOtp() async {
     ResendOtpRequestModel resendOtpRequestModel;
     SharedPreferences instance = await SharedPreferences.getInstance();

@@ -12,7 +12,9 @@ import 'package:showcaseview/showcaseview.dart';
 class ShowCaseBuyandSell extends StatelessWidget {
   final DateTime selectedDate;
   final refreshPage;
+
   ShowCaseBuyandSell(this.selectedDate, this.refreshPage);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,9 @@ class ShowCaseBuyandSell extends StatelessWidget {
 class BuyingSellingScreen extends StatefulWidget {
   final DateTime selectedDate;
   final refreshPage;
+
   BuyingSellingScreen(this.selectedDate, this.refreshPage);
+
   @override
   _BuyingSellingScreenState createState() => _BuyingSellingScreenState();
 }
@@ -511,9 +515,8 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
                                           controller: buildingTextController,
                                           keyboardType:
                                               TextInputType.numberWithOptions(
-                                                  signed: true,
-                                                  decimal:
-                                                      true), // TextInputType.number,
+                                                  signed: true, decimal: true),
+                                          // TextInputType.number,
                                           maxLength: maxLengthBuilding,
                                           textAlign: TextAlign.right,
                                           decoration: InputDecoration(

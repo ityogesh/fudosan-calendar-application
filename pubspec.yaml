@@ -43,19 +43,16 @@ dependencies:
   url_launcher:
   package_info: ^0.4.3+2
   firebase_remote_config:
-<<<<<<< HEAD
-  firebase_messaging:
-  flutter_facebook_appevents:
-=======
+
   firebase_messaging: ^7.0.3
   flutter_facebook_appevents: ^0.2.0
->>>>>>> 2f305640269e331ca0a7d532e3f1147d2bd94d8e
+
   flutter_native_admob: ^2.1.0+3
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
-  firebase_analytics: ^5.0.2
+# The following adds the Cupertino Icons font to your application.
+# Use with the CupertinoIcons class for iOS style icons.
+cupertino_icons: ^0.1.3
+firebase_analytics: ^5.0.2
 
 
 dev_dependencies:
@@ -92,14 +89,14 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: NotoSansJP
-       fonts:
-         - asset: assets/font/Noto_Sans_JP/NotoSansJP-Black.otf
-         - asset: assets/font/Noto_Sans_JP/NotoSansJP-Bold.otf
-         - asset: assets/font/Noto_Sans_JP/NotoSansJP-Light.otf
-         - asset: assets/font/Noto_Sans_JP/NotoSansJP-Medium.otf
-         - asset: assets/font/Noto_Sans_JP/NotoSansJP-Regular.otf
-         - asset: assets/font/Noto_Sans_JP/NotoSansJP-Thin.otf
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/font/Noto_Sans_JP/NotoSansJP-Black.otf
+        - asset: assets/font/Noto_Sans_JP/NotoSansJP-Bold.otf
+        - asset: assets/font/Noto_Sans_JP/NotoSansJP-Light.otf
+        - asset: assets/font/Noto_Sans_JP/NotoSansJP-Medium.otf
+        - asset: assets/font/Noto_Sans_JP/NotoSansJP-Regular.otf
+        - asset: assets/font/Noto_Sans_JP/NotoSansJP-Thin.otf
 
   #   - family: Trajan Pro
   #     fonts:

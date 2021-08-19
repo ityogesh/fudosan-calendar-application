@@ -1,5 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/login/loginRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/login/loginResponseModel.dart';
 import 'package:login_fudosan/screens/homescreen.dart';
@@ -7,12 +10,11 @@ import 'package:login_fudosan/screens/otp_registration.dart';
 import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'registration.dart';
-import 'forget_password.dart';
-import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'forget_password.dart';
+import 'registration.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -47,12 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
             builder: (BuildContext context) => Show(),
           ),
         );
-      }
-      else  if (instance.getInt('status') == 0) {
+      } else if (instance.getInt('status') == 0) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => OtpRegistrationScreen(instance.getString('email')),
+            builder: (BuildContext context) =>
+                OtpRegistrationScreen(instance.getString('email')),
           ),
         );
       }

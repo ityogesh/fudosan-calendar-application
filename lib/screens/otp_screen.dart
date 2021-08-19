@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/forgetPasswordOtpVerifyRequestModel.dart';
 import 'package:login_fudosan/models/apiRequestModels/register/resendOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/forget%20password/forgetPasswordOtpResponseModel.dart';
@@ -12,14 +15,15 @@ import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+
 import 'popup.dart';
-import 'dart:convert';
 
 class OtpScreen extends StatefulWidget {
   final String email;
   final int uid;
+
   OtpScreen(this.email, this.uid);
+
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
@@ -252,7 +256,7 @@ class _OtpScreenState extends State<OtpScreen> {
     /* Navigator.push(context,
           MaterialPageRoute(builder: (BuildContext context) => Popup()));
     */
-     if (formKey.currentState.validate()) {
+    if (formKey.currentState.validate()) {
       if (ValidateHelper().validatePin(pin.text)) {
         await _progressDialog.show();
         passwordChange();
@@ -287,7 +291,7 @@ class _OtpScreenState extends State<OtpScreen> {
     if (response.statusCode == 200) {
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(json.decode(response.body));
-   //   print(response.body);
+      //   print(response.body);
       _progressDialog.hide();
 //      showSuccessAlert(context);
       Navigator.push(context,
@@ -300,7 +304,7 @@ class _OtpScreenState extends State<OtpScreen> {
       );
       /*  throw Exception('http.post error: statusCode= ${response.statusCode}'); */
     }
- //   print(response.body);
+    //   print(response.body);
   }
 
   _fieldFocusChange(
@@ -376,7 +380,7 @@ class _OtpScreenState extends State<OtpScreen> {
       ResendOtpResponseModel();
 
   _reSendOtp() async {
-   // print('hi');
+    // print('hi');
     ResendOtpRequestModel resendOtpRequestModel;
     SharedPreferences instance = await SharedPreferences.getInstance();
 
@@ -395,7 +399,7 @@ class _OtpScreenState extends State<OtpScreen> {
       final Map registerResponse = responseData;
       resendOtpRegisterResponseModel =
           ResendOtpResponseModel.fromJson(registerResponse);
-   //   print(resendOtpRegisterResponseModel.success);
+      //   print(resendOtpRegisterResponseModel.success);
       _progressDialog.hide();
       if (responseData['success'] == "OTP resented successfully") {
         Fluttertoast.showToast(
@@ -404,7 +408,7 @@ class _OtpScreenState extends State<OtpScreen> {
         );
       }
     } else {
-   //   print('response error');
+      //   print('response error');
       throw Exception();
     }
   }

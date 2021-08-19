@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:login_fudosan/models/apiRequestModels/forget%20password/foregetPasswordOtpRequestModel.dart';
 import 'package:login_fudosan/models/apiResponseModels/forget%20password/ForgetPasswordOtpResponseModel.dart';
 import 'package:login_fudosan/screens/loginscreen.dart';
@@ -7,9 +10,8 @@ import 'package:login_fudosan/utils/colorconstant.dart';
 import 'package:login_fudosan/utils/constants.dart';
 import 'package:login_fudosan/utils/validateHelper.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+
 import 'otp_screen.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class ResetPassword extends StatefulWidget {
   @override
@@ -52,7 +54,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -147,7 +149,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   sendOTP() async {
-  //  print("Sending OTP");
+    //  print("Sending OTP");
     ForgetPasswordOtpRequestModel forgetPasswordOtpRequestModel =
         ForgetPasswordOtpRequestModel(email: emailaddress.text);
     var response = await http.post(Constants.forgot_password_Otp_URL,
@@ -156,7 +158,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       Map sendOtpResponse = json.decode(response.body);
       ForgetPasswordOtpResponseModel forgetPasswordOtpResponseModel =
           ForgetPasswordOtpResponseModel.fromJson(sendOtpResponse);
-    //  print('${response.body}');
+      //  print('${response.body}');
       _progressDialog.hide();
       Navigator.push(
           context,
@@ -165,7 +167,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   emailaddress.text, forgetPasswordOtpResponseModel.userid)));
     } else {
       _progressDialog.hide();
-     // print("Error ${response.body}");
+      // print("Error ${response.body}");
       var error = json.decode(response.body);
       if (error['error'] == "User not found") {
         Fluttertoast.showToast(

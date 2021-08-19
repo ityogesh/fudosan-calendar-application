@@ -15,7 +15,7 @@ class ForgetPasswordOtpResponseModel {
     data['userid'] = this.userid;
     return data;
   }
-  /* String success;
+/* String success;
 
   ForgetPasswordOtpResponseModel({this.success});
 
