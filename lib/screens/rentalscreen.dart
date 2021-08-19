@@ -9,7 +9,10 @@ import 'package:showcaseview/showcaseview.dart';
 class ShowCaseViewRental extends StatelessWidget {
   final int choice;
   final DateTime selecteddate;
-  ShowCaseViewRental(this.choice, this.selecteddate);
+  final refreshPage;
+
+  ShowCaseViewRental(this.choice, this.selecteddate, this.refreshPage);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +21,7 @@ class ShowCaseViewRental extends StatelessWidget {
         autoPlayDelay: Duration(seconds: 5),
         //autoPlayLockEnable: true,
         builder: Builder(
-          builder: (context) => RentalScreen(choice, selecteddate),
+          builder: (context) => RentalScreen(choice, selecteddate, refreshPage),
         ),
       ),
     );
@@ -28,7 +31,10 @@ class ShowCaseViewRental extends StatelessWidget {
 class RentalScreen extends StatefulWidget {
   final int choice;
   final DateTime selecteddate;
-  RentalScreen(this.choice, this.selecteddate);
+  final refreshPage;
+
+  RentalScreen(this.choice, this.selecteddate, this.refreshPage);
+
   @override
   _RentalScreenState createState() => _RentalScreenState();
 }
@@ -194,7 +200,10 @@ class _RentalScreenState extends State<RentalScreen> {
         backgroundColor: ColorConstant.appBar,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            widget.refreshPage();
+            Navigator.pop(context);
+          },
         ),
       ),
       body: GestureDetector(
@@ -378,8 +387,8 @@ class _RentalScreenState extends State<RentalScreen> {
                                                 keyboardType: TextInputType
                                                     .numberWithOptions(
                                                         signed: true,
-                                                        decimal:
-                                                            true), // TextInputType.number,
+                                                        decimal: true),
+                                                // TextInputType.number,
                                                 textInputAction:
                                                     TextInputAction.next,
                                                 maxLength: rMaxLength,
@@ -572,8 +581,8 @@ class _RentalScreenState extends State<RentalScreen> {
                                                 keyboardType: TextInputType
                                                     .numberWithOptions(
                                                         signed: true,
-                                                        decimal:
-                                                            true), // TextInputType.number,
+                                                        decimal: true),
+                                                // TextInputType.number,
                                                 textInputAction:
                                                     TextInputAction.done,
 //                                    style: TextStyle(fontSize: 18),

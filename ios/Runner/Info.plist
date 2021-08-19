@@ -43,6 +43,10 @@
 	<true/>
 	<key>FacebookDisplayName</key>
 	<string>不動産カレンダー</string>
+	<key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-7032283861969832~6953831445</string>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

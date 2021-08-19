@@ -82,7 +82,11 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
+<<<<<<< HEAD
             android:value="ca-app-pub-7032283861969832~3820208123" />
+=======
+            android:value="ca-app-pub-7032283861969832~3820208123"/>
+>>>>>>> 2f305640269e331ca0a7d532e3f1147d2bd94d8e
 
     </application>
 

@@ -1,38 +1,37 @@
 {
   "project_info": {
-    "project_number": "185325054911",
-    "firebase_url": "https://fudosan-calendar.firebaseio.com",
-    "project_id": "fudosan-calendar",
-    "storage_bucket": "fudosan-calendar.appspot.com"
+    "project_number": "529991315036",
+    "project_id": "fudosan-calendar-6c78c",
+    "storage_bucket": "fudosan-calendar-6c78c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:185325054911:android:61c6b229be7751ef62cf0a",
+        "mobilesdk_app_id": "1:529991315036:android:d6649bfc8d1c1d686ec099",
         "android_client_info": {
           "package_name": "com.fudosan.fudosanCalendarapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "185325054911-26bs0lpu72oqt3qvkcnl6m271ilv3f1k.apps.googleusercontent.com",
+          "client_id": "529991315036-ttu9e1tf4pgl7o856k0mi3i3ij2ahb4l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBBOBAtTLguWrNMh3jpigQhxb_vbUqAGm4"
+          "current_key": "AIzaSyDsetUEWtqwznLrccg8Eb0ltCCPuwFS8X8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "185325054911-26bs0lpu72oqt3qvkcnl6m271ilv3f1k.apps.googleusercontent.com",
+              "client_id": "529991315036-ttu9e1tf4pgl7o856k0mi3i3ij2ahb4l.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "185325054911-irr7ijv2r2l18hps8g6ja19pnuo1uh3s.apps.googleusercontent.com",
+              "client_id": "529991315036-g1365rlmc61v4ma3rv8jg8j0nhfjfb0h.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.fudosan.fudosanCalendarapp"

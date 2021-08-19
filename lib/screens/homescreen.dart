@@ -104,7 +104,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
     try {
       versionCheck(context);
     } catch (e) {
-      //    print("Exception " + e);
+      print("Version Exception " + e);
     }
     super.initState();
   }
@@ -396,7 +396,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                                 builder:
                                                     (BuildContext context) =>
                                                         ShowCaseBuyandSell(
+<<<<<<< HEAD
                                                             selectedDate)))
+=======
+                                                            selectedDate,
+                                                            refreshPage)))
+>>>>>>> 2f305640269e331ca0a7d532e3f1147d2bd94d8e
                                         : Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -404,7 +409,12 @@ class _HomeScreeenState extends State<HomeScreeen> {
                                                     (BuildContext context) =>
                                                         ShowCaseViewRental(
                                                             _radioValue1,
+<<<<<<< HEAD
                                                             selectedDate)));
+=======
+                                                            selectedDate,
+                                                            refreshPage)));
+>>>>>>> 2f305640269e331ca0a7d532e3f1147d2bd94d8e
                               },
                               child: CircleAvatar(
                                 radius: 23.0,
@@ -441,7 +451,7 @@ class _HomeScreeenState extends State<HomeScreeen> {
         //  print(data['start']['date']);
         _holidayModel.add(HolidayModel(DateTime.parse(data['start']['date'])));
         setState(() {
-          //      _state = 1;
+          _state = 1;
         });
       }
     } catch (e) {
@@ -1147,10 +1157,17 @@ class _HomeScreeenState extends State<HomeScreeen> {
       }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
+<<<<<<< HEAD
       //print(exception);
     } catch (exception) {
       /*print('Unable to fetch remote config. Cached or default values will be '
           'used');*/
+=======
+      print(exception);
+    } catch (exception) {
+      print(
+          'Unable to fetch remote config. Cached or default values will be used');
+>>>>>>> 2f305640269e331ca0a7d532e3f1147d2bd94d8e
     }
   }
 

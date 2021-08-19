@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.3+4
+version: 1.0.4+5
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations:    
+  flutter_localizations:
     sdk: flutter
 
   pin_code_fields: ^5.2.0
@@ -38,18 +38,25 @@ dependencies:
   intl: any
   showcaseview: ^0.1.6
   flutter_statusbarcolor: ^0.2.3
-  firebase_analytics: ^5.0.2
+
   flutter_spinkit: "^4.1.2"
   url_launcher:
   package_info: ^0.4.3+2
   firebase_remote_config:
+<<<<<<< HEAD
   firebase_messaging:
   flutter_facebook_appevents:
+=======
+  firebase_messaging: ^7.0.3
+  flutter_facebook_appevents: ^0.2.0
+>>>>>>> 2f305640269e331ca0a7d532e3f1147d2bd94d8e
   flutter_native_admob: ^2.1.0+3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  firebase_analytics: ^5.0.2
+
 
 dev_dependencies:
   flutter_test:
@@ -93,7 +100,7 @@ flutter:
          - asset: assets/font/Noto_Sans_JP/NotoSansJP-Medium.otf
          - asset: assets/font/Noto_Sans_JP/NotoSansJP-Regular.otf
          - asset: assets/font/Noto_Sans_JP/NotoSansJP-Thin.otf
-         
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -11,7 +11,8 @@ import 'package:showcaseview/showcaseview.dart';
 
 class ShowCaseBuyandSell extends StatelessWidget {
   final DateTime selectedDate;
-  ShowCaseBuyandSell(this.selectedDate);
+  final refreshPage;
+  ShowCaseBuyandSell(this.selectedDate, this.refreshPage);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +22,7 @@ class ShowCaseBuyandSell extends StatelessWidget {
         //autoPlayLockEnable: true,
 
         builder: Builder(
-          builder: (context) => BuyingSellingScreen(selectedDate),
+          builder: (context) => BuyingSellingScreen(selectedDate, refreshPage),
         ),
       ),
     );
@@ -30,7 +31,8 @@ class ShowCaseBuyandSell extends StatelessWidget {
 
 class BuyingSellingScreen extends StatefulWidget {
   final DateTime selectedDate;
-  BuyingSellingScreen(this.selectedDate);
+  final refreshPage;
+  BuyingSellingScreen(this.selectedDate, this.refreshPage);
   @override
   _BuyingSellingScreenState createState() => _BuyingSellingScreenState();
 }
@@ -110,7 +112,10 @@ class _BuyingSellingScreenState extends State<BuyingSellingScreen> {
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.pop(context)),
+            onPressed: () {
+              widget.refreshPage();
+              Navigator.pop(context);
+            }),
       ),
       body: GestureDetector(
         onTap: () {
